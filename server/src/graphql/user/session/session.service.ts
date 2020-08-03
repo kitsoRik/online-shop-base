@@ -8,12 +8,17 @@ export class SessionService {
 	constructor(
 		@InjectRepository(SessionEntity)
 		private sessionRepository: Repository<SessionEntity>
-	) {}
+	) {
+		(global as any).services = {
+			...(global as any).services,
+			session: this
+		};
+	}
 
 	async createSession(userId: number) {
 		const session = await this.sessionRepository.create({ userId });
 
-		this.sessionRepository.save(session);
+		await this.sessionRepository.save(session);
 
 		return session;
 	}

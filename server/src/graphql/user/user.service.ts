@@ -9,6 +9,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { SessionEntity } from "./session/session.entity";
 import { SessionService } from "./session/session.service";
 import { GraphQLError } from "graphql";
+import { UserRoleEnum } from "./user-role.enum";
 
 @Injectable()
 export class UserService {
@@ -21,6 +22,24 @@ export class UserService {
 			...(global as any).services,
 			user: this
 		};
+
+		const createAdmin = async () => {
+			let admin = await this.userRepository.findOne({ id: -1 });
+			if (admin) return;
+
+			admin = this.userRepository.create({
+				id: -1,
+				email: "admin@admin.com",
+				password: "admin",
+				firstName: "Rostyslav",
+				lastName: "Pidburachynskyi",
+				role: UserRoleEnum.Admin
+			});
+
+			this.userRepository.save(admin);
+		};
+
+		createAdmin();
 	}
 
 	async getUserById(id: number) {

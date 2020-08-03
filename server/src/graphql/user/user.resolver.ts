@@ -45,6 +45,12 @@ export class UserResolver {
 		return user;
 	}
 
+	@Mutation(returns => Boolean)
+	async leaveUser(@Res() { req: { res } }: { req: { res: Response } }) {
+		res.clearCookie("sesid");
+		return true;
+	}
+
 	@Mutation(returns => UserType)
 	async createUser(@Args() args: CreateUserArgs) {
 		const {

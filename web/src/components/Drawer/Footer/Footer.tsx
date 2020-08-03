@@ -3,10 +3,12 @@ import {
 	useUnloginMutation,
 	CurrentUserDocument
 } from "../../../generated/graphql";
-import { Menu, notification } from "antd";
+import { Menu, notification, Button } from "antd";
 import { useApolloClient } from "@apollo/react-hooks";
+import classes from "./Footer.module.scss";
+import { closeDrawer } from "../Drawer";
 
-const UnloginItem = () => {
+const Footer = () => {
 	const [unlogin] = useUnloginMutation();
 
 	const client = useApolloClient();
@@ -31,9 +33,20 @@ const UnloginItem = () => {
 				currentUser: null
 			}
 		});
+		closeDrawer();
 	};
 
-	return <div onClick={onUnlogin}>Logout</div>;
+	return (
+		<div className={classes.footer}>
+			<Button
+				className={classes.logout}
+				onClick={onUnlogin}
+				type="primary"
+			>
+				Logout
+			</Button>
+		</div>
+	);
 };
 
-export default UnloginItem;
+export default Footer;

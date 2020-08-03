@@ -1,6 +1,5 @@
 import React from "react";
 import { Menu as MenuD } from "antd";
-import UnloginItem from "./UnloginItem";
 import { closeDrawer } from "../Drawer";
 
 const Menu = () => {
@@ -15,9 +14,6 @@ const Menu = () => {
 			selectable={false}
 		>
 			<MenuD.Item>123</MenuD.Item>
-			<MenuD.Item>
-				<UnloginItem />
-			</MenuD.Item>
 		</MenuD>
 	);
 };

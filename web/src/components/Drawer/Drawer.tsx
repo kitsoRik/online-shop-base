@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Drawer as DrawerD } from "antd";
 import Menu from "./Menu";
 import UserPanel from "./UserPanel";
+import Footer from "./Footer";
 
 const Drawer = () => {
 	const [visible, setVisible] = useState(false);
@@ -23,9 +24,15 @@ const Drawer = () => {
 			onClose={onClose}
 			visible={visible}
 			getContainer={false}
-			bodyStyle={{ padding: 0 }}
+			bodyStyle={{
+				padding: 0,
+				display: "flex",
+				flexDirection: "column",
+				justifyContent: "space-between"
+			}}
 		>
 			<Menu />
+			<Footer />
 		</DrawerD>
 	);
 };

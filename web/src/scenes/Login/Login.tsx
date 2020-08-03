@@ -3,10 +3,25 @@ import Page from "../../shared/Page";
 import Form from "./Form";
 import { Typography } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { useLoginMutation } from "../../generated/graphql";
+import {
+	useLoginMutation,
+	useCurrentUserQuery,
+	CurrentUserDocument
+} from "../../generated/graphql";
+import Unlogin from "./Unlogin";
+import { useApolloClient } from "@apollo/react-hooks";
+import { useHistory } from "react-router";
 
 const Login = () => {
 	const [login] = useLoginMutation();
+
+	const client = useApolloClient();
+	const history = useHistory();
+	const { data } = useCurrentUserQuery();
+
+	if (data?.currentUser) {
+		return <Unlogin />;
+	}
 
 	const onLogin = async (
 		email: string,
@@ -15,14 +30,22 @@ const Login = () => {
 		form: FormInstance
 	) => {
 		try {
-			const user = await login({
+			const { data } = await login({
 				variables: {
 					email,
 					password,
 					remember
 				}
 			});
-			console.log(user);
+			const currentUser = data?.joinUser;
+			if (!currentUser) throw new Error("Unknown user");
+			client.writeQuery({
+				query: CurrentUserDocument,
+				data: {
+					currentUser
+				}
+			});
+			history.push("/");
 		} catch (e) {
 			switch (e.message) {
 				case "UNKNOWN_DATA":

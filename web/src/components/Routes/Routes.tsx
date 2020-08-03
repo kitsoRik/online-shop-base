@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import Home from "../../scenes/Home";
 import Login from "../../scenes/Login";
 import Register from "../../scenes/Register";
+import { useCurrentUserQuery } from "../../generated/graphql";
 
 const Routes = () => {
 	return (

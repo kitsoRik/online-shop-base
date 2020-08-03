@@ -40,6 +40,7 @@ export type Query = {
 export type Mutation = {
   __typename?: 'Mutation';
   joinUser: User;
+  leaveUser: Scalars['Boolean'];
   createUser: User;
   createCategory: Category;
 };
@@ -91,6 +92,14 @@ export type LoginMutation = (
     { __typename?: 'User' }
     & Pick<User, 'id'>
   ) }
+);
+
+export type UnloginMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UnloginMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'leaveUser'>
 );
 
 export type RegisterMutationVariables = Exact<{
@@ -179,6 +188,35 @@ export function useLoginMutation(baseOptions?: ApolloReactHooks.MutationHookOpti
 export type LoginMutationHookResult = ReturnType<typeof useLoginMutation>;
 export type LoginMutationResult = ApolloReactCommon.MutationResult<LoginMutation>;
 export type LoginMutationOptions = ApolloReactCommon.BaseMutationOptions<LoginMutation, LoginMutationVariables>;
+export const UnloginDocument = gql`
+    mutation Unlogin {
+  leaveUser
+}
+    `;
+export type UnloginMutationFn = ApolloReactCommon.MutationFunction<UnloginMutation, UnloginMutationVariables>;
+
+/**
+ * __useUnloginMutation__
+ *
+ * To run a mutation, you first call `useUnloginMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnloginMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unloginMutation, { data, loading, error }] = useUnloginMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUnloginMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnloginMutation, UnloginMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnloginMutation, UnloginMutationVariables>(UnloginDocument, baseOptions);
+      }
+export type UnloginMutationHookResult = ReturnType<typeof useUnloginMutation>;
+export type UnloginMutationResult = ApolloReactCommon.MutationResult<UnloginMutation>;
+export type UnloginMutationOptions = ApolloReactCommon.BaseMutationOptions<UnloginMutation, UnloginMutationVariables>;
 export const RegisterDocument = gql`
     mutation Register($firstName: String!, $lastName: String!, $middleName: String, $phone: String, $email: String!, $password: String!) {
   createUser(firstName: $firstName, lastName: $lastName, middleName: $middleName, phone: $phone, email: $email, password: $password) {

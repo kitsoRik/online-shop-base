@@ -14,3 +14,4 @@ config:
     withComponent: false
     withHOC: false
     withHooks: true
+watch: true

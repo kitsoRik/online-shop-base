@@ -6,6 +6,7 @@ import Content from "./components/Content";
 import Routes from "./components/Routes";
 
 import classes from "./App.module.scss";
+import Drawer from "./components/Drawer";
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 				<Routes />
 			</Content>
 			<Footer />
+			<Drawer />
 		</Layout>
 	);
 }

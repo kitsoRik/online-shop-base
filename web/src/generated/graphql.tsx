@@ -75,7 +75,7 @@ export type CurrentUserQuery = (
   { __typename?: 'Query' }
   & { currentUser?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, 'id' | 'email'>
+    & Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'middleName' | 'phone'>
   )> }
 );
 
@@ -126,6 +126,10 @@ export const CurrentUserDocument = gql`
   currentUser {
     id
     email
+    firstName
+    lastName
+    middleName
+    phone
   }
 }
     `;

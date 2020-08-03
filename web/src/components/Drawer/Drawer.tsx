@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Drawer as DrawerD } from "antd";
 import Menu from "./Menu";
+import UserPanel from "./UserPanel";
 
 const Drawer = () => {
 	const [visible, setVisible] = useState(false);
@@ -16,7 +17,7 @@ const Drawer = () => {
 
 	return (
 		<DrawerD
-			title="Basic Drawer"
+			title={<UserPanel />}
 			placement="right"
 			closable={true}
 			onClose={onClose}

@@ -1,18 +1,19 @@
 import React from "react";
-import "./App.css";
-import { useGetUserQuery } from "./generated/graphql";
+import { Layout } from "antd";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+import Content from "./components/Content";
+import Routes from "./components/Routes";
 
 function App() {
-	const { data } = useGetUserQuery();
-
-	const user = data?.user;
-
 	return (
-		<div className="App">
-			<header className="App-header">
-				{user?.id} {user?.email}
-			</header>
-		</div>
+		<Layout>
+			<Header />
+			<Content>
+				<Routes />
+			</Content>
+			<Footer />
+		</Layout>
 	);
 }
 

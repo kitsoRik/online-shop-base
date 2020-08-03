@@ -1,6 +1,0 @@
-query GetUser {
-	user(id: 123) {
-		id
-		email
-	}
-}

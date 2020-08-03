@@ -11,6 +11,7 @@ import {
 import Unlogin from "./Unlogin";
 import { useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router";
+import LoginWithButtons from "./LoginWithButtons";
 
 const Login = () => {
 	const [login] = useLoginMutation();
@@ -58,8 +59,9 @@ const Login = () => {
 
 	return (
 		<Page>
-			<Typography.Title level={2}>Register</Typography.Title>
+			<Typography.Title level={2}>Login</Typography.Title>
 			<Form onLogin={onLogin} />
+			<LoginWithButtons />
 		</Page>
 	);
 };

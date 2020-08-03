@@ -3,6 +3,7 @@ import { GraphQLModule } from "@nestjs/graphql";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { UserModule } from "./user/user.module";
 import { UserEntity } from "./user/user.entity";
+import { CategoryModule } from "./category/category.module";
 
 @Module({
 	imports: [
@@ -16,9 +17,10 @@ import { UserEntity } from "./user/user.entity";
 			password: "postgres",
 			database: "online-shop-base",
 			synchronize: true,
-			entities: [UserEntity]
+			entities: [__dirname + "/../**/*.entity.{js,ts}"]
 		}),
-		UserModule
+		UserModule,
+		CategoryModule
 	]
 })
 export class GraphqlModule {}

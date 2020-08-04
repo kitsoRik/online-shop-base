@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { CategoryEntity } from "./category.entity";
 import { Repository } from "typeorm";
+import { GraphQLError } from "graphql";
 
 @Injectable()
 export class CategoryService {
@@ -15,6 +16,22 @@ export class CategoryService {
 			name,
 			parentId
 		});
+
+		await this.categoryRepository.save(category);
+
+		return category;
+	}
+
+	async changeCategory(id: number, name: string) {
+		const category = await this.categoryRepository.findOne({
+			id
+		});
+
+		if (!category) {
+			throw new GraphQLError("UNKNOWN_CATEGORY");
+		}
+
+		category.name = name;
 
 		await this.categoryRepository.save(category);
 

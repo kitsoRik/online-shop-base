@@ -1,23 +1,31 @@
 import React from "react";
 import Page from "../../../../shared/Page";
 import Form from "./Form";
-import { useCreateCategoryMutation } from "../../../../generated/graphql";
+import { useCreateProductMutation } from "../../../../generated/graphql";
+import { FormInstance } from "antd/lib/form";
+import { notification } from "antd";
 
 const Create = () => {
-	const [createCategory] = useCreateCategoryMutation();
+	const [createProduct] = useCreateProductMutation();
 
 	const onCreate = async (
 		name: string,
-		description: string,
-		parentId?: number
+		categoryId: number,
+		form: FormInstance
 	) => {
-		console.log("Create ", name, description, parentId);
+		try {
+			const { data } = await createProduct({
+				variables: { name, categoryId }
+			});
 
-		const { data } = await createCategory({
-			variables: { name, parentId }
-        });
-        
-		console.log(data);
+			notification.success({
+				message: `Product ${name} has been created`
+			});
+
+			form.resetFields();
+		} catch (e) {
+			console.error(e.message);
+		}
 	};
 
 	return (

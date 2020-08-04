@@ -1,8 +1,8 @@
-mutation CreateCategory($name: String!, $parentId: Int) {
-	createCategory(name: $name, parentId: $parentId) {
+mutation CreateProduct($name: String!, $categoryId: Int!) {
+	createProduct(name: $name, categoryId: $categoryId) {
 		id
 		name
-		parent {
+		category {
 			id
 		}
 	}

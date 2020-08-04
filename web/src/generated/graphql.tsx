@@ -47,6 +47,13 @@ export type CategoryFieldInput = {
   id?: Maybe<Scalars['String']>;
 };
 
+export type Product = {
+  __typename?: 'Product';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  category: Category;
+};
+
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
@@ -75,6 +82,7 @@ export type Mutation = {
   addFieldToCategory: Category;
   changeFieldInCategory: Category;
   removeFieldFromCategory: Category;
+  createProduct: Product;
 };
 
 
@@ -123,6 +131,12 @@ export type MutationChangeFieldInCategoryArgs = {
 export type MutationRemoveFieldFromCategoryArgs = {
   fieldId: Scalars['String'];
   id: Scalars['Int'];
+};
+
+
+export type MutationCreateProductArgs = {
+  categoryId: Scalars['Int'];
+  name: Scalars['String'];
 };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -316,6 +330,24 @@ export type FindCategoryByNameTemplateQuery = (
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'name'>
   )> }
+);
+
+export type CreateProductMutationVariables = Exact<{
+  name: Scalars['String'];
+  categoryId: Scalars['Int'];
+}>;
+
+
+export type CreateProductMutation = (
+  { __typename?: 'Mutation' }
+  & { createProduct: (
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name'>
+    & { category: (
+      { __typename?: 'Category' }
+      & Pick<Category, 'id'>
+    ) }
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -797,6 +829,43 @@ export function useFindCategoryByNameTemplateLazyQuery(baseOptions?: ApolloReact
 export type FindCategoryByNameTemplateQueryHookResult = ReturnType<typeof useFindCategoryByNameTemplateQuery>;
 export type FindCategoryByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindCategoryByNameTemplateLazyQuery>;
 export type FindCategoryByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>;
+export const CreateProductDocument = gql`
+    mutation CreateProduct($name: String!, $categoryId: Int!) {
+  createProduct(name: $name, categoryId: $categoryId) {
+    id
+    name
+    category {
+      id
+    }
+  }
+}
+    `;
+export type CreateProductMutationFn = ApolloReactCommon.MutationFunction<CreateProductMutation, CreateProductMutationVariables>;
+
+/**
+ * __useCreateProductMutation__
+ *
+ * To run a mutation, you first call `useCreateProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createProductMutation, { data, loading, error }] = useCreateProductMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useCreateProductMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateProductMutation, CreateProductMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateProductMutation, CreateProductMutationVariables>(CreateProductDocument, baseOptions);
+      }
+export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
+export type CreateProductMutationResult = ApolloReactCommon.MutationResult<CreateProductMutation>;
+export type CreateProductMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!, $remember: Boolean!) {
   joinUser(email: $email, password: $password, remember: $remember) {

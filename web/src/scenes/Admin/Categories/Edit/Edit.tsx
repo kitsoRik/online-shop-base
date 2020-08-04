@@ -29,7 +29,10 @@ const Edit = () => {
 		variables: { id: categoryId }
 	});
 
-	if (category === null && categoryId !== -1) {
+	if (
+		(category === null && categoryId !== -1) ||
+		category?.id !== categoryId
+	) {
 		const category = data?.findCategoryById;
 		if (!category && !loading) {
 			setCategoryId(-1);

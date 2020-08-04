@@ -18,7 +18,7 @@
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-google-login": "^5.1.21",
-		"react-location-query": "^1.2.2",
+		"react-location-query": "^1.2.3",
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "3.4.1",
 		"typescript": "^3.7.5"

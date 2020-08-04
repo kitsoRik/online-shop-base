@@ -1,0 +1,9 @@
+query GetChildrenCategoryById ($id: Int!) {
+  findCategoryById(id: $id) {
+    id
+    children {
+      id
+      name
+    }
+  }
+}

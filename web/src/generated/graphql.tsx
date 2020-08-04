@@ -109,6 +109,23 @@ export type CreateCategoryMutation = (
   ) }
 );
 
+export type GetChildrenCategoryByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetChildrenCategoryByIdQuery = (
+  { __typename?: 'Query' }
+  & { findCategoryById?: Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { children?: Maybe<Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'name'>
+    )>> }
+  )> }
+);
+
 export type FindCategoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -251,6 +268,43 @@ export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const GetChildrenCategoryByIdDocument = gql`
+    query GetChildrenCategoryById($id: Int!) {
+  findCategoryById(id: $id) {
+    id
+    children {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetChildrenCategoryByIdQuery__
+ *
+ * To run a query within a React component, call `useGetChildrenCategoryByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetChildrenCategoryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetChildrenCategoryByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetChildrenCategoryByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetChildrenCategoryByIdQuery, GetChildrenCategoryByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetChildrenCategoryByIdQuery, GetChildrenCategoryByIdQueryVariables>(GetChildrenCategoryByIdDocument, baseOptions);
+      }
+export function useGetChildrenCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetChildrenCategoryByIdQuery, GetChildrenCategoryByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetChildrenCategoryByIdQuery, GetChildrenCategoryByIdQueryVariables>(GetChildrenCategoryByIdDocument, baseOptions);
+        }
+export type GetChildrenCategoryByIdQueryHookResult = ReturnType<typeof useGetChildrenCategoryByIdQuery>;
+export type GetChildrenCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetChildrenCategoryByIdLazyQuery>;
+export type GetChildrenCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetChildrenCategoryByIdQuery, GetChildrenCategoryByIdQueryVariables>;
 export const FindCategoryByIdDocument = gql`
     query FindCategoryById($id: Int!) {
   findCategoryById(id: $id) {

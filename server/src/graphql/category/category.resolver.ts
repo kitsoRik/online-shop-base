@@ -32,6 +32,18 @@ export class CategoryResolver {
 		return this.categoryService.getCategories();
 	}
 
+	@Query(type => [CategoryType])
+	findCategoryByNameTemplate(
+		@Args("template", { nullable: true, defaultValue: "" }) template: string
+	) {
+		return this.categoryService.findByNameTemplate(template);
+	}
+
+	@Query(type => CategoryType, { nullable: true })
+	findCategoryById(@Args("id", { type: () => Int }) id: number) {
+		return this.categoryService.findById(id);
+	}
+
 	@ResolveField(type => CategoryType)
 	parent(@Parent() { parentId }: { parentId?: number }) {
 		if (!parentId) return null;

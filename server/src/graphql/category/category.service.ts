@@ -39,4 +39,17 @@ export class CategoryService {
 		const categories = await this.categoryRepository.find();
 		return categories;
 	}
+
+	async findByNameTemplate(template: string) {
+		const query = await this.categoryRepository
+			.createQueryBuilder("categories")
+			.where("name LIKE :template", { template: `%${template}%` });
+		const categories = await query.getMany();
+		return categories;
+	}
+
+	async findById(id: number) {
+		const category = await this.categoryRepository.findOne({ id });
+		return category;
+	}
 }

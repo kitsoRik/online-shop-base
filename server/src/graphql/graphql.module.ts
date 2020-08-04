@@ -5,6 +5,7 @@ import { UserModule } from "./user/user.module";
 import { CategoryModule } from "./category/category.module";
 import { JwtModule } from "@nestjs/jwt";
 import { Request } from "express";
+import { ProductModule } from './product/product.module';
 @Module({
 	imports: [
 		GraphQLModule.forRoot({
@@ -31,7 +32,8 @@ import { Request } from "express";
 			entities: [__dirname + "/../**/*.entity.{js,ts}"]
 		}),
 		UserModule,
-		CategoryModule
+		CategoryModule,
+		ProductModule
 	]
 })
 export class GraphqlModule {}

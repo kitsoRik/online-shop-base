@@ -11,6 +11,7 @@ import { CategoryFieldModule } from "./category-field/category-field.module";
 		CategoryFieldModule,
 		CategoryFieldModule
 	],
+	exports: [CategoryService],
 	providers: [CategoryResolver, CategoryService]
 })
 export class CategoryModule {}

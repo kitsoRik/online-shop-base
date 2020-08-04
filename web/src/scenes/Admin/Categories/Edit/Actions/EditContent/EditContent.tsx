@@ -6,9 +6,11 @@ import { useForm } from "antd/lib/form/Form";
 
 interface Props {
 	category: Category;
+
+	load: boolean;
 }
 
-const EditContent = ({ category }: Props) => {
+const EditContent = ({ category, load }: Props) => {
 	const [change] = useChangeCategoryMutation();
 
 	const onChange = async (name: string) => {

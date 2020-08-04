@@ -34,7 +34,7 @@ const Edit = () => {
 		category?.id !== categoryId
 	) {
 		const category = data?.findCategoryById;
-		if (!category && !loading) {
+		if (!category && !loading && categoryId !== -1) {
 			setCategoryId(-1);
 		} else {
 			if (category) setCategory(category);

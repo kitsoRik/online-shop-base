@@ -8,10 +8,13 @@ import { useQueryPush } from "react-location-query";
 
 interface Props {
 	category: Category;
+
+	load: boolean;
 }
 
-const ChildrenContent = ({ category: { id } }: Props) => {
+const ChildrenContent = ({ category: { id }, load }: Props) => {
 	const { data } = useGetChildrenCategoryByIdQuery({
+		skip: !load,
 		variables: { id }
 	});
 
@@ -34,7 +37,10 @@ const ChildrenContent = ({ category: { id } }: Props) => {
 	return (
 		<>
 			{children.map(childCategory => (
-				<Button onClick={() => onChildCategoryClick(childCategory.id)}>
+				<Button
+					key={childCategory.id}
+					onClick={() => onChildCategoryClick(childCategory.id)}
+				>
 					{childCategory.name}
 				</Button>
 			))}

@@ -1,7 +1,7 @@
-query GetChildrenCategoryById($id: Int!) {
+query GetParentCategoryById($id: Int!) {
 	findCategoryById(id: $id) {
 		id
-		children {
+		parent {
 			id
 			name
 		}

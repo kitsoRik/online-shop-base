@@ -4,6 +4,7 @@ import { Menu, Tabs } from "antd";
 import EditContent from "./EditContent";
 import { useLocationField } from "react-location-query";
 import ChildrenContent from "./ChildrenContent";
+import ParentContent from "./ParentContent";
 
 interface Props {
 	category: Category | null;
@@ -13,7 +14,7 @@ const Actions = ({ category }: Props) => {
 	const [tab, setTab] = useLocationField("tab", {
 		type: "string",
 		initial: "editing",
-		enum: ["editing", "subcategories"]
+		enum: ["editing", "subcategories", "parent"]
 	});
 
 	if (!category) return null;
@@ -26,10 +27,16 @@ const Actions = ({ category }: Props) => {
 			onTabClick={tab => setTab(tab)}
 		>
 			<Tabs.TabPane key="editing" tab="Editing">
-				<EditContent category={category} />
+				<EditContent category={category} load={tab === "edit"} />
 			</Tabs.TabPane>
 			<Tabs.TabPane key="subcategories" tab="Subcategories">
-				<ChildrenContent category={category} />
+				<ChildrenContent
+					category={category}
+					load={tab === "subcategories"}
+				/>
+			</Tabs.TabPane>
+			<Tabs.TabPane key="parent" tab="Parent category">
+				<ParentContent category={category} load={tab === "parent"} />
 			</Tabs.TabPane>
 		</Tabs>
 	);

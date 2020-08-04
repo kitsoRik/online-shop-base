@@ -35,6 +35,12 @@ export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
   categories: Array<Category>;
+  findCategoryByNameTemplate: Array<Category>;
+};
+
+
+export type QueryFindCategoryByNameTemplateArgs = {
+  template?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -64,7 +70,7 @@ export type MutationCreateUserArgs = {
 
 
 export type MutationCreateCategoryArgs = {
-  parentId: Scalars['Int'];
+  parentId?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
 };
 
@@ -76,6 +82,37 @@ export type CurrentUserQuery = (
   & { currentUser?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, 'id' | 'email' | 'firstName' | 'lastName' | 'middleName' | 'phone'>
+  )> }
+);
+
+export type CreateCategoryMutationVariables = Exact<{
+  name: Scalars['String'];
+  parentId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type CreateCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { createCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
+    & { parent?: Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id'>
+    )> }
+  ) }
+);
+
+export type FindCategoryByNameTemplateQueryVariables = Exact<{
+  template?: Maybe<Scalars['String']>;
+}>;
+
+
+export type FindCategoryByNameTemplateQuery = (
+  { __typename?: 'Query' }
+  & { findCategoryByNameTemplate: Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
   )> }
 );
 
@@ -158,6 +195,77 @@ export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
+export const CreateCategoryDocument = gql`
+    mutation CreateCategory($name: String!, $parentId: Int) {
+  createCategory(name: $name, parentId: $parentId) {
+    id
+    name
+    parent {
+      id
+    }
+  }
+}
+    `;
+export type CreateCategoryMutationFn = ApolloReactCommon.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      parentId: // value for 'parentId'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, baseOptions);
+      }
+export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
+export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const FindCategoryByNameTemplateDocument = gql`
+    query FindCategoryByNameTemplate($template: String) {
+  findCategoryByNameTemplate(template: $template) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindCategoryByNameTemplateQuery__
+ *
+ * To run a query within a React component, call `useFindCategoryByNameTemplateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindCategoryByNameTemplateQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindCategoryByNameTemplateQuery({
+ *   variables: {
+ *      template: // value for 'template'
+ *   },
+ * });
+ */
+export function useFindCategoryByNameTemplateQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>) {
+        return ApolloReactHooks.useQuery<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>(FindCategoryByNameTemplateDocument, baseOptions);
+      }
+export function useFindCategoryByNameTemplateLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>(FindCategoryByNameTemplateDocument, baseOptions);
+        }
+export type FindCategoryByNameTemplateQueryHookResult = ReturnType<typeof useFindCategoryByNameTemplateQuery>;
+export type FindCategoryByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindCategoryByNameTemplateLazyQuery>;
+export type FindCategoryByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!, $remember: Boolean!) {
   joinUser(email: $email, password: $password, remember: $remember) {

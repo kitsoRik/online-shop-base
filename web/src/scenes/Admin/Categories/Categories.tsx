@@ -1,8 +1,8 @@
 import React from "react";
 import Routes from "./Routes";
 
-const Admin = () => {
+const Categories = () => {
 	return <Routes />;
 };
 
-export default Admin;
+export default Categories;

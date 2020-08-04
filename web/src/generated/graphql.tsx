@@ -55,6 +55,7 @@ export type Mutation = {
   leaveUser: Scalars['Boolean'];
   createUser: User;
   createCategory: Category;
+  changeCategory: Category;
 };
 
 
@@ -78,6 +79,12 @@ export type MutationCreateUserArgs = {
 export type MutationCreateCategoryArgs = {
   parentId?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
+};
+
+
+export type MutationChangeCategoryArgs = {
+  name: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -124,6 +131,20 @@ export type GetChildrenCategoryByIdQuery = (
       & Pick<Category, 'id' | 'name'>
     )>> }
   )> }
+);
+
+export type ChangeCategoryMutationVariables = Exact<{
+  id: Scalars['Int'];
+  name: Scalars['String'];
+}>;
+
+
+export type ChangeCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { changeCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
+  ) }
 );
 
 export type FindCategoryByIdQueryVariables = Exact<{
@@ -305,6 +326,40 @@ export function useGetChildrenCategoryByIdLazyQuery(baseOptions?: ApolloReactHoo
 export type GetChildrenCategoryByIdQueryHookResult = ReturnType<typeof useGetChildrenCategoryByIdQuery>;
 export type GetChildrenCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetChildrenCategoryByIdLazyQuery>;
 export type GetChildrenCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetChildrenCategoryByIdQuery, GetChildrenCategoryByIdQueryVariables>;
+export const ChangeCategoryDocument = gql`
+    mutation ChangeCategory($id: Int!, $name: String!) {
+  changeCategory(id: $id, name: $name) {
+    id
+    name
+  }
+}
+    `;
+export type ChangeCategoryMutationFn = ApolloReactCommon.MutationFunction<ChangeCategoryMutation, ChangeCategoryMutationVariables>;
+
+/**
+ * __useChangeCategoryMutation__
+ *
+ * To run a mutation, you first call `useChangeCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeCategoryMutation, { data, loading, error }] = useChangeCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useChangeCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeCategoryMutation, ChangeCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeCategoryMutation, ChangeCategoryMutationVariables>(ChangeCategoryDocument, baseOptions);
+      }
+export type ChangeCategoryMutationHookResult = ReturnType<typeof useChangeCategoryMutation>;
+export type ChangeCategoryMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryMutation>;
+export type ChangeCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryMutation, ChangeCategoryMutationVariables>;
 export const FindCategoryByIdDocument = gql`
     query FindCategoryById($id: Int!) {
   findCategoryById(id: $id) {

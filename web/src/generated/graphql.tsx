@@ -36,11 +36,17 @@ export type Query = {
   currentUser?: Maybe<User>;
   categories: Array<Category>;
   findCategoryByNameTemplate: Array<Category>;
+  findCategoryById?: Maybe<Category>;
 };
 
 
 export type QueryFindCategoryByNameTemplateArgs = {
   template?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryFindCategoryByIdArgs = {
+  id: Scalars['Int'];
 };
 
 export type Mutation = {
@@ -101,6 +107,19 @@ export type CreateCategoryMutation = (
       & Pick<Category, 'id'>
     )> }
   ) }
+);
+
+export type FindCategoryByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FindCategoryByIdQuery = (
+  { __typename?: 'Query' }
+  & { findCategoryById?: Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
+  )> }
 );
 
 export type FindCategoryByNameTemplateQueryVariables = Exact<{
@@ -232,6 +251,40 @@ export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
 export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
 export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
+export const FindCategoryByIdDocument = gql`
+    query FindCategoryById($id: Int!) {
+  findCategoryById(id: $id) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindCategoryByIdQuery__
+ *
+ * To run a query within a React component, call `useFindCategoryByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindCategoryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindCategoryByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindCategoryByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>(FindCategoryByIdDocument, baseOptions);
+      }
+export function useFindCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>(FindCategoryByIdDocument, baseOptions);
+        }
+export type FindCategoryByIdQueryHookResult = ReturnType<typeof useFindCategoryByIdQuery>;
+export type FindCategoryByIdLazyQueryHookResult = ReturnType<typeof useFindCategoryByIdLazyQuery>;
+export type FindCategoryByIdQueryResult = ApolloReactCommon.QueryResult<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>;
 export const FindCategoryByNameTemplateDocument = gql`
     query FindCategoryByNameTemplate($template: String) {
   findCategoryByNameTemplate(template: $template) {

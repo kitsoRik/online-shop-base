@@ -3,13 +3,18 @@ import SearchD from "antd/lib/input/Search";
 import { Category } from "../../../../../generated/graphql";
 import { useFindCategoryByNameTemplateQuery } from "../../../../../generated/graphql";
 import { AutoComplete } from "antd";
+import { useHistory } from "react-router";
+import classes from "./Search.module.scss";
 
 interface Props {
+	initialValue?: string;
 	onCategoryChange: (category: Category) => void;
 }
 
-const Search = ({ onCategoryChange }: Props) => {
+const Search = ({ initialValue, onCategoryChange }: Props) => {
 	const [template, setTemplate] = useState("");
+
+	const history = useHistory();
 
 	const { data, loading } = useFindCategoryByNameTemplateQuery({
 		skip: template === "",
@@ -17,10 +22,6 @@ const Search = ({ onCategoryChange }: Props) => {
 			template
 		}
 	});
-
-	const onSearch = (nameTemplate: string) => {
-		setTemplate(nameTemplate);
-	};
 
 	const categories = data?.findCategoryByNameTemplate ?? [];
 
@@ -31,9 +32,23 @@ const Search = ({ onCategoryChange }: Props) => {
 
 	return (
 		<AutoComplete
+			defaultValue={initialValue}
+			className={classes.search}
 			dropdownMatchSelectWidth={252}
 			options={options}
 			onChange={value => setTemplate(value)}
+			onSelect={(v, { key }) =>
+				onCategoryChange(categories.find(c => c.id === key)!)
+			}
+			onClick={() => {
+				if (
+					!history.location.pathname.startsWith(
+						"/admin/categories/edit"
+					)
+				) {
+					history.push("/admin/categories/edit");
+				}
+			}}
 		>
 			<SearchD
 				loading={loading}

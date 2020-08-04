@@ -1,4 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { ProductFieldEntity } from "./product-field/product-field.entity";
 
 @Entity({ name: "products" })
 export class ProductEntity {
@@ -11,10 +12,10 @@ export class ProductEntity {
 	@Column({ name: "category_id", type: "int" })
 	categoryId: number;
 
-	// @Column({
-	// 	name: "fields",
-	// 	default: JSON.stringify([]),
-	// 	type: "json"
-	// })
-	// fields: CategoryFieldEntity[];
+	@Column({
+		name: "fields",
+		default: JSON.stringify([]),
+		type: "json"
+	})
+	fields: ProductFieldEntity[];
 }

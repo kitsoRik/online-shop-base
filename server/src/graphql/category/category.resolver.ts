@@ -12,6 +12,7 @@ import { CategoryType } from "./category.type";
 import { CategoryService } from "./category.service";
 import { CategoryEntity } from "./category.entity";
 import { AccessAdmin } from "../user/decorators/access-admin.decorator";
+import { CategoryFieldInput } from "./category-field/category-field.input";
 
 @Resolver(of => CategoryType)
 export class CategoryResolver {
@@ -33,6 +34,34 @@ export class CategoryResolver {
 		@Args("name") name: string
 	): Promise<CategoryEntity> {
 		return this.categoryService.changeCategory(id, name);
+	}
+
+	@Mutation(type => CategoryType)
+	@AccessAdmin()
+	addFieldToCategory(
+		@Args("id", { type: () => Int }) id: number,
+		@Args("name") name: string
+	): Promise<CategoryEntity> {
+		return this.categoryService.addField(id, name);
+	}
+
+	@Mutation(type => CategoryType)
+	@AccessAdmin()
+	changeFieldInCategory(
+		@Args("id", { type: () => Int }) id: number,
+		@Args("fieldId") fieldId: string,
+		@Args("name") name: string
+	): Promise<CategoryEntity> {
+		return this.categoryService.changeField(id, fieldId, name);
+	}
+
+	@Mutation(type => CategoryType)
+	@AccessAdmin()
+	removeFieldFromCategory(
+		@Args("id", { type: () => Int }) id: number,
+		@Args("fieldId") fieldId: string
+	): Promise<CategoryEntity> {
+		return this.categoryService.removeField(id, fieldId);
 	}
 
 	@Query(type => [CategoryType])
@@ -61,5 +90,14 @@ export class CategoryResolver {
 	@ResolveField(type => CategoryType)
 	children(@Parent() { id }: { id: number }) {
 		return this.categoryService.getChildren(id);
+	}
+
+	@ResolveField(type => CategoryType)
+	fields(
+		@Parent() { id }: { id: number },
+		@Args("filter", { nullable: true }) filter: CategoryFieldInput
+	) {
+		console.log(filter);
+		return this.categoryService.getFields(id);
 	}
 }

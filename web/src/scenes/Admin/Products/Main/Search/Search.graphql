@@ -1,5 +1,5 @@
-query FindCategoryByNameTemplate($template: String) {
-	findCategoryByNameTemplate(template: $template) {
+query FindProductByNameTemplate($template: String) {
+	findProductByNameTemplate(template: $template) {
 		id
 		name
 	}

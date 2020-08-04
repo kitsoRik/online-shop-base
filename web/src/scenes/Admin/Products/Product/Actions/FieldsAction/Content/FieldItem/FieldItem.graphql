@@ -1,0 +1,9 @@
+mutation RemoveFieldFromCategory($id: Int!, $fieldId: String!) {
+	removeFieldFromCategory(id: $id, fieldId: $fieldId) {
+		id
+		fields {
+			id
+			name
+		}
+	}
+}

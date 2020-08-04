@@ -47,11 +47,27 @@ export type CategoryFieldInput = {
   id?: Maybe<Scalars['String']>;
 };
 
+export type ProductField = {
+  __typename?: 'ProductField';
+  id: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type Product = {
   __typename?: 'Product';
   id: Scalars['Int'];
   name: Scalars['String'];
   category: Category;
+  fields?: Maybe<Array<ProductField>>;
+};
+
+
+export type ProductFieldsArgs = {
+  filter?: Maybe<ProductFieldInput>;
+};
+
+export type ProductFieldInput = {
+  id?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -60,6 +76,8 @@ export type Query = {
   categories: Array<Category>;
   findCategoryByNameTemplate: Array<Category>;
   findCategoryById?: Maybe<Category>;
+  products: Array<Product>;
+  findProductByNameTemplate: Array<Product>;
 };
 
 
@@ -70,6 +88,20 @@ export type QueryFindCategoryByNameTemplateArgs = {
 
 export type QueryFindCategoryByIdArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryProductsArgs = {
+  filter?: Maybe<ProductInput>;
+};
+
+
+export type QueryFindProductByNameTemplateArgs = {
+  template?: Maybe<Scalars['String']>;
+};
+
+export type ProductInput = {
+  id?: Maybe<Scalars['Int']>;
 };
 
 export type Mutation = {
@@ -83,6 +115,8 @@ export type Mutation = {
   changeFieldInCategory: Category;
   removeFieldFromCategory: Category;
   createProduct: Product;
+  changeProduct: Product;
+  changeFieldInProduct: Product;
 };
 
 
@@ -137,6 +171,19 @@ export type MutationRemoveFieldFromCategoryArgs = {
 export type MutationCreateProductArgs = {
   categoryId: Scalars['Int'];
   name: Scalars['String'];
+};
+
+
+export type MutationChangeProductArgs = {
+  name: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationChangeFieldInProductArgs = {
+  value: Scalars['String'];
+  fieldId: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -348,6 +395,63 @@ export type CreateProductMutation = (
       & Pick<Category, 'id'>
     ) }
   ) }
+);
+
+export type FindProductByNameTemplateQueryVariables = Exact<{
+  template?: Maybe<Scalars['String']>;
+}>;
+
+
+export type FindProductByNameTemplateQuery = (
+  { __typename?: 'Query' }
+  & { findProductByNameTemplate: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name'>
+  )> }
+);
+
+export type GetProductByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetProductByIdQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name'>
+  )> }
+);
+
+export type ChangeProductMutationVariables = Exact<{
+  id: Scalars['Int'];
+  name: Scalars['String'];
+}>;
+
+
+export type ChangeProductMutation = (
+  { __typename?: 'Mutation' }
+  & { changeProduct: (
+    { __typename?: 'Product' }
+    & Pick<Product, 'id' | 'name'>
+  ) }
+);
+
+export type GetFieldsProductByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetFieldsProductByIdQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+    & { fields?: Maybe<Array<(
+      { __typename?: 'ProductField' }
+      & Pick<ProductField, 'id' | 'value'>
+    )>> }
+  )> }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -866,6 +970,145 @@ export function useCreateProductMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
 export type CreateProductMutationResult = ApolloReactCommon.MutationResult<CreateProductMutation>;
 export type CreateProductMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
+export const FindProductByNameTemplateDocument = gql`
+    query FindProductByNameTemplate($template: String) {
+  findProductByNameTemplate(template: $template) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useFindProductByNameTemplateQuery__
+ *
+ * To run a query within a React component, call `useFindProductByNameTemplateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductByNameTemplateQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindProductByNameTemplateQuery({
+ *   variables: {
+ *      template: // value for 'template'
+ *   },
+ * });
+ */
+export function useFindProductByNameTemplateQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>) {
+        return ApolloReactHooks.useQuery<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>(FindProductByNameTemplateDocument, baseOptions);
+      }
+export function useFindProductByNameTemplateLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>(FindProductByNameTemplateDocument, baseOptions);
+        }
+export type FindProductByNameTemplateQueryHookResult = ReturnType<typeof useFindProductByNameTemplateQuery>;
+export type FindProductByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindProductByNameTemplateLazyQuery>;
+export type FindProductByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>;
+export const GetProductByIdDocument = gql`
+    query GetProductById($id: Int!) {
+  products(filter: {id: $id}) {
+    id
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetProductByIdQuery__
+ *
+ * To run a query within a React component, call `useGetProductByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProductByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProductByIdQuery, GetProductByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetProductByIdQuery, GetProductByIdQueryVariables>(GetProductByIdDocument, baseOptions);
+      }
+export function useGetProductByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProductByIdQuery, GetProductByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetProductByIdQuery, GetProductByIdQueryVariables>(GetProductByIdDocument, baseOptions);
+        }
+export type GetProductByIdQueryHookResult = ReturnType<typeof useGetProductByIdQuery>;
+export type GetProductByIdLazyQueryHookResult = ReturnType<typeof useGetProductByIdLazyQuery>;
+export type GetProductByIdQueryResult = ApolloReactCommon.QueryResult<GetProductByIdQuery, GetProductByIdQueryVariables>;
+export const ChangeProductDocument = gql`
+    mutation ChangeProduct($id: Int!, $name: String!) {
+  changeProduct(id: $id, name: $name) {
+    id
+    name
+  }
+}
+    `;
+export type ChangeProductMutationFn = ApolloReactCommon.MutationFunction<ChangeProductMutation, ChangeProductMutationVariables>;
+
+/**
+ * __useChangeProductMutation__
+ *
+ * To run a mutation, you first call `useChangeProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeProductMutation, { data, loading, error }] = useChangeProductMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useChangeProductMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeProductMutation, ChangeProductMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeProductMutation, ChangeProductMutationVariables>(ChangeProductDocument, baseOptions);
+      }
+export type ChangeProductMutationHookResult = ReturnType<typeof useChangeProductMutation>;
+export type ChangeProductMutationResult = ApolloReactCommon.MutationResult<ChangeProductMutation>;
+export type ChangeProductMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeProductMutation, ChangeProductMutationVariables>;
+export const GetFieldsProductByIdDocument = gql`
+    query GetFieldsProductById($id: Int!) {
+  products(filter: {id: $id}) {
+    id
+    fields {
+      id
+      value
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetFieldsProductByIdQuery__
+ *
+ * To run a query within a React component, call `useGetFieldsProductByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFieldsProductByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFieldsProductByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetFieldsProductByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetFieldsProductByIdQuery, GetFieldsProductByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetFieldsProductByIdQuery, GetFieldsProductByIdQueryVariables>(GetFieldsProductByIdDocument, baseOptions);
+      }
+export function useGetFieldsProductByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetFieldsProductByIdQuery, GetFieldsProductByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetFieldsProductByIdQuery, GetFieldsProductByIdQueryVariables>(GetFieldsProductByIdDocument, baseOptions);
+        }
+export type GetFieldsProductByIdQueryHookResult = ReturnType<typeof useGetFieldsProductByIdQuery>;
+export type GetFieldsProductByIdLazyQueryHookResult = ReturnType<typeof useGetFieldsProductByIdLazyQuery>;
+export type GetFieldsProductByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldsProductByIdQuery, GetFieldsProductByIdQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!, $remember: Boolean!) {
   joinUser(email: $email, password: $password, remember: $remember) {

@@ -1,0 +1,9 @@
+query GetFieldsProductById($id: Int!) {
+	products(filter: { id: $id }) {
+		id
+		fields {
+			id
+			value
+		}
+	}
+}

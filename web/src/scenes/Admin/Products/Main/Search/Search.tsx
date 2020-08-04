@@ -1,33 +1,33 @@
 import React, { useState } from "react";
 import SearchD from "antd/lib/input/Search";
-import { Category } from "../../../../../generated/graphql";
-import { useFindCategoryByNameTemplateQuery } from "../../../../../generated/graphql";
+import { Category, Product } from "../../../../../generated/graphql";
+import { useFindProductByNameTemplateQuery } from "../../../../../generated/graphql";
 import { AutoComplete } from "antd";
 import { useHistory } from "react-router";
 import classes from "./Search.module.scss";
 
 interface Props {
 	initialValue?: string;
-	onCategoryChange: (category: Category) => void;
+	onProductChange: (product: { id: number, name: string }) => void;
 }
 
-const Search = ({ initialValue, onCategoryChange }: Props) => {
+const Search = ({ initialValue, onProductChange }: Props) => {
 	const [template, setTemplate] = useState("");
 
 	const history = useHistory();
 
-	const { data, loading } = useFindCategoryByNameTemplateQuery({
+	const { data, loading } = useFindProductByNameTemplateQuery({
 		skip: template === "",
 		variables: {
 			template
 		}
 	});
 
-	const categories = data?.findCategoryByNameTemplate ?? [];
+	const products = data?.findProductByNameTemplate ?? [];
 
-	const options = categories.map(category => ({
-		value: category.name,
-		key: category.id
+	const options = products.map(product => ({
+		value: product.name,
+		key: product.id
 	}));
 
 	return (
@@ -38,21 +38,21 @@ const Search = ({ initialValue, onCategoryChange }: Props) => {
 			options={options}
 			onChange={value => setTemplate(value)}
 			onSelect={(v, { key }) =>
-				onCategoryChange(categories.find(c => c.id === key)!)
+				onProductChange(products.find(c => c.id === key)!)
 			}
 			onClick={() => {
 				if (
 					!history.location.pathname.startsWith(
-						"/admin/categories/edit"
+						"/admin/products/edit"
 					)
 				) {
-					history.push("/admin/categories/edit");
+					history.push("/admin/products/edit");
 				}
 			}}
 		>
 			<SearchD
 				loading={loading}
-				placeholder="Input category name"
+				placeholder="Input product name"
 				size="large"
 			/>
 		</AutoComplete>

@@ -40,7 +40,7 @@ const Actions = ({ category }: Props) => {
 				<ParentContent category={category} load={tab === "parent"} />
 			</Tabs.TabPane>
 			<Tabs.TabPane key="fields" tab="Fields">
-				<FieldsContent category={category} load={tab === "fields"} />
+				<FieldsContent load={tab === "fields"} />
 			</Tabs.TabPane>
 		</Tabs>
 	);

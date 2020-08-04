@@ -2,6 +2,7 @@ query GetFieldsCategoryById($id: Int!) {
 	findCategoryById(id: $id) {
 		id
 		fields {
+			id
 			name
 		}
 	}

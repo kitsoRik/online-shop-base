@@ -8,11 +8,8 @@ import {
 } from "../../../../../../../generated/graphql";
 import { useForm } from "antd/lib/form/Form";
 
-interface Props {
-	categoryId: number;
-}
-
-const AddFieldDialog = ({ categoryId }: Props) => {
+const AddFieldDialog = () => {
+	const [categoryId] = useLocationFieldT<number>("category");
 	const [add, setAdd] = useLocationFieldT<boolean>("add");
 
 	const [addFieldToCategory] = useAddFieldToCategoryMutation();

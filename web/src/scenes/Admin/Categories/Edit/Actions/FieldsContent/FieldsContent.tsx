@@ -3,30 +3,37 @@ import {
 	useGetFieldsCategoryByIdQuery,
 	Category
 } from "../../../../../../generated/graphql";
-import { Button } from "antd";
+import { Button, List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import AddFieldDialog from "./AddFieldDialog";
-import { useLocationField } from "react-location-query";
+import { useLocationField, useLocationFieldT } from "react-location-query";
+import FieldItem from "./FieldItem";
+import ModifyDialog from "./ModifyDialog";
 
 interface Props {
-	category: Category;
-
 	load: boolean;
 }
 
-const FieldsContent = ({ category: { id }, load }: Props) => {
+const FieldsContent = ({ load }: Props) => {
+	const [categoryId] = useLocationFieldT<number>("category");
 	const [, setAdd] = useLocationField("add", {
 		type: "boolean",
 		initial: false,
 		hideIfInitial: true
 	});
 
-	const { data, loading } = useGetFieldsCategoryByIdQuery({
-		skip: !load,
-		variables: { id }
+	const [] = useLocationField("modify", {
+		type: "string",
+		initial: "",
+		hideIfInitial: true
 	});
 
-	if (loading) return null;
+	const { data, loading } = useGetFieldsCategoryByIdQuery({
+		skip: !load,
+		variables: { id: categoryId }
+	});
+
+	if (loading || !load) return null;
 
 	const category = data?.findCategoryById;
 
@@ -36,18 +43,21 @@ const FieldsContent = ({ category: { id }, load }: Props) => {
 
 	return (
 		<>
-			<div>
-				{fields.map(field => (
-					<div>{field.name}</div>
-				))}
-			</div>
+			<List
+				itemLayout="horizontal"
+				dataSource={fields}
+				renderItem={field => (
+					<FieldItem categoryId={category.id} field={field} />
+				)}
+			/>
 			<div>
 				<Button type="dashed" block onClick={() => setAdd(true)}>
 					<PlusOutlined />
 					Add field
 				</Button>
 			</div>
-			<AddFieldDialog categoryId={category.id} />
+			<AddFieldDialog />
+			<ModifyDialog />
 		</>
 	);
 };

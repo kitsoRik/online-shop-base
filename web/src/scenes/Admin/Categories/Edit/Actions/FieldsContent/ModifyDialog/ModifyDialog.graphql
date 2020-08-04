@@ -1,0 +1,19 @@
+query GetFieldByIdFromCategoryById($categoryId: Int!, $fieldId: String!) {
+	findCategoryById(id: $categoryId) {
+		id
+		fields(filter: { id: $fieldId }) {
+			id
+			name
+		}
+	}
+}
+
+mutation ChangeFieldInCategory($categoryId: Int!, $fieldId: String!, $name: String!) {
+	changeFieldInCategory(id: $categoryId, fieldId: $fieldId, name: $name) {
+		id
+		fields {
+			id
+			name
+		}
+	}
+}

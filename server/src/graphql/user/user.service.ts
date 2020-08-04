@@ -24,11 +24,12 @@ export class UserService {
 		};
 
 		const createAdmin = async () => {
-			let admin = await this.userRepository.findOne({ id: -1 });
+			let admin = await this.userRepository.findOne({
+				email: "admin@admin.com"
+			});
 			if (admin) return;
 
-			admin = this.userRepository.create({
-				id: -1,
+			admin = await this.userRepository.create({
 				email: "admin@admin.com",
 				password: "admin",
 				firstName: "Rostyslav",

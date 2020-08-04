@@ -30,5 +30,5 @@ export class UserEntity {
 		nullable: false,
 		default: UserRoleEnum.User
 	})
-	role: string;
+	role: UserRoleEnum;
 }

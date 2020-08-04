@@ -11,15 +11,18 @@ import {
 import { CategoryType } from "./category.type";
 import { CategoryService } from "./category.service";
 import { CategoryEntity } from "./category.entity";
+import { RolesGuard } from "../user/guards/roles.guard";
+import { AccessAdmin } from "../user/decorators/access-admin.decorator";
 
 @Resolver(of => CategoryType)
 export class CategoryResolver {
 	constructor(private categoryService: CategoryService) {}
 
 	@Mutation(type => CategoryType)
+	@AccessAdmin()
 	createCategory(
 		@Args("name") name: string,
-		@Args("parentId", { type: () => Int }) parentId: number
+		@Args("parentId", { type: () => Int, nullable: true }) parentId: number
 	): Promise<CategoryEntity> {
 		return this.categoryService.createCategory(name, parentId);
 	}

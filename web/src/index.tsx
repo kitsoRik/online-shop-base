@@ -6,13 +6,19 @@ import { ApolloProvider } from "@apollo/react-hooks";
 import { client } from "./apollo/apollo";
 import { BrowserRouter } from "react-router-dom";
 import { BrowserLocationQuery } from "react-location-query";
+import { Provider as MobxProvider } from 'mobx-react';
+import { user } from "./mobx";
 
 ReactDOM.render(
 	<React.StrictMode>
 		<BrowserRouter>
 			<BrowserLocationQuery>
 				<ApolloProvider client={client}>
-					<App />
+					<MobxProvider
+						user={user}
+					>
+						<App />
+					</MobxProvider>
 				</ApolloProvider>
 			</BrowserLocationQuery>
 		</BrowserRouter>

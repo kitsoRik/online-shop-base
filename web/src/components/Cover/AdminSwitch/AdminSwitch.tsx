@@ -12,7 +12,10 @@ const AdminSwitch = ({ user }: Props) => {
 	if (user!.role !== "admin") return null;
 	return (
 		<div className={classes.adminSwitch}>
-			<Switch />
+			<Switch
+				checked={user!.adminView}
+				onChange={e => user!.setAdminView(e)}
+			/>
 		</div>
 	);
 };

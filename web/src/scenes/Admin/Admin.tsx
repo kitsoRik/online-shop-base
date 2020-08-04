@@ -1,18 +1,13 @@
 import React, { useEffect } from "react";
 import Routes from "./Routes";
-import { setHeaderContent } from "../../components/Header/Header";
 import { Menu } from "antd";
 import { Link } from "react-router-dom";
 
 const Admin = () => {
-	useEffect(() => {
-		return setHeaderContent(<AdminHeader />);
-	}, []);
-
 	return <Routes />;
 };
 
-const AdminHeader = () => {
+export const AdminHeader = () => {
 	return (
 		<Menu theme="dark" mode="horizontal" selectable={false}>
 			<Menu.SubMenu title="Categories">

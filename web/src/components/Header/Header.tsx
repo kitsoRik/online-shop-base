@@ -17,7 +17,7 @@ const Header = () => {
 
 	return (
 		<Layout.Header className={classes.header}>
-			<div>{content}</div>
+			<>{content}</>
 			<User />
 		</Layout.Header>
 	);

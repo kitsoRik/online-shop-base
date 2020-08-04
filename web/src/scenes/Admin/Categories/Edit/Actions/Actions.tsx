@@ -5,6 +5,7 @@ import EditContent from "./EditContent";
 import { useLocationField } from "react-location-query";
 import ChildrenContent from "./ChildrenContent";
 import ParentContent from "./ParentContent";
+import FieldsContent from "./FieldsContent";
 
 interface Props {
 	category: Category | null;
@@ -14,7 +15,7 @@ const Actions = ({ category }: Props) => {
 	const [tab, setTab] = useLocationField("tab", {
 		type: "string",
 		initial: "editing",
-		enum: ["editing", "subcategories", "parent"]
+		enum: ["editing", "subcategories", "parent", "fields"]
 	});
 
 	if (!category) return null;
@@ -37,6 +38,9 @@ const Actions = ({ category }: Props) => {
 			</Tabs.TabPane>
 			<Tabs.TabPane key="parent" tab="Parent category">
 				<ParentContent category={category} load={tab === "parent"} />
+			</Tabs.TabPane>
+			<Tabs.TabPane key="fields" tab="Fields">
+				<FieldsContent category={category} load={tab === "fields"} />
 			</Tabs.TabPane>
 		</Tabs>
 	);

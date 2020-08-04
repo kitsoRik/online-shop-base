@@ -1,0 +1,9 @@
+mutation CreateCategory($name: String!, $parentId: Int) {
+	createCategory(name: $name, parentId: $parentId) {
+		id
+		name
+		parent {
+			id
+		}
+	}
+}

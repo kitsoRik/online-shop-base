@@ -23,12 +23,19 @@ export type User = {
   role: Scalars['String'];
 };
 
+export type CategoryField = {
+  __typename?: 'CategoryField';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
 export type Category = {
   __typename?: 'Category';
   id: Scalars['Int'];
   name: Scalars['String'];
   parent?: Maybe<Category>;
   children?: Maybe<Array<Category>>;
+  fields?: Maybe<Array<CategoryField>>;
 };
 
 export type Query = {
@@ -56,6 +63,9 @@ export type Mutation = {
   createUser: User;
   createCategory: Category;
   changeCategory: Category;
+  addFieldToCategory: Category;
+  changeFieldToCategory: Category;
+  removeFieldToCategory: Category;
 };
 
 
@@ -84,6 +94,25 @@ export type MutationCreateCategoryArgs = {
 
 export type MutationChangeCategoryArgs = {
   name: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationAddFieldToCategoryArgs = {
+  name: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationChangeFieldToCategoryArgs = {
+  name: Scalars['String'];
+  fieldId: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationRemoveFieldToCategoryArgs = {
+  fieldId: Scalars['String'];
   id: Scalars['Int'];
 };
 
@@ -145,6 +174,41 @@ export type ChangeCategoryMutation = (
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'name'>
   ) }
+);
+
+export type AddFieldToCategoryMutationVariables = Exact<{
+  id: Scalars['Int'];
+  name: Scalars['String'];
+}>;
+
+
+export type AddFieldToCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { addFieldToCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { fields?: Maybe<Array<(
+      { __typename?: 'CategoryField' }
+      & Pick<CategoryField, 'id' | 'name'>
+    )>> }
+  ) }
+);
+
+export type GetFieldsCategoryByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetFieldsCategoryByIdQuery = (
+  { __typename?: 'Query' }
+  & { findCategoryById?: Maybe<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { fields?: Maybe<Array<(
+      { __typename?: 'CategoryField' }
+      & Pick<CategoryField, 'name'>
+    )>> }
+  )> }
 );
 
 export type GetParentCategoryByIdQueryVariables = Exact<{
@@ -377,6 +441,79 @@ export function useChangeCategoryMutation(baseOptions?: ApolloReactHooks.Mutatio
 export type ChangeCategoryMutationHookResult = ReturnType<typeof useChangeCategoryMutation>;
 export type ChangeCategoryMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryMutation>;
 export type ChangeCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryMutation, ChangeCategoryMutationVariables>;
+export const AddFieldToCategoryDocument = gql`
+    mutation AddFieldToCategory($id: Int!, $name: String!) {
+  addFieldToCategory(id: $id, name: $name) {
+    id
+    fields {
+      id
+      name
+    }
+  }
+}
+    `;
+export type AddFieldToCategoryMutationFn = ApolloReactCommon.MutationFunction<AddFieldToCategoryMutation, AddFieldToCategoryMutationVariables>;
+
+/**
+ * __useAddFieldToCategoryMutation__
+ *
+ * To run a mutation, you first call `useAddFieldToCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFieldToCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFieldToCategoryMutation, { data, loading, error }] = useAddFieldToCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useAddFieldToCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddFieldToCategoryMutation, AddFieldToCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddFieldToCategoryMutation, AddFieldToCategoryMutationVariables>(AddFieldToCategoryDocument, baseOptions);
+      }
+export type AddFieldToCategoryMutationHookResult = ReturnType<typeof useAddFieldToCategoryMutation>;
+export type AddFieldToCategoryMutationResult = ApolloReactCommon.MutationResult<AddFieldToCategoryMutation>;
+export type AddFieldToCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<AddFieldToCategoryMutation, AddFieldToCategoryMutationVariables>;
+export const GetFieldsCategoryByIdDocument = gql`
+    query GetFieldsCategoryById($id: Int!) {
+  findCategoryById(id: $id) {
+    id
+    fields {
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetFieldsCategoryByIdQuery__
+ *
+ * To run a query within a React component, call `useGetFieldsCategoryByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFieldsCategoryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFieldsCategoryByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetFieldsCategoryByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetFieldsCategoryByIdQuery, GetFieldsCategoryByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetFieldsCategoryByIdQuery, GetFieldsCategoryByIdQueryVariables>(GetFieldsCategoryByIdDocument, baseOptions);
+      }
+export function useGetFieldsCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetFieldsCategoryByIdQuery, GetFieldsCategoryByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetFieldsCategoryByIdQuery, GetFieldsCategoryByIdQueryVariables>(GetFieldsCategoryByIdDocument, baseOptions);
+        }
+export type GetFieldsCategoryByIdQueryHookResult = ReturnType<typeof useGetFieldsCategoryByIdQuery>;
+export type GetFieldsCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetFieldsCategoryByIdLazyQuery>;
+export type GetFieldsCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldsCategoryByIdQuery, GetFieldsCategoryByIdQueryVariables>;
 export const GetParentCategoryByIdDocument = gql`
     query GetParentCategoryById($id: Int!) {
   findCategoryById(id: $id) {

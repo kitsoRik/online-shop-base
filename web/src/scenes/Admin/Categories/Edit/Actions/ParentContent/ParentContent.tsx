@@ -7,20 +7,20 @@ import { Typography } from "antd";
 import { Link } from "react-router-dom";
 
 interface Props {
-	category: Category;
+	category: Category | null;
 
 	load: boolean;
 }
 
-const ParentContent = ({ category: { id }, load }: Props) => {
+const ParentContent = ({ category, load }: Props) => {
 	const { data } = useGetParentCategoryByIdQuery({
 		skip: !load,
-		variables: { id }
+		variables: { id: category?.id || -1 }
 	});
 
-	const category = data?.findCategoryById;
+	const _category = data?.findCategoryById;
 
-	if (!category) return null;
+	if (!_category) return null;
 
 	const parentCategory = category?.parent;
 	if (!parentCategory)

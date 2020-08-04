@@ -1,6 +1,6 @@
 import React from "react";
 import { Form as FormD, Input, Button } from "antd";
-import { UserOutlined, PlusOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import InputCategory from "../../../../../shared/InputCategory";
 import { useForm } from "antd/lib/form/Form";
 
@@ -32,11 +32,6 @@ const Form = ({ onCreate }: Props) => {
 			</FormD.Item>
 			<FormD.Item name="parent" label="Category description">
 				<InputCategory />
-			</FormD.Item>
-			<FormD.Item>
-				<Button type="dashed" block>
-					<PlusOutlined /> Add field
-				</Button>
 			</FormD.Item>
 			<FormD.Item>
 				<Button type="primary" htmlType="submit">

@@ -5,7 +5,7 @@ import Search from "./Search";
 import { Link } from "react-router-dom";
 
 const Main = () => {
-	let product: { id: number; name: string } | null = null;
+	let product: { id: number } | null = null;
 
 	return (
 		<Page>

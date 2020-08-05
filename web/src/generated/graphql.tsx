@@ -53,21 +53,26 @@ export type ProductField = {
   value: Scalars['String'];
 };
 
-export type Product = {
-  __typename?: 'Product';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  category: Category;
+export type ProductInfo = {
+  __typename?: 'ProductInfo';
+  product_id: Scalars['Int'];
   fields?: Maybe<Array<ProductField>>;
 };
 
 
-export type ProductFieldsArgs = {
+export type ProductInfoFieldsArgs = {
   filter?: Maybe<ProductFieldInput>;
 };
 
 export type ProductFieldInput = {
   id?: Maybe<Scalars['String']>;
+};
+
+export type Product = {
+  __typename?: 'Product';
+  id: Scalars['Int'];
+  category: Category;
+  info: Array<ProductInfo>;
 };
 
 export type Query = {
@@ -116,7 +121,9 @@ export type Mutation = {
   removeFieldFromCategory: Category;
   createProduct: Product;
   changeProduct: Product;
-  changeFieldInProduct: Product;
+  createProductInfo: ProductInfo;
+  changeProductInfo: ProductInfo;
+  changeFieldInProductInfo: ProductInfo;
 };
 
 
@@ -170,17 +177,26 @@ export type MutationRemoveFieldFromCategoryArgs = {
 
 export type MutationCreateProductArgs = {
   categoryId: Scalars['Int'];
-  name: Scalars['String'];
 };
 
 
 export type MutationChangeProductArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationCreateProductInfoArgs = {
+  productId: Scalars['Int'];
+};
+
+
+export type MutationChangeProductInfoArgs = {
   name: Scalars['String'];
   id: Scalars['Int'];
 };
 
 
-export type MutationChangeFieldInProductArgs = {
+export type MutationChangeFieldInProductInfoArgs = {
   value: Scalars['String'];
   fieldId: Scalars['String'];
   id: Scalars['Int'];
@@ -380,7 +396,6 @@ export type FindCategoryByNameTemplateQuery = (
 );
 
 export type CreateProductMutationVariables = Exact<{
-  name: Scalars['String'];
   categoryId: Scalars['Int'];
 }>;
 
@@ -389,7 +404,7 @@ export type CreateProductMutation = (
   { __typename?: 'Mutation' }
   & { createProduct: (
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name'>
+    & Pick<Product, 'id'>
     & { category: (
       { __typename?: 'Category' }
       & Pick<Category, 'id'>
@@ -406,7 +421,7 @@ export type FindProductByNameTemplateQuery = (
   { __typename?: 'Query' }
   & { findProductByNameTemplate: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name'>
+    & Pick<Product, 'id'>
   )> }
 );
 
@@ -419,13 +434,12 @@ export type GetProductByIdQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name'>
+    & Pick<Product, 'id'>
   )> }
 );
 
 export type ChangeProductMutationVariables = Exact<{
   id: Scalars['Int'];
-  name: Scalars['String'];
 }>;
 
 
@@ -433,7 +447,7 @@ export type ChangeProductMutation = (
   { __typename?: 'Mutation' }
   & { changeProduct: (
     { __typename?: 'Product' }
-    & Pick<Product, 'id' | 'name'>
+    & Pick<Product, 'id'>
   ) }
 );
 
@@ -447,10 +461,20 @@ export type GetFieldsProductByIdQuery = (
   & { products: Array<(
     { __typename?: 'Product' }
     & Pick<Product, 'id'>
-    & { fields?: Maybe<Array<(
-      { __typename?: 'ProductField' }
-      & Pick<ProductField, 'id' | 'value'>
-    )>> }
+    & { info: Array<(
+      { __typename?: 'ProductInfo' }
+      & { fields?: Maybe<Array<(
+        { __typename?: 'ProductField' }
+        & Pick<ProductField, 'id' | 'value'>
+      )>> }
+    )>, category: (
+      { __typename?: 'Category' }
+      & Pick<Category, 'id'>
+      & { fields?: Maybe<Array<(
+        { __typename?: 'CategoryField' }
+        & Pick<CategoryField, 'id' | 'name'>
+      )>> }
+    ) }
   )> }
 );
 
@@ -934,10 +958,9 @@ export type FindCategoryByNameTemplateQueryHookResult = ReturnType<typeof useFin
 export type FindCategoryByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindCategoryByNameTemplateLazyQuery>;
 export type FindCategoryByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>;
 export const CreateProductDocument = gql`
-    mutation CreateProduct($name: String!, $categoryId: Int!) {
-  createProduct(name: $name, categoryId: $categoryId) {
+    mutation CreateProduct($categoryId: Int!) {
+  createProduct(categoryId: $categoryId) {
     id
-    name
     category {
       id
     }
@@ -959,7 +982,6 @@ export type CreateProductMutationFn = ApolloReactCommon.MutationFunction<CreateP
  * @example
  * const [createProductMutation, { data, loading, error }] = useCreateProductMutation({
  *   variables: {
- *      name: // value for 'name'
  *      categoryId: // value for 'categoryId'
  *   },
  * });
@@ -974,7 +996,6 @@ export const FindProductByNameTemplateDocument = gql`
     query FindProductByNameTemplate($template: String) {
   findProductByNameTemplate(template: $template) {
     id
-    name
   }
 }
     `;
@@ -1008,7 +1029,6 @@ export const GetProductByIdDocument = gql`
     query GetProductById($id: Int!) {
   products(filter: {id: $id}) {
     id
-    name
   }
 }
     `;
@@ -1039,10 +1059,9 @@ export type GetProductByIdQueryHookResult = ReturnType<typeof useGetProductByIdQ
 export type GetProductByIdLazyQueryHookResult = ReturnType<typeof useGetProductByIdLazyQuery>;
 export type GetProductByIdQueryResult = ApolloReactCommon.QueryResult<GetProductByIdQuery, GetProductByIdQueryVariables>;
 export const ChangeProductDocument = gql`
-    mutation ChangeProduct($id: Int!, $name: String!) {
-  changeProduct(id: $id, name: $name) {
+    mutation ChangeProduct($id: Int!) {
+  changeProduct(id: $id) {
     id
-    name
   }
 }
     `;
@@ -1062,7 +1081,6 @@ export type ChangeProductMutationFn = ApolloReactCommon.MutationFunction<ChangeP
  * const [changeProductMutation, { data, loading, error }] = useChangeProductMutation({
  *   variables: {
  *      id: // value for 'id'
- *      name: // value for 'name'
  *   },
  * });
  */
@@ -1076,9 +1094,18 @@ export const GetFieldsProductByIdDocument = gql`
     query GetFieldsProductById($id: Int!) {
   products(filter: {id: $id}) {
     id
-    fields {
+    info {
+      fields {
+        id
+        value
+      }
+    }
+    category {
       id
-      value
+      fields {
+        id
+        name
+      }
     }
   }
 }

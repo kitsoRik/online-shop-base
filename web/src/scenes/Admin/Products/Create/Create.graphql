@@ -1,7 +1,6 @@
-mutation CreateProduct($name: String!, $categoryId: Int!) {
-	createProduct(name: $name, categoryId: $categoryId) {
+mutation CreateProduct($categoryId: Int!) {
+	createProduct(categoryId: $categoryId) {
 		id
-		name
 		category {
 			id
 		}

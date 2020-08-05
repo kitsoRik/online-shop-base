@@ -1,6 +1,5 @@
 query FindProductByNameTemplate($template: String) {
 	findProductByNameTemplate(template: $template) {
 		id
-		name
 	}
 }

@@ -1,9 +1,18 @@
 query GetFieldsProductById($id: Int!) {
 	products(filter: { id: $id }) {
 		id
-		fields {
+		info {
+			fields {
+				id
+				value
+			}
+		}
+		category {
 			id
-			value
+			fields {
+				id
+				name
+			}
 		}
 	}
 }

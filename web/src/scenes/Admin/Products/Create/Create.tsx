@@ -8,18 +8,14 @@ import { notification } from "antd";
 const Create = () => {
 	const [createProduct] = useCreateProductMutation();
 
-	const onCreate = async (
-		name: string,
-		categoryId: number,
-		form: FormInstance
-	) => {
+	const onCreate = async (categoryId: number, form: FormInstance) => {
 		try {
 			const { data } = await createProduct({
-				variables: { name, categoryId }
+				variables: { categoryId }
 			});
 
 			notification.success({
-				message: `Product ${name} has been created`
+				message: `Product has been created`
 			});
 
 			form.resetFields();

@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Category } from "../../../../../../../generated/graphql";
 import { Form, Input, Button, notification } from "antd";
-import {
-	useChangeProductMutation,
-	useGetProductByIdQuery
-} from "../../../../../../../generated/graphql";
 import { useForm } from "antd/lib/form/Form";
 import { useLocationFieldT } from "react-location-query";
+import { useChangeProductMutation, useGetProductByIdQuery } from "../../../../../../../../../generated/graphql";
 
 interface Props {
 	load: boolean;
@@ -22,13 +18,12 @@ const Content = ({ load }: Props) => {
 		skip: productId === -1
 	});
 
-	const onChange = async (name: string) => {
+	const onChange = async () => {
 		if (!product) throw new Error("Here product must be defined");
 		try {
 			const { data } = await change({
 				variables: {
-					id: product.id,
-					name: name
+					id: product.id
 				}
 			});
 			notification.success({ message: "Product has been changed" });
@@ -54,16 +49,7 @@ const Content = ({ load }: Props) => {
 
 	return (
 		<>
-			<Form form={form} onFinish={({ name }) => onChange(name)}>
-				<Form.Item
-					label="Name"
-					name="name"
-					initialValue={product?.name}
-					required
-					rules={[{ required: true, message: "Name is required" }]}
-				>
-					<Input />
-				</Form.Item>
+			<Form form={form} onFinish={({}) => onChange()}>
 				<Form.Item>
 					<Button
 						type="primary"

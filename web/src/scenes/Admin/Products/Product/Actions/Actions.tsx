@@ -1,18 +1,14 @@
 import React from "react";
-import { Category } from "../../../../../generated/graphql";
-import { Menu, Tabs } from "antd";
-import EditContent from "./EditAction/Content";
-import { useLocationField, useQueryPush } from "react-location-query";
-import FieldsContent from "./FieldsAction/Content";
+import { Tabs } from "antd";
+import { useLocationField } from "react-location-query";
 import CategoryAction from "./CategoryAction";
-import EditAction from "./EditAction";
-import FieldsAction from "./FieldsAction";
+import InfoAction from "./InfoAction";
 
 const Actions = () => {
 	const [tab, setTab] = useLocationField("tab", {
 		type: "string",
-		initial: "editing",
-		enum: ["editing", "fields"]
+		initial: "info",
+		enum: ["info", "category"]
 	});
 
 	return (
@@ -27,9 +23,8 @@ const Actions = () => {
 				setTab(tab);
 			}}
 		>
-			{EditAction()}
 			{CategoryAction()}
-			{FieldsAction()}
+			{InfoAction()}
 		</Tabs>
 	);
 };

@@ -1,19 +1,19 @@
 import React from "react";
-import { ProductField } from "../../../../../../../../generated/graphql";
+import { ProductField } from "../../../../../../../../../../../generated/graphql";
 import { List } from "antd";
 import { useLocationFieldT } from "react-location-query";
 
 interface Props {
-	field: ProductField;
+	productField: ProductField;
 }
 
-const FieldItem = ({ field }: Props) => {
+const FieldItem = ({ productField }: Props) => {
 	const [productId] = useLocationFieldT<number>("product");
 
 	return (
 		<>
 			<List.Item actions={[]}>
-				<List.Item.Meta description={field.value} />
+				<List.Item.Meta description={productField.value} />
 			</List.Item>
 		</>
 	);

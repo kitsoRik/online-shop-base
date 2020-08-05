@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import Search from "../../Main/Search";
-import { Category } from "../../../../../generated/graphql";
+import { Category, Product } from "../../../../../generated/graphql";
 import { useLocationField } from "react-location-query";
 
 interface Props {
-	onProductChange: (category: Category) => void;
+	onProductChange: (product: { id: number }) => void;
 }
 
 const SearchEdit = ({ onProductChange }: Props) => {
@@ -19,7 +19,6 @@ const SearchEdit = ({ onProductChange }: Props) => {
 			initialValue={name}
 			onProductChange={product => {
 				onProductChange(product);
-				setName(product.name);
 			}}
 		/>
 	);

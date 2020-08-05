@@ -1,0 +1,11 @@
+query GetProductById($id: Int!) {
+	products(filter: { id: $id }) {
+		id
+	}
+}
+
+mutation ChangeProduct($id: Int!) {
+	changeProduct(id: $id) {
+		id
+	}
+}

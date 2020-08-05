@@ -5,7 +5,7 @@ import InputCategory from "../../../../../shared/InputCategory";
 import { useForm, FormInstance } from "antd/lib/form/Form";
 
 interface Props {
-	onCreate: (name: string, categoryId: number, form: FormInstance) => void;
+	onCreate: (categoryId: number, form: FormInstance) => void;
 }
 
 const Form = ({ onCreate }: Props) => {
@@ -14,17 +14,9 @@ const Form = ({ onCreate }: Props) => {
 	return (
 		<FormD
 			form={form}
-			onFinish={({ name, category }) => onCreate(name, category, form)}
+			onFinish={({ category }) => onCreate(category, form)}
 			layout="vertical"
 		>
-			<FormD.Item name="name" label="Product name">
-				<Input
-					size="large"
-					placeholder="Input product name"
-					prefix={<UserOutlined />}
-					required
-				/>
-			</FormD.Item>
 			<FormD.Item name="category" label="Category description">
 				<InputCategory />
 			</FormD.Item>

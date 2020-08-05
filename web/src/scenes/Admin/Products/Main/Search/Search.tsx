@@ -8,7 +8,7 @@ import classes from "./Search.module.scss";
 
 interface Props {
 	initialValue?: string;
-	onProductChange: (product: { id: number, name: string }) => void;
+	onProductChange: (product: { id: number }) => void;
 }
 
 const Search = ({ initialValue, onProductChange }: Props) => {
@@ -26,7 +26,7 @@ const Search = ({ initialValue, onProductChange }: Props) => {
 	const products = data?.findProductByNameTemplate ?? [];
 
 	const options = products.map(product => ({
-		value: product.name,
+		value: "qwe",
 		key: product.id
 	}));
 

@@ -1,12 +1,15 @@
 import React from "react";
 import {
 	useGetFieldsProductByIdQuery,
-	Category
-} from "../../../../../../../generated/graphql";
-import { Button, List } from "antd";
+	Category,
+	ProductField
+} from "../../../../../../../../../generated/graphql";
+import { Button, List, Tabs } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useLocationField, useLocationFieldT } from "react-location-query";
-import FieldItem from "./FieldItem";
+import FieldItem from "./ProductFields/FieldItem";
+import CategoryFields from "./CategoryFields";
+import ProductFields from "./ProductFields";
 
 interface Props {
 	load: boolean;
@@ -14,11 +17,6 @@ interface Props {
 
 const Content = ({ load }: Props) => {
 	const [productId] = useLocationFieldT<number>("product");
-	const [, setAdd] = useLocationField("add", {
-		type: "boolean",
-		initial: false,
-		hideIfInitial: true
-	});
 
 	const [] = useLocationField("modify", {
 		type: "string",
@@ -37,21 +35,19 @@ const Content = ({ load }: Props) => {
 
 	if (!product) throw new Error("Unknown category");
 
-	const fields = product.fields ?? [];
+	const productFields: ProductField[] = [];
+	const categoryFields = product.category.fields ?? [];
 
 	return (
 		<>
-			<List
-				itemLayout="horizontal"
-				dataSource={fields}
-				renderItem={field => <FieldItem field={field} />}
+			<CategoryFields
+				categoryFields={categoryFields}
+				productFields={productFields}
 			/>
-			<div>
-				<Button type="dashed" block onClick={() => setAdd(true)}>
-					<PlusOutlined />
-					Add field
-				</Button>
-			</div>
+			<ProductFields
+				categoryFields={categoryFields}
+				productFields={productFields}
+			/>
 		</>
 	);
 };

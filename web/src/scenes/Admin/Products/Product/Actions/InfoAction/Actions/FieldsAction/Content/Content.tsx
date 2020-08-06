@@ -28,7 +28,6 @@ const Content = ({ load }: Props) => {
 		skip: !load,
 		variables: { id: productId }
 	});
-
 	if (loading || !load) return null;
 
 	const product = (data?.products || [null])[0];

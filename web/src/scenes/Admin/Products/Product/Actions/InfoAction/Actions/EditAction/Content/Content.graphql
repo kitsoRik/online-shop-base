@@ -1,11 +1,16 @@
-query GetProductById($id: Int!) {
+query GetProductInfoByProductIdAndInfoId($id: Int!, $infoId: Int!) {
 	products(filter: { id: $id }) {
 		id
+		info(filter: { id: $infoId }) {
+			id
+			name
+			language
+		}
 	}
 }
 
-mutation ChangeProduct($id: Int!) {
-	changeProduct(id: $id) {
+mutation ChangeProductInfo($id: Int!, $infoId: Int!, $name: String!) {
+	changeProductInfo(id: $id, infoId: $infoId, change: { name: $name }) {
 		id
 	}
 }

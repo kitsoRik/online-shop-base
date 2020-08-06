@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, notification } from "antd";
+import React, { useEffect } from "react";
+import { Form, Button, notification, Input } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { useLocationFieldT } from "react-location-query";
-import { useChangeProductMutation, useGetProductByIdQuery } from "../../../../../../../../../generated/graphql";
+import {
+	useChangeProductInfoMutation,
+	useGetProductInfoByProductIdAndInfoIdQuery
+} from "../../../../../../../../../generated/graphql";
 
 interface Props {
 	load: boolean;
@@ -10,23 +13,26 @@ interface Props {
 
 const Content = ({ load }: Props) => {
 	const [productId] = useLocationFieldT<number>("product");
+	const [infoId] = useLocationFieldT<number>("info");
 
-	const [change] = useChangeProductMutation();
+	const [change] = useChangeProductInfoMutation();
 
-	const { data } = useGetProductByIdQuery({
-		variables: { id: productId },
+	const { data } = useGetProductInfoByProductIdAndInfoIdQuery({
+		variables: { id: productId, infoId },
 		skip: productId === -1
 	});
 
-	const onChange = async () => {
-		if (!product) throw new Error("Here product must be defined");
+	const onChange = async (name: string) => {
+		if (!info) throw new Error("Here product info must be defined");
 		try {
 			const { data } = await change({
 				variables: {
-					id: product.id
+					id: info.id,
+					infoId: 1,
+					name
 				}
 			});
-			notification.success({ message: "Product has been changed" });
+			notification.success({ message: "Product info has been changed" });
 		} catch (e) {
 			switch (e.type) {
 				case "UNKNOWN_CATEGORY":
@@ -40,16 +46,18 @@ const Content = ({ load }: Props) => {
 
 	const [form] = useForm();
 	const product = (data?.products ?? [null])[0];
+	const info = (product?.info ?? [null])[0];
 
 	useEffect(() => {
 		form.resetFields();
-	}, [product]);
-
-	console.log(product);
+	}, [info]);
 
 	return (
 		<>
-			<Form form={form} onFinish={({}) => onChange()}>
+			<Form form={form} onFinish={({ name }) => onChange(name)}>
+				<Form.Item name="name" label="Name" initialValue={info?.name}>
+					<Input />
+				</Form.Item>
 				<Form.Item>
 					<Button
 						type="primary"

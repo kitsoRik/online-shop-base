@@ -1,0 +1,12 @@
+query GetProductInfoByProductId($id: Int!) {
+	products(filter: { id: $id }) {
+		info {
+			id
+			language
+			fields {
+				id
+				value
+			}
+		}
+	}
+}

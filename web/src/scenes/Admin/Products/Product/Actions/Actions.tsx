@@ -15,7 +15,6 @@ const Actions = () => {
 		<Tabs
 			activeKey={tab}
 			tabPosition={"left"}
-			style={{ height: 220 }}
 			onTabClick={tab => {
 				// if (tab === "category") {
 				// 	return queryPush("/admin/categories/edit", { category: 1 });

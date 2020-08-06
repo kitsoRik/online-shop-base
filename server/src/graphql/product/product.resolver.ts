@@ -13,41 +13,28 @@ import { ProductService } from "./product.service";
 import { ProductType } from "./product.type";
 import { CategoryService } from "../category/category.service";
 import { ProductInput } from "./product.input";
-import { ProductFieldInput } from "./product-field/product-field.input";
+import { ProductInfoType } from "./product-info/product-info.type";
+import { ProductInfoService } from "./product-info/product-info.service";
+import { ProductInfoInput } from "./product-info/product-info.input";
 
 @Resolver(of => ProductType)
 export class ProductResolver {
 	constructor(
 		private productService: ProductService,
+		private productInfoService: ProductInfoService,
 		private categoryService: CategoryService
 	) {}
 
 	@Mutation(type => ProductType)
 	@AccessAdmin()
-	createProduct(
-		@Args("name") name: string,
-		@Args("categoryId", { type: () => Int }) categoryId: number
-	) {
-		return this.productService.createProduct(name, categoryId);
+	createProduct(@Args("categoryId", { type: () => Int }) categoryId: number) {
+		return this.productService.createProduct(categoryId);
 	}
 
 	@Mutation(type => ProductType)
 	@AccessAdmin()
-	changeProduct(
-		@Args("id", { type: () => Int }) id: number,
-		@Args("name") name: string
-	) {
-		return this.productService.changeProduct(id, name);
-	}
-
-	@Mutation(type => ProductType)
-	@AccessAdmin()
-	changeFieldInProduct(
-		@Args("id", { type: () => Int }) id: number,
-		@Args("fieldId") fieldId: string,
-		@Args("value") value: string
-	) {
-		return this.productService.changeField(id, fieldId, value);
+	changeProduct(@Args("id", { type: () => Int }) id: number) {
+		return this.productService.changeProduct(id);
 	}
 
 	@Query(type => [ProductType])
@@ -55,6 +42,7 @@ export class ProductResolver {
 		@Args("filter", { type: () => ProductInput, nullable: true })
 		filter: ProductInput
 	) {
+		console.log(filter);
 		if (filter.id !== undefined) {
 			return [this.productService.findById(filter.id)];
 		}
@@ -68,15 +56,21 @@ export class ProductResolver {
 	}
 
 	@ResolveField(type => ProductType)
-	category(@Parent() { id }: { id: number }) {
-		return this.categoryService.findById(id);
+	category(@Parent() { categoryId }: { categoryId: number }) {
+		return this.categoryService.findById(categoryId);
 	}
 
-	@ResolveField(type => ProductType)
-	fields(
+	@ResolveField(type => [ProductInfoType])
+	info(
 		@Parent() { id }: { id: number },
-		@Args("filter", { nullable: true }) filter: ProductFieldInput
+		@Args("filter", { nullable: true }) filter: ProductInfoInput
 	) {
-		return this.productService.getFields(id);
+		if (!filter) return this.productInfoService.getInfoByProductId(id);
+		if (filter.id) {
+			return this.productInfoService.getInfoByProductIdAndInfoId(
+				id,
+				filter.id
+			);
+		}
 	}
 }

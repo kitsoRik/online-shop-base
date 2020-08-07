@@ -4,8 +4,8 @@ import classes from "./Page.module.scss";
 interface Props {
 	children: React.ReactNode;
 
-	hAlign?: "left" | "center" | "right";
-	vAlign?: "top" | "center" | "bottom";
+	hAlign?: "left" | "center" | "right" | "stretch";
+	vAlign?: "top" | "center" | "bottom" | "stretch";
 }
 
 const Page = ({ children, hAlign = "center", vAlign = "center" }: Props) => {
@@ -22,7 +22,9 @@ const Page = ({ children, hAlign = "center", vAlign = "center" }: Props) => {
 	);
 };
 
-const alignItemsFromHAlign = (hAlign: "left" | "center" | "right") => {
+const alignItemsFromHAlign = (
+	hAlign: "left" | "center" | "right" | "stretch"
+) => {
 	switch (hAlign) {
 		case "left":
 			return "flex-start";
@@ -30,12 +32,16 @@ const alignItemsFromHAlign = (hAlign: "left" | "center" | "right") => {
 			return "center";
 		case "right":
 			return "flex-end";
+		case "stretch":
+			return "stretch";
 		default:
 			throw new Error(`Unknown hAlign, passed ${hAlign}`);
 	}
 };
 
-const justifyContentFromVAlign = (hAlign: "top" | "center" | "bottom") => {
+const justifyContentFromVAlign = (
+	hAlign: "top" | "center" | "bottom" | "stretch"
+) => {
 	switch (hAlign) {
 		case "top":
 			return "flex-start";
@@ -43,6 +49,8 @@ const justifyContentFromVAlign = (hAlign: "top" | "center" | "bottom") => {
 			return "center";
 		case "bottom":
 			return "flex-end";
+		case "stretch":
+			return "stretch";
 		default:
 			throw new Error(`Unknown vAlign, passed ${hAlign}`);
 	}

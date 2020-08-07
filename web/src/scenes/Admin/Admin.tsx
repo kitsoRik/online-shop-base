@@ -10,6 +10,14 @@ const Admin = () => {
 export const AdminHeader = () => {
 	return (
 		<Menu theme="dark" mode="horizontal" selectable={false}>
+			<Menu.SubMenu title="General">
+				<Menu.Item>
+					<Link to="/admin/general/information">Information</Link>
+				</Menu.Item>
+				<Menu.Item>
+					<Link to="/admin/general/languages">Languages</Link>
+				</Menu.Item>
+			</Menu.SubMenu>
 			<Menu.SubMenu title="Categories">
 				<Menu.Item>
 					<Link to="/admin/categories/create">Create</Link>

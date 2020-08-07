@@ -86,6 +86,13 @@ export type ProductInfoInput = {
   id?: Maybe<Scalars['Int']>;
 };
 
+export type Language = {
+  __typename?: 'Language';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  code: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
@@ -94,6 +101,7 @@ export type Query = {
   findCategoryById?: Maybe<Category>;
   products: Array<Product>;
   findProductByNameTemplate: Array<Product>;
+  languages: Array<Language>;
 };
 
 
@@ -135,6 +143,7 @@ export type Mutation = {
   addProductInfoToProduct: Product;
   changeProductInfo: ProductInfo;
   changeFieldInProductInfo: ProductInfo;
+  addLanguage: Language;
 };
 
 
@@ -213,6 +222,12 @@ export type MutationChangeFieldInProductInfoArgs = {
   value: Scalars['String'];
   fieldId: Scalars['String'];
   id: Scalars['Int'];
+};
+
+
+export type MutationAddLanguageArgs = {
+  code: Scalars['String'];
+  name: Scalars['String'];
 };
 
 export type ChangeProductInfoInput = {
@@ -410,6 +425,31 @@ export type FindCategoryByNameTemplateQuery = (
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'name'>
   )> }
+);
+
+export type GetLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetLanguagesQuery = (
+  { __typename?: 'Query' }
+  & { languages: Array<(
+    { __typename?: 'Language' }
+    & Pick<Language, 'id' | 'name' | 'code'>
+  )> }
+);
+
+export type AddLanguageMutationVariables = Exact<{
+  name: Scalars['String'];
+  code: Scalars['String'];
+}>;
+
+
+export type AddLanguageMutation = (
+  { __typename?: 'Mutation' }
+  & { addLanguage: (
+    { __typename?: 'Language' }
+    & Pick<Language, 'id' | 'name' | 'code'>
+  ) }
 );
 
 export type CreateProductMutationVariables = Exact<{
@@ -1020,6 +1060,75 @@ export function useFindCategoryByNameTemplateLazyQuery(baseOptions?: ApolloReact
 export type FindCategoryByNameTemplateQueryHookResult = ReturnType<typeof useFindCategoryByNameTemplateQuery>;
 export type FindCategoryByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindCategoryByNameTemplateLazyQuery>;
 export type FindCategoryByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindCategoryByNameTemplateQuery, FindCategoryByNameTemplateQueryVariables>;
+export const GetLanguagesDocument = gql`
+    query GetLanguages {
+  languages {
+    id
+    name
+    code
+  }
+}
+    `;
+
+/**
+ * __useGetLanguagesQuery__
+ *
+ * To run a query within a React component, call `useGetLanguagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetLanguagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetLanguagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetLanguagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetLanguagesQuery, GetLanguagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetLanguagesQuery, GetLanguagesQueryVariables>(GetLanguagesDocument, baseOptions);
+      }
+export function useGetLanguagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetLanguagesQuery, GetLanguagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetLanguagesQuery, GetLanguagesQueryVariables>(GetLanguagesDocument, baseOptions);
+        }
+export type GetLanguagesQueryHookResult = ReturnType<typeof useGetLanguagesQuery>;
+export type GetLanguagesLazyQueryHookResult = ReturnType<typeof useGetLanguagesLazyQuery>;
+export type GetLanguagesQueryResult = ApolloReactCommon.QueryResult<GetLanguagesQuery, GetLanguagesQueryVariables>;
+export const AddLanguageDocument = gql`
+    mutation AddLanguage($name: String!, $code: String!) {
+  addLanguage(name: $name, code: $code) {
+    id
+    name
+    code
+  }
+}
+    `;
+export type AddLanguageMutationFn = ApolloReactCommon.MutationFunction<AddLanguageMutation, AddLanguageMutationVariables>;
+
+/**
+ * __useAddLanguageMutation__
+ *
+ * To run a mutation, you first call `useAddLanguageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddLanguageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addLanguageMutation, { data, loading, error }] = useAddLanguageMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      code: // value for 'code'
+ *   },
+ * });
+ */
+export function useAddLanguageMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddLanguageMutation, AddLanguageMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddLanguageMutation, AddLanguageMutationVariables>(AddLanguageDocument, baseOptions);
+      }
+export type AddLanguageMutationHookResult = ReturnType<typeof useAddLanguageMutation>;
+export type AddLanguageMutationResult = ApolloReactCommon.MutationResult<AddLanguageMutation>;
+export type AddLanguageMutationOptions = ApolloReactCommon.BaseMutationOptions<AddLanguageMutation, AddLanguageMutationVariables>;
 export const CreateProductDocument = gql`
     mutation CreateProduct($categoryId: Int!) {
   createProduct(categoryId: $categoryId) {

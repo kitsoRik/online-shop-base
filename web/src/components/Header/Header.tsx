@@ -16,8 +16,13 @@ const Header = ({ user }: Props) => {
 	if (user?.adminView) {
 		return (
 			<Layout.Header className={classes.header}>
-				<AdminHeader />
-				<UserComponent />
+				<div className={classes.layout}>
+					<AdminHeader />
+					<div></div>
+					<div className={classes.rightContainer}>
+						<UserComponent />
+					</div>
+				</div>
 			</Layout.Header>
 		);
 	}

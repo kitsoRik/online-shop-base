@@ -1,0 +1,7 @@
+mutation AddLanguage($name: String!, $code: String!) {
+	addLanguage(name: $name, code: $code) {
+		id
+		name
+		code
+	}
+}

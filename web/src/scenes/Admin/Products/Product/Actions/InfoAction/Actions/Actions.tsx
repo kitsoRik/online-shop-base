@@ -39,7 +39,7 @@ const Actions = () => {
 			<Tabs
 				tabPosition="top"
 				type="editable-card"
-				onEdit={(arg1, action) => {
+				onEdit={(key, action) => {
 					if (action === "add") setAddInfo(true);
 				}}
 				activeKey={infoId.toString()}

@@ -451,6 +451,7 @@ export type GetProductInfoByProductIdQuery = (
   { __typename?: 'Query' }
   & { products: Array<(
     { __typename?: 'Product' }
+    & Pick<Product, 'id'>
     & { info: Array<(
       { __typename?: 'ProductInfo' }
       & Pick<ProductInfo, 'id' | 'language'>
@@ -475,7 +476,7 @@ export type AddProductInfoToProductMutation = (
     & Pick<Product, 'id'>
     & { info: Array<(
       { __typename?: 'ProductInfo' }
-      & Pick<ProductInfo, 'language'>
+      & Pick<ProductInfo, 'id' | 'language'>
     )> }
   ) }
 );
@@ -1090,6 +1091,7 @@ export type FindProductByNameTemplateQueryResult = ApolloReactCommon.QueryResult
 export const GetProductInfoByProductIdDocument = gql`
     query GetProductInfoByProductId($id: Int!) {
   products(filter: {id: $id}) {
+    id
     info {
       id
       language
@@ -1132,6 +1134,7 @@ export const AddProductInfoToProductDocument = gql`
   addProductInfoToProduct(productId: $id, language: $language) {
     id
     info {
+      id
       language
     }
   }

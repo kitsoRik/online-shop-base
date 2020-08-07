@@ -1,0 +1,6 @@
+query FindCategoryById($id: Int!) {
+	findCategoryById(id: $id) {
+		id
+		name
+	}
+}

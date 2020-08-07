@@ -1,15 +1,24 @@
 import React from "react";
 import { Tabs } from "antd";
 import { useLocationField } from "react-location-query";
-import CategoryAction from "./CategoryAction";
 import InfoAction from "./InfoAction";
+import { Link } from "react-location-query";
+import { useFindCategoryByIdQuery } from "../../../../../generated/graphql";
 
 const Actions = () => {
+	const [productId] = useLocationField("product");
 	const [tab, setTab] = useLocationField("tab", {
 		type: "string",
 		initial: "info",
 		enum: ["info", "category"]
 	});
+
+	const { data, loading } = useFindCategoryByIdQuery({
+		skip: productId === -1,
+		variables: { id: productId }
+	});
+
+	const category = data?.findCategoryById;
 
 	return (
 		<Tabs
@@ -22,7 +31,17 @@ const Actions = () => {
 				setTab(tab);
 			}}
 		>
-			{CategoryAction()}
+			<Tabs.TabPane
+				key="category"
+				tab={
+					<Link
+						to="/admin/categories/edit"
+						query={{ category: category?.id ?? -1 }}
+					>
+						Category
+					</Link>
+				}
+			></Tabs.TabPane>
 			{InfoAction()}
 		</Tabs>
 	);

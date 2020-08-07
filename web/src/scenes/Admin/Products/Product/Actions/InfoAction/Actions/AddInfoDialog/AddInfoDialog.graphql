@@ -2,6 +2,7 @@ mutation AddProductInfoToProduct($id: Int!, $language: String!) {
 	addProductInfoToProduct(productId: $id, language: $language) {
 		id
 		info {
+			id
 			language
 		}
 	}

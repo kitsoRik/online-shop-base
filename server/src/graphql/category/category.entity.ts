@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-import { CategoryFieldType } from "./category-field/category-field.type";
-import { CategoryFieldEntity } from "./category-field/category-field.entity";
+import { CategoryFieldEntity } from "./category-field/category-field";
 
 @Entity({ name: "categories" })
 export class CategoryEntity {

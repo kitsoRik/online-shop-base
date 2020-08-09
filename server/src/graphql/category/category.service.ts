@@ -3,7 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CategoryEntity } from "./category.entity";
 import { Repository } from "typeorm";
 import { GraphQLError } from "graphql";
-import { CategoryFieldEntity } from "./category-field/category-field.entity";
+import { CategoryFieldEntity } from "./category-field/category-field";
 
 import * as uuid from "uuid";
 

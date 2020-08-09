@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	ManyToOne,
+	JoinColumn
+} from "typeorm";
 import { ProductFieldEntity } from "./product-field/product-field.entity";
+import { ProductEntity } from "../product.entity";
 
 @Entity({ name: "products_info" })
 export class ProductInfoEntity {
@@ -12,7 +19,14 @@ export class ProductInfoEntity {
 	@Column({ name: "language" })
 	language: string;
 
-	@Column({ name: "product_id" })
+	@ManyToOne(
+		type => ProductEntity,
+		product => product.id
+	)
+	@JoinColumn({ name: "product_id" })
+	product: ProductEntity;
+
+	@Column({ name: "product_id", default: -1 })
 	productId: number;
 
 	@Column({

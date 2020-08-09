@@ -4,17 +4,21 @@ import { ProductInfoEntity } from "./product-info.entity";
 import { Repository } from "typeorm";
 import { GraphQLError } from "graphql";
 import { ChangeProductInfoInput } from "./product-info.input";
+import { ProductService } from "../product.service";
 
 @Injectable()
 export class ProductInfoService {
 	constructor(
 		@InjectRepository(ProductInfoEntity)
-		private productInfoRepository: Repository<ProductInfoEntity>
+		private productInfoRepository: Repository<ProductInfoEntity>,
+		private productService: ProductService
 	) {}
 
 	async addProductInfo(productId: number, language: string) {
+		const product = await this.productService.findById(productId);
+
 		const productInfo = await this.productInfoRepository.create({
-			productId,
+			product,
 			language
 		});
 

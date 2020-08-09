@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { ProductFieldEntity } from "./product-info/product-field/product-field.entity";
+import { ProductFieldEntity } from "./product-info/product-field/product-field";
 import { ProductInfoEntity } from "./product-info/product-info.entity";
 
 @Entity({ name: "products" })

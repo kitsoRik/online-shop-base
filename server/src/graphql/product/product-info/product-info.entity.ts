@@ -5,7 +5,7 @@ import {
 	ManyToOne,
 	JoinColumn
 } from "typeorm";
-import { ProductFieldEntity } from "./product-field/product-field.entity";
+import { ProductFieldEntity } from "./product-field/product-field";
 import { ProductEntity } from "../product.entity";
 
 @Entity({ name: "products_info" })

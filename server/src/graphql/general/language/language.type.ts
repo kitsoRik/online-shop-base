@@ -6,8 +6,5 @@ export class LanguageType {
 	id: number;
 
 	@Field()
-	name: string;
-
-	@Field()
 	code: string;
 }

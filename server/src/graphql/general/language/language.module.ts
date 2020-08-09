@@ -1,11 +1,9 @@
 import { Module } from "@nestjs/common";
-import { LanguageService } from "./language.service";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import { LanguageEntity } from "./language.entity";
 import { LanguageResolver } from "./language.resolver";
+import { LanguageModule as ConfigLanguageModule } from "src/config/language/language.module";
 
 @Module({
-	imports: [TypeOrmModule.forFeature([LanguageEntity])],
-	providers: [LanguageService, LanguageResolver]
+	imports: [ConfigLanguageModule],
+	providers: [LanguageResolver]
 })
 export class LanguageModule {}

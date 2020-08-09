@@ -89,7 +89,6 @@ export type ProductInfoInput = {
 export type Language = {
   __typename?: 'Language';
   id: Scalars['Int'];
-  name: Scalars['String'];
   code: Scalars['String'];
 };
 
@@ -144,6 +143,7 @@ export type Mutation = {
   changeProductInfo: ProductInfo;
   changeFieldInProductInfo: ProductInfo;
   addLanguage: Language;
+  setLanguageJson: Scalars['Boolean'];
 };
 
 
@@ -227,7 +227,12 @@ export type MutationChangeFieldInProductInfoArgs = {
 
 export type MutationAddLanguageArgs = {
   code: Scalars['String'];
-  name: Scalars['String'];
+};
+
+
+export type MutationSetLanguageJsonArgs = {
+  jsonName: Scalars['String'];
+  id: Scalars['Int'];
 };
 
 export type ChangeProductInfoInput = {
@@ -434,12 +439,22 @@ export type GetLanguagesQuery = (
   { __typename?: 'Query' }
   & { languages: Array<(
     { __typename?: 'Language' }
-    & Pick<Language, 'id' | 'name' | 'code'>
+    & Pick<Language, 'id' | 'code'>
   )> }
 );
 
+export type SetLanguageJsonMutationVariables = Exact<{
+  id: Scalars['Int'];
+  jsonName: Scalars['String'];
+}>;
+
+
+export type SetLanguageJsonMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'setLanguageJson'>
+);
+
 export type AddLanguageMutationVariables = Exact<{
-  name: Scalars['String'];
   code: Scalars['String'];
 }>;
 
@@ -448,7 +463,7 @@ export type AddLanguageMutation = (
   { __typename?: 'Mutation' }
   & { addLanguage: (
     { __typename?: 'Language' }
-    & Pick<Language, 'id' | 'name' | 'code'>
+    & Pick<Language, 'id' | 'code'>
   ) }
 );
 
@@ -1064,7 +1079,6 @@ export const GetLanguagesDocument = gql`
     query GetLanguages {
   languages {
     id
-    name
     code
   }
 }
@@ -1094,11 +1108,41 @@ export function useGetLanguagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQuer
 export type GetLanguagesQueryHookResult = ReturnType<typeof useGetLanguagesQuery>;
 export type GetLanguagesLazyQueryHookResult = ReturnType<typeof useGetLanguagesLazyQuery>;
 export type GetLanguagesQueryResult = ApolloReactCommon.QueryResult<GetLanguagesQuery, GetLanguagesQueryVariables>;
+export const SetLanguageJsonDocument = gql`
+    mutation SetLanguageJson($id: Int!, $jsonName: String!) {
+  setLanguageJson(id: $id, jsonName: $jsonName)
+}
+    `;
+export type SetLanguageJsonMutationFn = ApolloReactCommon.MutationFunction<SetLanguageJsonMutation, SetLanguageJsonMutationVariables>;
+
+/**
+ * __useSetLanguageJsonMutation__
+ *
+ * To run a mutation, you first call `useSetLanguageJsonMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetLanguageJsonMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setLanguageJsonMutation, { data, loading, error }] = useSetLanguageJsonMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      jsonName: // value for 'jsonName'
+ *   },
+ * });
+ */
+export function useSetLanguageJsonMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetLanguageJsonMutation, SetLanguageJsonMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetLanguageJsonMutation, SetLanguageJsonMutationVariables>(SetLanguageJsonDocument, baseOptions);
+      }
+export type SetLanguageJsonMutationHookResult = ReturnType<typeof useSetLanguageJsonMutation>;
+export type SetLanguageJsonMutationResult = ApolloReactCommon.MutationResult<SetLanguageJsonMutation>;
+export type SetLanguageJsonMutationOptions = ApolloReactCommon.BaseMutationOptions<SetLanguageJsonMutation, SetLanguageJsonMutationVariables>;
 export const AddLanguageDocument = gql`
-    mutation AddLanguage($name: String!, $code: String!) {
-  addLanguage(name: $name, code: $code) {
+    mutation AddLanguage($code: String!) {
+  addLanguage(code: $code) {
     id
-    name
     code
   }
 }
@@ -1118,7 +1162,6 @@ export type AddLanguageMutationFn = ApolloReactCommon.MutationFunction<AddLangua
  * @example
  * const [addLanguageMutation, { data, loading, error }] = useAddLanguageMutation({
  *   variables: {
- *      name: // value for 'name'
  *      code: // value for 'code'
  *   },
  * });

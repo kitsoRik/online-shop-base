@@ -7,9 +7,9 @@ import { useForm } from "antd/lib/form/Form";
 const New = () => {
 	const [addLanguage] = useAddLanguageMutation();
 
-	const onAddLanguage = async (name: string, code: string) => {
+	const onAddLanguage = async (code: string) => {
 		try {
-			const {} = await addLanguage({ variables: { name, code } });
+			const {} = await addLanguage({ variables: { code } });
 		} catch (e) {
 			console.log(e.message);
 		}
@@ -19,18 +19,7 @@ const New = () => {
 
 	return (
 		<>
-			<Form
-				form={form}
-				onFinish={({ name, code }) => onAddLanguage(name, code)}
-			>
-				<Form.Item
-					label="Name"
-					name="name"
-					required
-					rules={[{ required: true }]}
-				>
-					<Input />
-				</Form.Item>
+			<Form form={form} onFinish={({ code }) => onAddLanguage(code)}>
 				<Form.Item
 					label="Locale"
 					name="code"

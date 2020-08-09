@@ -27,7 +27,7 @@ const List = () => {
 							</Button>
 						]}
 					>
-						{language.name}
+						{language.code}
 					</ListD.Item>
 				)}
 			/>

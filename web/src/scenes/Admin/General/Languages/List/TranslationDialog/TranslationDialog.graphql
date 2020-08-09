@@ -1,0 +1,3 @@
+mutation SetLanguageJson($id: Int!, $jsonName: String!) {
+	setLanguageJson(id: $id, jsonName: $jsonName)
+}

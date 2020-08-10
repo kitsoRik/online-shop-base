@@ -28,8 +28,24 @@ export class ProductService {
 		});
 
 		if (!product) {
-			throw new GraphQLError("UNKNOWN_CATEGORY");
+			throw new GraphQLError("UNKNOWN_PRODUCT");
 		}
+
+		await this.productRepository.save(product);
+
+		return product;
+	}
+
+	async changeCategory(id: number, categoryId: number) {
+		const product = await this.productRepository.findOne({
+			id
+		});
+
+		if (!product) {
+			throw new GraphQLError("UNKNOWN_PRODUCT");
+		}
+
+		product.categoryId = categoryId;
 
 		await this.productRepository.save(product);
 

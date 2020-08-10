@@ -37,6 +37,15 @@ export class ProductResolver {
 		return this.productService.changeProduct(id);
 	}
 
+	@Mutation(type => ProductType)
+	@AccessAdmin()
+	changeCategoryInProduct(
+		@Args("id", { type: () => Int }) id: number,
+		@Args("categoryId", { type: () => Int }) categoryId: number
+	) {
+		return this.productService.changeCategory(id, categoryId);
+	}
+
 	@Query(type => [ProductType])
 	products(
 		@Args("filter", { type: () => ProductInput, nullable: true })

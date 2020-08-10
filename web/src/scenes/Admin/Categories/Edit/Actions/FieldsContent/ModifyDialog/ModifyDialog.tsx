@@ -8,8 +8,10 @@ import {
 import { useLocationFieldT } from "react-location-query";
 import { Form, Input, notification } from "antd";
 import { useForm } from "antd/lib/form/Form";
+import { useTranslation } from "react-i18next";
 
 const ModifyDialog = () => {
+	const { t } = useTranslation();
 	const [categoryId] = useLocationFieldT<number>("category");
 	const [modify, setModify] = useLocationFieldT<string>("modify");
 
@@ -50,7 +52,14 @@ const ModifyDialog = () => {
 			});
 
 			notification.success({
-				message: `Field ${field.name} has been changed`
+				message: t(
+					"admin.categories.edit.actions.fields.modifyDialog.success",
+					{
+						replace: {
+							name: field.name
+						}
+					}
+				)
 			});
 		} catch (e) {
 			console.error(e.message);
@@ -66,11 +75,20 @@ const ModifyDialog = () => {
 			closable={false}
 			onOk={() => form.submit()}
 			okButtonProps={{ disabled: !field }}
-			okText="Modify"
-			cancelText="Cancel"
+			okText={t(
+				"admin.categories.edit.actions.fields.modifyDialog.okText"
+			)}
+			cancelText={t(
+				"admin.categories.edit.actions.fields.modifyDialog.cancelText"
+			)}
 		>
 			<Form form={form} onFinish={({ name }) => handleModify(name)}>
-				<Form.Item name="name" label="Name">
+				<Form.Item
+					name="name"
+					label={t(
+						"admin.categories.edit.actions.fields.modifyDialog.form.name.label"
+					)}
+				>
 					<Input />
 				</Form.Item>
 			</Form>

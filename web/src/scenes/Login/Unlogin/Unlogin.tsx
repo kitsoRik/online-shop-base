@@ -7,8 +7,10 @@ import {
 import Page from "../../../shared/Page";
 import { useApolloClient } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const Unlogin = () => {
+	const { t } = useTranslation();
 	const [unlogin] = useUnloginMutation();
 
 	const client = useApolloClient();
@@ -18,13 +20,12 @@ const Unlogin = () => {
 			const unlogined = await unlogin();
 			if (unlogined) {
 				notification.success({
-					message: "You have left from your profile"
+					message: t("scenes.login.unlogin.success")
 				});
 			}
 		} catch (e) {
 			notification.error({
-				message:
-					"Server response error, but you've left from your profile localy"
+				message: t("scenes.login.unlogin.error")
 			});
 		}
 		client.writeQuery({
@@ -39,14 +40,14 @@ const Unlogin = () => {
 		<Page>
 			<Result
 				status="warning"
-				title="Ooy, you are loggined now, do you want leave?"
+				title={t("scenes.login.unlogin.title")}
 				extra={
 					<>
 						<Button type="primary" onClick={onUnlogin}>
-							Yes, I want leave
+							{t("scenes.login.unlogin.ok")}
 						</Button>
 						<Button onClick={onUnlogin}>
-							<Link to="/">No, go to home page</Link>
+							<Link to="/">{t("scenes.login.unlogin.no")}</Link>
 						</Button>
 					</>
 				}

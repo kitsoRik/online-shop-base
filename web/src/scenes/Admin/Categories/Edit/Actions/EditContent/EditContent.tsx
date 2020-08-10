@@ -3,6 +3,7 @@ import { Category } from "../../../../../../generated/graphql";
 import { Form, Input, Button, notification } from "antd";
 import { useChangeCategoryMutation } from "../../../../../../generated/graphql";
 import { useForm } from "antd/lib/form/Form";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	category: Category;
@@ -13,6 +14,8 @@ interface Props {
 const EditContent = ({ category, load }: Props) => {
 	const [change] = useChangeCategoryMutation();
 
+	const { t } = useTranslation();
+
 	const onChange = async (name: string) => {
 		try {
 			const { data } = await change({
@@ -22,12 +25,16 @@ const EditContent = ({ category, load }: Props) => {
 				}
 			});
 
-			notification.success({ message: "Category has been changed" });
+			notification.success({
+				message: t("admin.categories.edit.actions.edit.success")
+			});
 		} catch (e) {
 			switch (e.type) {
 				case "UNKNOWN_CATEGORY":
 					notification.error({
-						message: "Internal server error, please reload page"
+						message: t(
+							"admin.categories.edit.actions.edit.error.unknownCategory"
+						)
 					});
 					break;
 			}
@@ -44,17 +51,28 @@ const EditContent = ({ category, load }: Props) => {
 		<>
 			<Form form={form} onFinish={({ name }) => onChange(name)}>
 				<Form.Item
-					label="Name"
+					label={t(
+						"admin.categories.edit.actions.edit.form.name.label"
+					)}
 					name="name"
 					initialValue={category.name}
 					required
-					rules={[{ required: true, message: "Name is required" }]}
+					rules={[
+						{
+							required: true,
+							message: t(
+								"admin.categories.edit.actions.edit.form.name.rules.requiredMessage"
+							)
+						}
+					]}
 				>
 					<Input />
 				</Form.Item>
 				<Form.Item>
 					<Button type="primary" htmlType="submit">
-						Change
+						{t(
+							"admin.categories.edit.actions.edit.form.submit.change"
+						)}
 					</Button>
 				</Form.Item>
 			</Form>

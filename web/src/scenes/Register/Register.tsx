@@ -4,8 +4,10 @@ import Form from "./Form";
 import { Typography } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { useRegisterMutation } from "../../generated/graphql";
+import { useTranslation } from "react-i18next";
 
 const Register = () => {
+	const { t } = useTranslation();
 	const [register, {}] = useRegisterMutation();
 
 	const onRegister = async (
@@ -28,12 +30,14 @@ const Register = () => {
 					phone
 				}
 			});
-			console.log(newUser);
 		} catch (e) {
 			switch (e.message) {
 				case "EMAIL_IS_BUSY":
 					form.setFields([
-						{ name: "email", errors: ["Email is busy"] }
+						{
+							name: "email",
+							errors: [t("scenes.register.errors.busyEmail")]
+						}
 					]);
 			}
 		}
@@ -41,7 +45,9 @@ const Register = () => {
 
 	return (
 		<Page>
-			<Typography.Title level={2}>Register</Typography.Title>
+			<Typography.Title level={2}>
+				{t("scenes.register.title")}
+			</Typography.Title>
 			<Form onRegister={onRegister} />
 		</Page>
 	);

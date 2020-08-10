@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Input, AutoComplete } from "antd";
-import { UserOutlined } from "@ant-design/icons";
+import { AutoComplete } from "antd";
 import { useFindCategoryByNameTemplateQuery } from "../../generated/graphql";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	value?: number | string;
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const InputCategory = ({ value, onChange }: Props) => {
+	const { t } = useTranslation();
 	const [template, setTemplate] = useState("");
 
 	const { data, loading } = useFindCategoryByNameTemplateQuery({
@@ -20,7 +21,7 @@ const InputCategory = ({ value, onChange }: Props) => {
 	const onSelect = (value: string, { key }: any) => {
 		if (onChange) onChange(+key);
 	};
-	console.log(categories);
+
 	return (
 		<AutoComplete
 			options={categories.map(category => ({
@@ -30,7 +31,7 @@ const InputCategory = ({ value, onChange }: Props) => {
 			style={{ width: 200 }}
 			onSelect={onSelect}
 			onSearch={setTemplate}
-			placeholder="input here"
+			placeholder={t("shared.inputCategory.placeholder")}
 		/>
 	);
 };

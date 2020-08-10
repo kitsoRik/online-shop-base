@@ -12,8 +12,10 @@ import Unlogin from "./Unlogin";
 import { useApolloClient } from "@apollo/react-hooks";
 import { useHistory } from "react-router";
 import LoginWithButtons from "./LoginWithButtons";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+	const { t } = useTranslation();
 	const [login] = useLoginMutation();
 
 	const client = useApolloClient();
@@ -51,7 +53,10 @@ const Login = () => {
 			switch (e.message) {
 				case "UNKNOWN_DATA":
 					form.setFields([
-						{ name: "password", errors: ["Unknown data"] }
+						{
+							name: "password",
+							errors: [t("scenes.login.error.unknownData")]
+						}
 					]);
 			}
 		}
@@ -59,7 +64,9 @@ const Login = () => {
 
 	return (
 		<Page>
-			<Typography.Title level={2}>Login</Typography.Title>
+			<Typography.Title level={2}>
+				{t("scenes.login.title")}
+			</Typography.Title>
 			<Form onLogin={onLogin} />
 			<LoginWithButtons />
 		</Page>

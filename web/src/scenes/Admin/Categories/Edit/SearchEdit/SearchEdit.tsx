@@ -18,7 +18,6 @@ const SearchEdit = ({ onCategoryChange }: Props) => {
 		<Search
 			initialValue={name}
 			onCategoryChange={category => {
-				console.log(category);
 				onCategoryChange(category);
 				setName(category.name);
 			}}

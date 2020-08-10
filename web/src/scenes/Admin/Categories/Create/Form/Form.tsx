@@ -3,6 +3,7 @@ import { Form as FormD, Input, Button } from "antd";
 import { UserOutlined, PlusOutlined } from "@ant-design/icons";
 import InputCategory from "../../../../../shared/InputCategory";
 import { useForm } from "antd/lib/form/Form";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	onCreate: (name: string, description: string, parentId?: number) => void;
@@ -10,6 +11,8 @@ interface Props {
 
 const Form = ({ onCreate }: Props) => {
 	const [form] = useForm();
+
+	const { t } = useTranslation();
 
 	return (
 		<FormD
@@ -19,28 +22,45 @@ const Form = ({ onCreate }: Props) => {
 			}}
 			layout="vertical"
 		>
-			<FormD.Item name="name" label="Category name">
+			<FormD.Item
+				name="name"
+				label={t("admin.categories.create.form.name.label")}
+			>
 				<Input
 					size="large"
-					placeholder="Input category name"
+					placeholder={t(
+						"admin.categories.create.form.name.placeholder"
+					)}
 					prefix={<UserOutlined />}
 					required
 				/>
 			</FormD.Item>
-			<FormD.Item name="description" label="Category description">
-				<Input size="large" placeholder="Input category description" />
+			<FormD.Item
+				name="description"
+				label={t("admin.categories.create.form.description.label")}
+			>
+				<Input
+					size="large"
+					placeholder={t(
+						"admin.categories.create.form.description.label"
+					)}
+				/>
 			</FormD.Item>
-			<FormD.Item name="parent" label="Category description">
+			<FormD.Item
+				name="parent"
+				label={t("admin.categories.create.form.parent.label")}
+			>
 				<InputCategory />
 			</FormD.Item>
 			<FormD.Item>
 				<Button type="dashed" block>
-					<PlusOutlined /> Add field
+					<PlusOutlined />
+					{t("admin.categories.create.form.fields.addField")}
 				</Button>
 			</FormD.Item>
 			<FormD.Item>
 				<Button type="primary" htmlType="submit">
-					Create
+					{t("admin.categories.create.form.submit.create")}
 				</Button>
 			</FormD.Item>
 		</FormD>

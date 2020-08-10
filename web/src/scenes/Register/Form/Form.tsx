@@ -1,6 +1,7 @@
 import React from "react";
 import { Form as FormD, Input, Button } from "antd";
 import { useForm, FormInstance } from "antd/lib/form/Form";
+import { useTranslation } from "react-i18next";
 
 const layout = {
 	labelCol: { span: 8 },
@@ -20,6 +21,7 @@ interface Props {
 }
 
 const Form = ({ onRegister }: Props) => {
+	const { t } = useTranslation();
 	const [form] = useForm();
 
 	return (
@@ -47,45 +49,77 @@ const Form = ({ onRegister }: Props) => {
 			}
 		>
 			<FormD.Item
-				label="Name"
+				label={t("scenes.register.form.firstName.label")}
 				name="firstName"
 				required
-				rules={[{ required: true }]}
+				rules={[
+					{
+						required: true,
+						message: t(
+							"scenes.register.form.firstName.rules.required"
+						)
+					}
+				]}
 			>
 				<Input />
 			</FormD.Item>
 			<FormD.Item
-				label="Last name"
+				label={t("scenes.register.form.lastName.label")}
 				name="lastName"
 				required
-				rules={[{ required: true }]}
+				rules={[
+					{
+						required: true,
+						message: t(
+							"scenes.register.form.lastName.rules.required"
+						)
+					}
+				]}
 			>
 				<Input />
 			</FormD.Item>
-			<FormD.Item label="Middle name" name="middleName">
-				<Input />
-			</FormD.Item>
-			<FormD.Item label="Phone" name="phone">
+			<FormD.Item
+				label={t("scenes.register.form.middleName.label")}
+				name="middleName"
+			>
 				<Input />
 			</FormD.Item>
 			<FormD.Item
-				label="Email"
+				label={t("scenes.register.form.phone.label")}
+				name="phone"
+			>
+				<Input />
+			</FormD.Item>
+			<FormD.Item
+				label={t("scenes.register.form.email.label")}
 				name="email"
 				required
-				rules={[{ required: true }]}
+				rules={[
+					{
+						required: true,
+						message: t("scenes.register.form.email.rules.required")
+					}
+				]}
 			>
 				<Input />
 			</FormD.Item>
 			<FormD.Item
-				label="Password"
+				label={t("scenes.register.form.password.label")}
 				name="password"
 				required
-				rules={[{ required: true }]}
+				rules={[
+					{
+						required: true,
+						message: t(
+							"scenes.register.form.firstName.password.required"
+						)
+					}
+				]}
 			>
 				<Input type="password" />
 			</FormD.Item>
 			<FormD.Item
-				label="Confirm password"
+				label={t("scenes.register.form.confirmPassword.label")}
 				name="confirmPassword"
 				required
 				rules={[
@@ -94,7 +128,11 @@ const Form = ({ onRegister }: Props) => {
 						validator: async (rule, value) => {
 							const password = form.getFieldValue("password");
 							if (value !== password)
-								throw new Error("Password is not equals");
+								throw new Error(
+									t(
+										"scenes.register.form.confirmPassword.rules.equalToPassword"
+									)
+								);
 						}
 					}
 				]}
@@ -103,7 +141,7 @@ const Form = ({ onRegister }: Props) => {
 			</FormD.Item>
 			<FormD.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
 				<Button type="primary" htmlType="submit">
-					Register
+					{t("scenes.register.form.submit")}
 				</Button>
 			</FormD.Item>
 		</FormD>

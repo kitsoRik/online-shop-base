@@ -5,6 +5,7 @@ import {
 } from "../../../../../../generated/graphql";
 import { Typography } from "antd";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	category: Category | null;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 const ParentContent = ({ category, load }: Props) => {
+	const { t } = useTranslation();
 	const { data } = useGetParentCategoryByIdQuery({
 		skip: !load,
 		variables: { id: category?.id || -1 }
@@ -24,17 +26,25 @@ const ParentContent = ({ category, load }: Props) => {
 
 	const parentCategory = category?.parent;
 	if (!parentCategory)
-		return <Typography.Text>Has no parent category</Typography.Text>;
+		return (
+			<Typography.Text>
+				{t("admin.categories.edit.actions.parent.empty")}
+			</Typography.Text>
+		);
 
 	return (
 		<>
-			<Typography.Text>Name: {parentCategory.name}</Typography.Text>
+			<Typography.Text>
+				{t("admin.categories.edit.actions.parent.name", {
+					replace: { name: parentCategory.name }
+				})}
+			</Typography.Text>
 			<br />
 			<Typography.Link>
 				<Link
 					to={`/admin/categories/edit?category=${parentCategory.id}`}
 				>
-					Go to parent
+					{t("admin.categories.edit.actions.parent.goto")}
 				</Link>
 			</Typography.Link>
 		</>

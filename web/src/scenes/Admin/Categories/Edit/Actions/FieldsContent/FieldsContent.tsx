@@ -9,12 +9,14 @@ import AddFieldDialog from "./AddFieldDialog";
 import { useLocationField, useLocationFieldT } from "react-location-query";
 import FieldItem from "./FieldItem";
 import ModifyDialog from "./ModifyDialog";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	load: boolean;
 }
 
 const FieldsContent = ({ load }: Props) => {
+	const { t } = useTranslation();
 	const [categoryId] = useLocationFieldT<number>("category");
 	const [, setAdd] = useLocationField("add", {
 		type: "boolean",
@@ -53,7 +55,7 @@ const FieldsContent = ({ load }: Props) => {
 			<div>
 				<Button type="dashed" block onClick={() => setAdd(true)}>
 					<PlusOutlined />
-					Add field
+					{t("admin.categories.edit.actions.fields.add")}
 				</Button>
 			</div>
 			<AddFieldDialog />

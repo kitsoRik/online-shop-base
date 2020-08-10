@@ -1,15 +1,18 @@
 import React from "react";
 import { Typography, Result, Button } from "antd";
+import { useTranslation } from "react-i18next";
 
 const SuccessWindow = () => {
+	const { t } = useTranslation();
+
 	return (
 		<Result
 			status="success"
-			title="Thanks for register, now you can login into your account"
-			subTitle="But, you almost need to verify your email by proceed link from your email"
+			title={t("scenes.register.successWindow.title")}
+			subTitle={t("scenes.register.successWindow.subTitle")}
 			extra={[
 				<Button type="primary" key="console">
-					Go to login form
+					{t("scenes.register.successWindow.loginLink")}
 				</Button>
 			]}
 		/>

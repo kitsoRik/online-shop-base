@@ -7,6 +7,7 @@ import { List, Button, Popconfirm, Typography, notification } from "antd";
 import confirm from "antd/lib/modal/confirm";
 import { WarningTwoTone } from "@ant-design/icons";
 import { useLocationFieldT } from "react-location-query";
+import { useTranslation } from "react-i18next";
 
 interface Props {
 	categoryId: number;
@@ -14,6 +15,7 @@ interface Props {
 }
 
 const FieldItem = ({ categoryId, field }: Props) => {
+	const { t } = useTranslation();
 	const [, setModify] = useLocationFieldT<string>("modify");
 
 	const [removeField] = useRemoveFieldFromCategoryMutation();
@@ -27,7 +29,10 @@ const FieldItem = ({ categoryId, field }: Props) => {
 				}
 			});
 			notification.success({
-				message: `Field '${field.name}' has been removed`
+				message: t(
+					"admin.categories.edit.fields.field.remove.success",
+					{ replace: { name: field.name } }
+				)
 			});
 		} catch (e) {
 			console.warn(e.message);
@@ -43,11 +48,18 @@ const FieldItem = ({ categoryId, field }: Props) => {
 			icon: <WarningTwoTone />,
 			content: (
 				<Typography.Text type="danger">
-					Are you want to delete '{field.name}'?
+					{t(
+						"admin.categories.edit.fields.field.remove.confirm.content",
+						{ replace: { name: field.name } }
+					)}
 				</Typography.Text>
 			),
-			okText: "Yes, I want delete it",
-			cancelText: "No, just close dialog",
+			okText: t(
+				"admin.categories.edit.fields.field.remove.confirm.okText"
+			),
+			cancelText: t(
+				"admin.categories.edit.fields.field.remove.confirm.cancelText"
+			),
 			onOk: handleRemove,
 			onCancel() {}
 		});
@@ -57,8 +69,16 @@ const FieldItem = ({ categoryId, field }: Props) => {
 		<>
 			<List.Item
 				actions={[
-					<Button onClick={onModifyClick}>Modify</Button>,
-					<Button onClick={onRemoveClick}>Remove</Button>
+					<Button onClick={onModifyClick}>
+						{t(
+							"admin.categories.edit.fields.field.remove.actions.modify"
+						)}
+					</Button>,
+					<Button onClick={onRemoveClick}>
+						{t(
+							"admin.categories.edit.fields.field.remove.actions.remove"
+						)}
+					</Button>
 				]}
 			>
 				<List.Item.Meta description={field.name} />

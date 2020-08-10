@@ -1,6 +1,7 @@
 import React from "react";
 import { Form as FormD, Input, Button, Checkbox } from "antd";
 import { useForm, FormInstance } from "antd/lib/form/Form";
+import { useTranslation } from "react-i18next";
 
 const layout = {
 	labelCol: { span: 8 },
@@ -17,6 +18,7 @@ interface Props {
 }
 
 const Form = ({ onLogin }: Props) => {
+	const { t } = useTranslation();
 	const [form] = useForm();
 
 	return (
@@ -29,23 +31,37 @@ const Form = ({ onLogin }: Props) => {
 			}
 		>
 			<FormD.Item
-				label="Email"
+				label={t("scenes.login.form.email.label")}
 				name="email"
 				required
-				rules={[{ required: true }]}
+				rules={[
+					{
+						required: true,
+						message: t(
+							"scenes.login.form.email.rules.required.message"
+						)
+					}
+				]}
 			>
 				<Input />
 			</FormD.Item>
 			<FormD.Item
-				label="Password"
+				label={t("scenes.login.form.password.label")}
 				name="password"
 				required
-				rules={[{ required: true }]}
+				rules={[
+					{
+						required: true,
+						message: t(
+							"scenes.login.form.password.rules.required.message"
+						)
+					}
+				]}
 			>
 				<Input type="password" />
 			</FormD.Item>
 			<FormD.Item
-				label="Remember me"
+				label={t("scenes.login.form.remember.label")}
 				name="remember"
 				valuePropName="checked"
 			>
@@ -53,7 +69,7 @@ const Form = ({ onLogin }: Props) => {
 			</FormD.Item>
 			<FormD.Item wrapperCol={{ ...layout.wrapperCol, offset: 11 }}>
 				<Button type="primary" htmlType="submit">
-					Login
+					{t("scenes.login.form.submit")}
 				</Button>
 			</FormD.Item>
 		</FormD>

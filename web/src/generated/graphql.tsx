@@ -139,6 +139,7 @@ export type Mutation = {
   removeFieldFromCategory: Category;
   createProduct: Product;
   changeProduct: Product;
+  changeCategoryInProduct: Product;
   addProductInfoToProduct: Product;
   removeInfoFromProduct: Product;
   changeProductInfo: ProductInfo;
@@ -202,6 +203,12 @@ export type MutationCreateProductArgs = {
 
 
 export type MutationChangeProductArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type MutationChangeCategoryInProductArgs = {
+  categoryId: Scalars['Int'];
   id: Scalars['Int'];
 };
 
@@ -502,6 +509,41 @@ export type FindProductByNameTemplateQuery = (
     { __typename?: 'Product' }
     & Pick<Product, 'id'>
   )> }
+);
+
+export type GetProductCategoryByProductIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetProductCategoryByProductIdQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+    & { category: (
+      { __typename?: 'Category' }
+      & Pick<Category, 'id'>
+    ) }
+  )> }
+);
+
+export type ChangeCategoryInProductMutationVariables = Exact<{
+  productId: Scalars['Int'];
+  categoryId: Scalars['Int'];
+}>;
+
+
+export type ChangeCategoryInProductMutation = (
+  { __typename?: 'Mutation' }
+  & { changeCategoryInProduct: (
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+    & { category: (
+      { __typename?: 'Category' }
+      & Pick<Category, 'id'>
+    ) }
+  ) }
 );
 
 export type GetProductInfoByProductIdQueryVariables = Exact<{
@@ -1297,6 +1339,78 @@ export function useFindProductByNameTemplateLazyQuery(baseOptions?: ApolloReactH
 export type FindProductByNameTemplateQueryHookResult = ReturnType<typeof useFindProductByNameTemplateQuery>;
 export type FindProductByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindProductByNameTemplateLazyQuery>;
 export type FindProductByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>;
+export const GetProductCategoryByProductIdDocument = gql`
+    query GetProductCategoryByProductId($id: Int!) {
+  products(filter: {id: $id}) {
+    id
+    category {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProductCategoryByProductIdQuery__
+ *
+ * To run a query within a React component, call `useGetProductCategoryByProductIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductCategoryByProductIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductCategoryByProductIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProductCategoryByProductIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProductCategoryByProductIdQuery, GetProductCategoryByProductIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetProductCategoryByProductIdQuery, GetProductCategoryByProductIdQueryVariables>(GetProductCategoryByProductIdDocument, baseOptions);
+      }
+export function useGetProductCategoryByProductIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProductCategoryByProductIdQuery, GetProductCategoryByProductIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetProductCategoryByProductIdQuery, GetProductCategoryByProductIdQueryVariables>(GetProductCategoryByProductIdDocument, baseOptions);
+        }
+export type GetProductCategoryByProductIdQueryHookResult = ReturnType<typeof useGetProductCategoryByProductIdQuery>;
+export type GetProductCategoryByProductIdLazyQueryHookResult = ReturnType<typeof useGetProductCategoryByProductIdLazyQuery>;
+export type GetProductCategoryByProductIdQueryResult = ApolloReactCommon.QueryResult<GetProductCategoryByProductIdQuery, GetProductCategoryByProductIdQueryVariables>;
+export const ChangeCategoryInProductDocument = gql`
+    mutation ChangeCategoryInProduct($productId: Int!, $categoryId: Int!) {
+  changeCategoryInProduct(id: $productId, categoryId: $categoryId) {
+    id
+    category {
+      id
+    }
+  }
+}
+    `;
+export type ChangeCategoryInProductMutationFn = ApolloReactCommon.MutationFunction<ChangeCategoryInProductMutation, ChangeCategoryInProductMutationVariables>;
+
+/**
+ * __useChangeCategoryInProductMutation__
+ *
+ * To run a mutation, you first call `useChangeCategoryInProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeCategoryInProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeCategoryInProductMutation, { data, loading, error }] = useChangeCategoryInProductMutation({
+ *   variables: {
+ *      productId: // value for 'productId'
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useChangeCategoryInProductMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeCategoryInProductMutation, ChangeCategoryInProductMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeCategoryInProductMutation, ChangeCategoryInProductMutationVariables>(ChangeCategoryInProductDocument, baseOptions);
+      }
+export type ChangeCategoryInProductMutationHookResult = ReturnType<typeof useChangeCategoryInProductMutation>;
+export type ChangeCategoryInProductMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryInProductMutation>;
+export type ChangeCategoryInProductMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryInProductMutation, ChangeCategoryInProductMutationVariables>;
 export const GetProductInfoByProductIdDocument = gql`
     query GetProductInfoByProductId($id: Int!) {
   products(filter: {id: $id}) {

@@ -4,6 +4,7 @@ import { useLocationField } from "react-location-query";
 import InfoAction from "./InfoAction";
 import { Link } from "react-location-query";
 import { useFindCategoryByIdQuery } from "../../../../../generated/graphql";
+import Category from "./Category";
 
 const Actions = () => {
 	const [productId] = useLocationField("product");
@@ -31,17 +32,9 @@ const Actions = () => {
 				setTab(tab);
 			}}
 		>
-			<Tabs.TabPane
-				key="category"
-				tab={
-					<Link
-						to="/admin/categories/edit"
-						query={{ category: category?.id ?? -1 }}
-					>
-						Category
-					</Link>
-				}
-			></Tabs.TabPane>
+			<Tabs.TabPane key="category" tab="Category">
+				<Category />
+			</Tabs.TabPane>
 			{InfoAction()}
 		</Tabs>
 	);

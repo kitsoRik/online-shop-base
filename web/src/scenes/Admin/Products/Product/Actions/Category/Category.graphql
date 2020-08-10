@@ -1,0 +1,8 @@
+query GetProductCategoryByProductId($id: Int!) {
+	products(filter: { id: $id }) {
+		id
+        category {
+            id
+        }
+	}
+}

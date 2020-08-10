@@ -1,0 +1,8 @@
+mutation ChangeCategoryInProduct($productId: Int!, $categoryId: Int!) {
+	changeCategoryInProduct(id: $productId, categoryId: $categoryId) {
+		id
+		category {
+			id
+		}
+	}
+}

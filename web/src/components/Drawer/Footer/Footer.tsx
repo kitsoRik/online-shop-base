@@ -7,8 +7,10 @@ import { Menu, notification, Button } from "antd";
 import { useApolloClient } from "@apollo/react-hooks";
 import classes from "./Footer.module.scss";
 import { closeDrawer } from "../Drawer";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
+	const { t } = useTranslation();
 	const [unlogin] = useUnloginMutation();
 
 	const client = useApolloClient();
@@ -18,13 +20,12 @@ const Footer = () => {
 			const unlogined = await unlogin();
 			if (unlogined) {
 				notification.success({
-					message: "You have left from your profile"
+					message: t("components.drawer.footer.logout.success")
 				});
 			}
 		} catch (e) {
 			notification.error({
-				message:
-					"Server response error, but you've left from your profile localy"
+				message: t("components.drawer.footer.logout.error")
 			});
 		}
 		client.writeQuery({
@@ -43,7 +44,7 @@ const Footer = () => {
 				onClick={onUnlogin}
 				type="primary"
 			>
-				Logout
+				{t("components.drawer.footer.logout.label")}
 			</Button>
 		</div>
 	);

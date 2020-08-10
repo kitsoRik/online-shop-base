@@ -212,5 +212,19 @@
 		"inputCategory": {
 			"placeholder": "Input here"
 		}
+	},
+	"components": {
+		"drawer": {
+			"menu": {
+				"inbox": "Inbox"
+			},
+			"footer": {
+				"logout": {
+					"label": "Logout",
+					"success": "You have left from your profile",
+					"error": "Server response error, but you've left from your profile localy"
+				}
+			}
+		}
 	}
 }

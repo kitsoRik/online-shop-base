@@ -3,8 +3,10 @@ import { Menu as MenuD } from "antd";
 import { closeDrawer } from "../Drawer";
 import { InboxOutlined } from "@ant-design/icons";
 import { Link } from "react-location-query";
+import { useTranslation } from "react-i18next";
 
 const Menu = () => {
+	const { t } = useTranslation();
 	return (
 		<MenuD
 			style={{ width: 256 }}
@@ -18,7 +20,7 @@ const Menu = () => {
 			<MenuD.Item>123</MenuD.Item>
 			<MenuD.Item icon={<InboxOutlined />}>
 				<Link to="/inbox" query={{}}>
-					Inbox
+					{t("components.drawer.menu.inbox")}
 				</Link>
 			</MenuD.Item>
 		</MenuD>

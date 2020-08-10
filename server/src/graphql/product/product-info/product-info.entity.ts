@@ -16,8 +16,8 @@ export class ProductInfoEntity {
 	@Column({ default: "" })
 	name: string;
 
-	@Column({ name: "language" })
-	language: string;
+	@Column({ name: "language_id", type: "int" })
+	languageId: number;
 
 	@ManyToOne(
 		type => ProductEntity,

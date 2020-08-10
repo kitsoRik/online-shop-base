@@ -38,4 +38,8 @@ export class LanguageService {
 
 		return languages;
 	}
+
+	async getLanguageById(id: number) {
+		return await this.languageRepository.findOne({ id });
+	}
 }

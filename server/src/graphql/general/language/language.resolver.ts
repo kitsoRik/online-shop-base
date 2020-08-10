@@ -1,4 +1,11 @@
-import { Resolver, Mutation, Args, Query, Int } from "@nestjs/graphql";
+import {
+	Resolver,
+	Mutation,
+	Args,
+	Query,
+	Int,
+	ResolveField
+} from "@nestjs/graphql";
 import { LanguageType } from "./language.type";
 import { LanguageService } from "src/config/language/language.service";
 

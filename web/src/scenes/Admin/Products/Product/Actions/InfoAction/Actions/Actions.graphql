@@ -3,7 +3,10 @@ query GetProductInfoByProductId($id: Int!) {
 		id
 		info {
 			id
-			language
+			language {
+				id
+				code
+			}
 			fields {
 				id
 				value

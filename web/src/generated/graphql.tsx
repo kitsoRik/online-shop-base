@@ -53,11 +53,17 @@ export type ProductField = {
   value: Scalars['String'];
 };
 
+export type Language = {
+  __typename?: 'Language';
+  id: Scalars['Int'];
+  code: Scalars['String'];
+};
+
 export type ProductInfo = {
   __typename?: 'ProductInfo';
   id: Scalars['Int'];
   name: Scalars['String'];
-  language: Scalars['String'];
+  language: Language;
   fields?: Maybe<Array<ProductField>>;
 };
 
@@ -84,12 +90,6 @@ export type ProductInfoArgs = {
 
 export type ProductInfoInput = {
   id?: Maybe<Scalars['Int']>;
-};
-
-export type Language = {
-  __typename?: 'Language';
-  id: Scalars['Int'];
-  code: Scalars['String'];
 };
 
 export type Query = {
@@ -140,6 +140,7 @@ export type Mutation = {
   createProduct: Product;
   changeProduct: Product;
   addProductInfoToProduct: Product;
+  removeInfoFromProduct: Product;
   changeProductInfo: ProductInfo;
   changeFieldInProductInfo: ProductInfo;
   addLanguage: Language;
@@ -206,7 +207,13 @@ export type MutationChangeProductArgs = {
 
 
 export type MutationAddProductInfoToProductArgs = {
-  language: Scalars['String'];
+  language: Scalars['Int'];
+  productId: Scalars['Int'];
+};
+
+
+export type MutationRemoveInfoFromProductArgs = {
+  infoId: Scalars['Int'];
   productId: Scalars['Int'];
 };
 
@@ -509,8 +516,11 @@ export type GetProductInfoByProductIdQuery = (
     & Pick<Product, 'id'>
     & { info: Array<(
       { __typename?: 'ProductInfo' }
-      & Pick<ProductInfo, 'id' | 'language'>
-      & { fields?: Maybe<Array<(
+      & Pick<ProductInfo, 'id'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ), fields?: Maybe<Array<(
         { __typename?: 'ProductField' }
         & Pick<ProductField, 'id' | 'value'>
       )>> }
@@ -520,7 +530,7 @@ export type GetProductInfoByProductIdQuery = (
 
 export type AddProductInfoToProductMutationVariables = Exact<{
   id: Scalars['Int'];
-  language: Scalars['String'];
+  languageId: Scalars['Int'];
 }>;
 
 
@@ -531,9 +541,34 @@ export type AddProductInfoToProductMutation = (
     & Pick<Product, 'id'>
     & { info: Array<(
       { __typename?: 'ProductInfo' }
-      & Pick<ProductInfo, 'id' | 'language'>
+      & Pick<ProductInfo, 'id'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ) }
     )> }
   ) }
+);
+
+export type GetProductInfoLanguagesQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetProductInfoLanguagesQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+    & { info: Array<(
+      { __typename?: 'ProductInfo' }
+      & Pick<ProductInfo, 'id'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ) }
+    )> }
+  )> }
 );
 
 export type GetProductInfoByProductIdAndInfoIdQueryVariables = Exact<{
@@ -549,7 +584,11 @@ export type GetProductInfoByProductIdAndInfoIdQuery = (
     & Pick<Product, 'id'>
     & { info: Array<(
       { __typename?: 'ProductInfo' }
-      & Pick<ProductInfo, 'id' | 'name' | 'language'>
+      & Pick<ProductInfo, 'id' | 'name'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id'>
+      ) }
     )> }
   )> }
 );
@@ -594,6 +633,24 @@ export type GetFieldsProductByIdQuery = (
       )>> }
     ) }
   )> }
+);
+
+export type RemoveProductInfoFromProductMutationVariables = Exact<{
+  productId: Scalars['Int'];
+  infoId: Scalars['Int'];
+}>;
+
+
+export type RemoveProductInfoFromProductMutation = (
+  { __typename?: 'Mutation' }
+  & { removeInfoFromProduct: (
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+    & { info: Array<(
+      { __typename?: 'ProductInfo' }
+      & Pick<ProductInfo, 'id'>
+    )> }
+  ) }
 );
 
 export type LoginMutationVariables = Exact<{
@@ -1246,7 +1303,10 @@ export const GetProductInfoByProductIdDocument = gql`
     id
     info {
       id
-      language
+      language {
+        id
+        code
+      }
       fields {
         id
         value
@@ -1282,12 +1342,15 @@ export type GetProductInfoByProductIdQueryHookResult = ReturnType<typeof useGetP
 export type GetProductInfoByProductIdLazyQueryHookResult = ReturnType<typeof useGetProductInfoByProductIdLazyQuery>;
 export type GetProductInfoByProductIdQueryResult = ApolloReactCommon.QueryResult<GetProductInfoByProductIdQuery, GetProductInfoByProductIdQueryVariables>;
 export const AddProductInfoToProductDocument = gql`
-    mutation AddProductInfoToProduct($id: Int!, $language: String!) {
-  addProductInfoToProduct(productId: $id, language: $language) {
+    mutation AddProductInfoToProduct($id: Int!, $languageId: Int!) {
+  addProductInfoToProduct(productId: $id, language: $languageId) {
     id
     info {
       id
-      language
+      language {
+        id
+        code
+      }
     }
   }
 }
@@ -1308,7 +1371,7 @@ export type AddProductInfoToProductMutationFn = ApolloReactCommon.MutationFuncti
  * const [addProductInfoToProductMutation, { data, loading, error }] = useAddProductInfoToProductMutation({
  *   variables: {
  *      id: // value for 'id'
- *      language: // value for 'language'
+ *      languageId: // value for 'languageId'
  *   },
  * });
  */
@@ -1318,6 +1381,46 @@ export function useAddProductInfoToProductMutation(baseOptions?: ApolloReactHook
 export type AddProductInfoToProductMutationHookResult = ReturnType<typeof useAddProductInfoToProductMutation>;
 export type AddProductInfoToProductMutationResult = ApolloReactCommon.MutationResult<AddProductInfoToProductMutation>;
 export type AddProductInfoToProductMutationOptions = ApolloReactCommon.BaseMutationOptions<AddProductInfoToProductMutation, AddProductInfoToProductMutationVariables>;
+export const GetProductInfoLanguagesDocument = gql`
+    query GetProductInfoLanguages($id: Int!) {
+  products(filter: {id: $id}) {
+    id
+    info {
+      id
+      language {
+        id
+        code
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProductInfoLanguagesQuery__
+ *
+ * To run a query within a React component, call `useGetProductInfoLanguagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductInfoLanguagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductInfoLanguagesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetProductInfoLanguagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProductInfoLanguagesQuery, GetProductInfoLanguagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetProductInfoLanguagesQuery, GetProductInfoLanguagesQueryVariables>(GetProductInfoLanguagesDocument, baseOptions);
+      }
+export function useGetProductInfoLanguagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProductInfoLanguagesQuery, GetProductInfoLanguagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetProductInfoLanguagesQuery, GetProductInfoLanguagesQueryVariables>(GetProductInfoLanguagesDocument, baseOptions);
+        }
+export type GetProductInfoLanguagesQueryHookResult = ReturnType<typeof useGetProductInfoLanguagesQuery>;
+export type GetProductInfoLanguagesLazyQueryHookResult = ReturnType<typeof useGetProductInfoLanguagesLazyQuery>;
+export type GetProductInfoLanguagesQueryResult = ApolloReactCommon.QueryResult<GetProductInfoLanguagesQuery, GetProductInfoLanguagesQueryVariables>;
 export const GetProductInfoByProductIdAndInfoIdDocument = gql`
     query GetProductInfoByProductIdAndInfoId($id: Int!, $infoId: Int!) {
   products(filter: {id: $id}) {
@@ -1325,7 +1428,9 @@ export const GetProductInfoByProductIdAndInfoIdDocument = gql`
     info(filter: {id: $infoId}) {
       id
       name
-      language
+      language {
+        id
+      }
     }
   }
 }
@@ -1437,6 +1542,42 @@ export function useGetFieldsProductByIdLazyQuery(baseOptions?: ApolloReactHooks.
 export type GetFieldsProductByIdQueryHookResult = ReturnType<typeof useGetFieldsProductByIdQuery>;
 export type GetFieldsProductByIdLazyQueryHookResult = ReturnType<typeof useGetFieldsProductByIdLazyQuery>;
 export type GetFieldsProductByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldsProductByIdQuery, GetFieldsProductByIdQueryVariables>;
+export const RemoveProductInfoFromProductDocument = gql`
+    mutation RemoveProductInfoFromProduct($productId: Int!, $infoId: Int!) {
+  removeInfoFromProduct(productId: $productId, infoId: $infoId) {
+    id
+    info {
+      id
+    }
+  }
+}
+    `;
+export type RemoveProductInfoFromProductMutationFn = ApolloReactCommon.MutationFunction<RemoveProductInfoFromProductMutation, RemoveProductInfoFromProductMutationVariables>;
+
+/**
+ * __useRemoveProductInfoFromProductMutation__
+ *
+ * To run a mutation, you first call `useRemoveProductInfoFromProductMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveProductInfoFromProductMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeProductInfoFromProductMutation, { data, loading, error }] = useRemoveProductInfoFromProductMutation({
+ *   variables: {
+ *      productId: // value for 'productId'
+ *      infoId: // value for 'infoId'
+ *   },
+ * });
+ */
+export function useRemoveProductInfoFromProductMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveProductInfoFromProductMutation, RemoveProductInfoFromProductMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveProductInfoFromProductMutation, RemoveProductInfoFromProductMutationVariables>(RemoveProductInfoFromProductDocument, baseOptions);
+      }
+export type RemoveProductInfoFromProductMutationHookResult = ReturnType<typeof useRemoveProductInfoFromProductMutation>;
+export type RemoveProductInfoFromProductMutationResult = ApolloReactCommon.MutationResult<RemoveProductInfoFromProductMutation>;
+export type RemoveProductInfoFromProductMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveProductInfoFromProductMutation, RemoveProductInfoFromProductMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!, $remember: Boolean!) {
   joinUser(email: $email, password: $password, remember: $remember) {

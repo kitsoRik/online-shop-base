@@ -5,6 +5,7 @@ import FieldsAction from "./FieldsAction";
 import { useLocationField, useLocationFieldT } from "react-location-query";
 import { useGetProductInfoByProductIdQuery } from "../../../../../../../generated/graphql";
 import AddInfoDialog from "./AddInfoDialog";
+import RemoveInfoDialog from "./RemoveInfoDialog";
 
 const Actions = () => {
 	const [productId] = useLocationFieldT<number>("product");
@@ -18,9 +19,16 @@ const Actions = () => {
 		initial: -1,
 		hideIfInitial: true
 	});
-	const [addInfo, setAddInfo] = useLocationField("addInfo", {
+
+	const [, setAddInfo] = useLocationField("addInfo", {
 		type: "boolean",
 		initial: false,
+		hideIfInitial: true
+	});
+
+	const [, setRemoveInfo] = useLocationField("removeInfo", {
+		type: "number",
+		initial: -1,
 		hideIfInitial: true
 	});
 
@@ -41,6 +49,7 @@ const Actions = () => {
 				type="editable-card"
 				onEdit={(key, action) => {
 					if (action === "add") setAddInfo(true);
+					if (action === "remove") setRemoveInfo(+key);
 				}}
 				activeKey={infoId.toString()}
 				onTabClick={tab => setInfoId(+tab)}
@@ -51,7 +60,7 @@ const Actions = () => {
 					.map(currentInfo => (
 						<Tabs.TabPane
 							key={currentInfo.id}
-							tab={<div>{currentInfo.language}</div>}
+							tab={<div>{currentInfo.language.code}</div>}
 						>
 							<Tabs
 								activeKey={action}
@@ -75,6 +84,7 @@ const Actions = () => {
 					))}
 			</Tabs>
 			<AddInfoDialog />
+			<RemoveInfoDialog />
 		</>
 	);
 };

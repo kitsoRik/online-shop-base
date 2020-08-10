@@ -4,7 +4,9 @@ query GetProductInfoByProductIdAndInfoId($id: Int!, $infoId: Int!) {
 		info(filter: { id: $infoId }) {
 			id
 			name
-			language
+			language {
+				id
+			}
 		}
 	}
 }

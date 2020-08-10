@@ -1,9 +1,25 @@
-mutation AddProductInfoToProduct($id: Int!, $language: String!) {
-	addProductInfoToProduct(productId: $id, language: $language) {
+mutation AddProductInfoToProduct($id: Int!, $languageId: Int!) {
+	addProductInfoToProduct(productId: $id, language: $languageId) {
 		id
 		info {
 			id
-			language
+			language {
+				id
+				code
+			}
+		}
+	}
+}
+
+query GetProductInfoLanguages($id: Int!) {
+	products(filter: { id: $id }) {
+		id
+		info {
+			id
+			language {
+				id
+				code
+			}
 		}
 	}
 }

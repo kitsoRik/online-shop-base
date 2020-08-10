@@ -1,25 +1,34 @@
 import React from "react";
 import { Modal, Form, Input, notification } from "antd";
 import { useLocationFieldT } from "react-location-query";
-import { useAddProductInfoToProductMutation } from "../../../../../../../../generated/graphql";
+import {
+	useAddProductInfoToProductMutation,
+	useGetProductInfoLanguagesQuery
+} from "../../../../../../../../generated/graphql";
 import { useForm } from "antd/lib/form/Form";
+import InputLanguage from "../../../../../../../../shared/InputLanguage";
 
 const AddInfoDialog = () => {
 	const [addInfo, setAddInfo] = useLocationFieldT<boolean>("addInfo");
 	const [productId] = useLocationFieldT<number>("product");
 
+	const { data } = useGetProductInfoLanguagesQuery({
+		variables: { id: productId }
+	});
 	const [addProductInfo] = useAddProductInfoToProductMutation();
 
-	const onAddProductInfo = async (language: string) => {
+	const onAddProductInfo = async (languageId: number) => {
 		try {
 			const {} = await addProductInfo({
-				variables: { id: productId, language }
+				variables: { id: productId, languageId }
 			});
 			notification.success({ message: "New language has been added" });
 			setAddInfo(false);
 		} catch (e) {}
 	};
 
+	const product = (data?.products || [null])[0];
+	const languageCodes = product?.info.map(i => i.language.code);
 	const [form] = useForm();
 
 	return (
@@ -40,7 +49,7 @@ const AddInfoDialog = () => {
 					required
 					rules={[{ required: true }]}
 				>
-					<Input />
+					<InputLanguage.App exceptCodes={languageCodes} />
 				</Form.Item>
 			</Form>
 		</Modal>

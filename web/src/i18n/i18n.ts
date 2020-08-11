@@ -9,7 +9,9 @@ i18n.use(Backend)
 	.init({
 		fallbackLng: "en_US",
 		debug: true,
-
+		backend: {
+			loadPath: "http://localhost:3500/static/translations/{{lng}}"
+		},
 		interpolation: {
 			escapeValue: false // not needed for react as it escapes by default
 		}

@@ -7,6 +7,7 @@ import { User } from "../../mobx/User";
 import { AdminHeader } from "../../scenes/Admin/Admin";
 import Logo from "./Logo";
 import Search from "./Search";
+import LanguageController from "./LanguageController";
 
 interface Props {
 	user?: User;
@@ -34,6 +35,7 @@ const Header = ({ user }: Props) => {
 				</div>
 				<Search />
 				<div className={classes.rightContainer}>
+					<LanguageController />
 					<UserComponent />
 				</div>
 			</div>

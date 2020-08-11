@@ -253,6 +253,17 @@ export type ChangeProductInfoInput = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type GetApplicationLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetApplicationLanguagesQuery = (
+  { __typename?: 'Query' }
+  & { languages: Array<(
+    { __typename?: 'Language' }
+    & Pick<Language, 'id' | 'code'>
+  )> }
+);
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -737,6 +748,39 @@ export type RegisterMutation = (
 );
 
 
+export const GetApplicationLanguagesDocument = gql`
+    query GetApplicationLanguages {
+  languages {
+    id
+    code
+  }
+}
+    `;
+
+/**
+ * __useGetApplicationLanguagesQuery__
+ *
+ * To run a query within a React component, call `useGetApplicationLanguagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetApplicationLanguagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetApplicationLanguagesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetApplicationLanguagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetApplicationLanguagesQuery, GetApplicationLanguagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetApplicationLanguagesQuery, GetApplicationLanguagesQueryVariables>(GetApplicationLanguagesDocument, baseOptions);
+      }
+export function useGetApplicationLanguagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetApplicationLanguagesQuery, GetApplicationLanguagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetApplicationLanguagesQuery, GetApplicationLanguagesQueryVariables>(GetApplicationLanguagesDocument, baseOptions);
+        }
+export type GetApplicationLanguagesQueryHookResult = ReturnType<typeof useGetApplicationLanguagesQuery>;
+export type GetApplicationLanguagesLazyQueryHookResult = ReturnType<typeof useGetApplicationLanguagesLazyQuery>;
+export type GetApplicationLanguagesQueryResult = ApolloReactCommon.QueryResult<GetApplicationLanguagesQuery, GetApplicationLanguagesQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {

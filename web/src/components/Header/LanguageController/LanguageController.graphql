@@ -1,0 +1,6 @@
+query GetApplicationLanguages {
+	languages {
+		id
+		code
+	}
+}

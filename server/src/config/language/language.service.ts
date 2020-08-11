@@ -42,4 +42,8 @@ export class LanguageService {
 	async getLanguageById(id: number) {
 		return await this.languageRepository.findOne({ id });
 	}
+
+	async getLanguageByCode(code: string) {
+		return await this.languageRepository.findOne({ where: { code } });
+	}
 }

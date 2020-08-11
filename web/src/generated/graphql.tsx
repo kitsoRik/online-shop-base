@@ -65,6 +65,7 @@ export type ProductInfo = {
   name: Scalars['String'];
   language: Language;
   fields?: Maybe<Array<ProductField>>;
+  product: ProductInfo;
 };
 
 
@@ -99,7 +100,7 @@ export type Query = {
   findCategoryByNameTemplate: Array<Category>;
   findCategoryById?: Maybe<Category>;
   products: Array<Product>;
-  findProductByNameTemplate: Array<Product>;
+  findProductInfoByNameTemplate: Array<ProductInfo>;
   languages: Array<Language>;
 };
 
@@ -119,7 +120,7 @@ export type QueryProductsArgs = {
 };
 
 
-export type QueryFindProductByNameTemplateArgs = {
+export type QueryFindProductInfoByNameTemplateArgs = {
   template?: Maybe<Scalars['String']>;
 };
 
@@ -509,16 +510,20 @@ export type CreateProductMutation = (
   ) }
 );
 
-export type FindProductByNameTemplateQueryVariables = Exact<{
+export type FindProductInfoByNameTemplateQueryVariables = Exact<{
   template?: Maybe<Scalars['String']>;
 }>;
 
 
-export type FindProductByNameTemplateQuery = (
+export type FindProductInfoByNameTemplateQuery = (
   { __typename?: 'Query' }
-  & { findProductByNameTemplate: Array<(
-    { __typename?: 'Product' }
-    & Pick<Product, 'id'>
+  & { findProductInfoByNameTemplate: Array<(
+    { __typename?: 'ProductInfo' }
+    & Pick<ProductInfo, 'id' | 'name'>
+    & { product: (
+      { __typename?: 'ProductInfo' }
+      & Pick<ProductInfo, 'id'>
+    ) }
   )> }
 );
 
@@ -1350,39 +1355,43 @@ export function useCreateProductMutation(baseOptions?: ApolloReactHooks.Mutation
 export type CreateProductMutationHookResult = ReturnType<typeof useCreateProductMutation>;
 export type CreateProductMutationResult = ApolloReactCommon.MutationResult<CreateProductMutation>;
 export type CreateProductMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
-export const FindProductByNameTemplateDocument = gql`
-    query FindProductByNameTemplate($template: String) {
-  findProductByNameTemplate(template: $template) {
+export const FindProductInfoByNameTemplateDocument = gql`
+    query FindProductInfoByNameTemplate($template: String) {
+  findProductInfoByNameTemplate(template: $template) {
     id
+    name
+    product {
+      id
+    }
   }
 }
     `;
 
 /**
- * __useFindProductByNameTemplateQuery__
+ * __useFindProductInfoByNameTemplateQuery__
  *
- * To run a query within a React component, call `useFindProductByNameTemplateQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindProductByNameTemplateQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useFindProductInfoByNameTemplateQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindProductInfoByNameTemplateQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindProductByNameTemplateQuery({
+ * const { data, loading, error } = useFindProductInfoByNameTemplateQuery({
  *   variables: {
  *      template: // value for 'template'
  *   },
  * });
  */
-export function useFindProductByNameTemplateQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>) {
-        return ApolloReactHooks.useQuery<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>(FindProductByNameTemplateDocument, baseOptions);
+export function useFindProductInfoByNameTemplateQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindProductInfoByNameTemplateQuery, FindProductInfoByNameTemplateQueryVariables>) {
+        return ApolloReactHooks.useQuery<FindProductInfoByNameTemplateQuery, FindProductInfoByNameTemplateQueryVariables>(FindProductInfoByNameTemplateDocument, baseOptions);
       }
-export function useFindProductByNameTemplateLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>(FindProductByNameTemplateDocument, baseOptions);
+export function useFindProductInfoByNameTemplateLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindProductInfoByNameTemplateQuery, FindProductInfoByNameTemplateQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FindProductInfoByNameTemplateQuery, FindProductInfoByNameTemplateQueryVariables>(FindProductInfoByNameTemplateDocument, baseOptions);
         }
-export type FindProductByNameTemplateQueryHookResult = ReturnType<typeof useFindProductByNameTemplateQuery>;
-export type FindProductByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindProductByNameTemplateLazyQuery>;
-export type FindProductByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindProductByNameTemplateQuery, FindProductByNameTemplateQueryVariables>;
+export type FindProductInfoByNameTemplateQueryHookResult = ReturnType<typeof useFindProductInfoByNameTemplateQuery>;
+export type FindProductInfoByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindProductInfoByNameTemplateLazyQuery>;
+export type FindProductInfoByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindProductInfoByNameTemplateQuery, FindProductInfoByNameTemplateQueryVariables>;
 export const GetProductCategoryByProductIdDocument = gql`
     query GetProductCategoryByProductId($id: Int!) {
   products(filter: {id: $id}) {

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import SearchD from "antd/lib/input/Search";
-import { Category, Product } from "../../../../../generated/graphql";
-import { useFindProductByNameTemplateQuery } from "../../../../../generated/graphql";
+import { useFindProductInfoByNameTemplateQuery } from "../../../../../generated/graphql";
 import { AutoComplete } from "antd";
 import { useHistory } from "react-router";
 import classes from "./Search.module.scss";
@@ -16,18 +15,18 @@ const Search = ({ initialValue, onProductChange }: Props) => {
 
 	const history = useHistory();
 
-	const { data, loading } = useFindProductByNameTemplateQuery({
+	const { data, loading } = useFindProductInfoByNameTemplateQuery({
 		skip: template === "",
 		variables: {
 			template
 		}
 	});
 
-	const products = data?.findProductByNameTemplate ?? [];
+	const productsInfo = data?.findProductInfoByNameTemplate ?? [];
 
-	const options = products.map(product => ({
-		value: "qwe",
-		key: product.id
+	const options = productsInfo.map(info => ({
+		value: info.name,
+		key: info.product.id
 	}));
 
 	return (
@@ -38,7 +37,7 @@ const Search = ({ initialValue, onProductChange }: Props) => {
 			options={options}
 			onChange={value => setTemplate(value)}
 			onSelect={(v, { key }) =>
-				onProductChange(products.find(c => c.id === key)!)
+				onProductChange(productsInfo.find(c => c.product.id === key)!)
 			}
 			onClick={() => {
 				if (

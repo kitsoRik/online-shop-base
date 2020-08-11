@@ -1,5 +1,9 @@
-query FindProductByNameTemplate($template: String) {
-	findProductByNameTemplate(template: $template) {
+query FindProductInfoByNameTemplate($template: String) {
+	findProductInfoByNameTemplate(template: $template) {
 		id
+		name
+		product {
+			id
+		}
 	}
 }

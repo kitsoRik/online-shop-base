@@ -491,6 +491,22 @@
             },
             "isDeprecated": false,
             "deprecationReason": null
+          },
+          {
+            "name": "product",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "NON_NULL",
+              "name": null,
+              "ofType": {
+                "kind": "OBJECT",
+                "name": "ProductInfo",
+                "ofType": null
+              }
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
           }
         ],
         "inputFields": null,
@@ -757,7 +773,7 @@
             "deprecationReason": null
           },
           {
-            "name": "findProductByNameTemplate",
+            "name": "findProductInfoByNameTemplate",
             "description": null,
             "args": [
               {
@@ -782,7 +798,7 @@
                   "name": null,
                   "ofType": {
                     "kind": "OBJECT",
-                    "name": "Product",
+                    "name": "ProductInfo",
                     "ofType": null
                   }
                 }

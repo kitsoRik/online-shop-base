@@ -68,6 +68,11 @@ export class ProductInfoResolver {
 	}
 
 	@ResolveField(type => ProductInfoType)
+	product(@Parent() { productId }: ProductInfoEntity) {
+		return this.productService.findById(productId);
+	}
+
+	@ResolveField(type => ProductInfoType)
 	fields(
 		@Parent() { id }: { id: number },
 		@Args("filter", { nullable: true }) filter: ProductFieldInput
@@ -78,5 +83,12 @@ export class ProductInfoResolver {
 	@ResolveField(type => ProductInfoType)
 	language(@Parent() parent: ProductInfoEntity) {
 		return this.languageService.getLanguageById(parent.languageId);
+	}
+
+	@Query(type => [ProductInfoType])
+	findProductInfoByNameTemplate(
+		@Args("template", { nullable: true, defaultValue: "" }) template: string
+	) {
+		return this.productInfoService.findByNameTemplate(template);
 	}
 }

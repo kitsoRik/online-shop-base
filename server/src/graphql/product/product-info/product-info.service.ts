@@ -81,11 +81,11 @@ export class ProductInfoService {
 	}
 
 	async findByNameTemplate(template: string) {
-		// const query = await this.productInfoRepository
-		// 	.createQueryBuilder("productInfos")
-		// 	.where("name LIKE :template", { template: `%${template}%` });
-		// const productInfos = await query.getMany();
-		// return productInfos;
+		const query = await this.productInfoRepository
+			.createQueryBuilder("products_info")
+			.where("name LIKE :template", { template: `%${template}%` });
+		const products = await query.getMany();
+		return products;
 	}
 
 	async getFields(id: number) {

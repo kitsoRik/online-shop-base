@@ -57,14 +57,6 @@ export class ProductService {
 		return product;
 	}
 
-	async findByNameTemplate(template: string) {
-		const query = await this.productRepository
-			.createQueryBuilder("products")
-			.where("name LIKE :template", { template: `%${template}%` });
-		const products = await query.getMany();
-		return products;
-	}
-
 	async getInfo(id: number) {
 		const product = await this.productRepository.findOne({ id });
 		return product;

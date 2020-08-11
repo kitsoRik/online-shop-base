@@ -57,13 +57,6 @@ export class ProductResolver {
 		}
 	}
 
-	@Query(type => [ProductType])
-	findProductByNameTemplate(
-		@Args("template", { nullable: true, defaultValue: "" }) template: string
-	) {
-		return this.productService.findByNameTemplate(template);
-	}
-
 	@ResolveField(type => ProductType)
 	category(@Parent() { categoryId }: { categoryId: number }) {
 		return this.categoryService.findById(categoryId);

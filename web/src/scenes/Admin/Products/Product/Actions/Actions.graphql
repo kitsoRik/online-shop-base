@@ -1,6 +1,7 @@
 query FindCategoryById($id: Int!) {
-	findCategoryById(id: $id) {
+	categories(filter: { id: $id }){
 		id
 		name
+		level
 	}
 }

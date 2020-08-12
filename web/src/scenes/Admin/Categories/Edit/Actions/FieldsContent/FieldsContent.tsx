@@ -37,7 +37,7 @@ const FieldsContent = ({ load }: Props) => {
 
 	if (loading || !load) return null;
 
-	const category = data?.findCategoryById;
+	const category = (data?.categories ?? [null])[0];
 
 	if (!category) throw new Error("Unknown category");
 

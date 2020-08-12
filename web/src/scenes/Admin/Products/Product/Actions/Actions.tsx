@@ -19,7 +19,7 @@ const Actions = () => {
 		variables: { id: productId }
 	});
 
-	const category = data?.findCategoryById;
+	const category = (data?.categories ?? [null])[0];
 
 	return (
 		<Tabs

@@ -1,5 +1,5 @@
 query GetParentCategoryById($id: Int!) {
-	findCategoryById(id: $id) {
+	categories(filter: { id: $id }) {
 		id
 		parent {
 			id

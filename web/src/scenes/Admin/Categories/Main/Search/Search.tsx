@@ -5,6 +5,7 @@ import { useFindCategoryByNameTemplateQuery } from "../../../../../generated/gra
 import { AutoComplete } from "antd";
 import { useHistory } from "react-router";
 import classes from "./Search.module.scss";
+import CategoriesTree from "./CategoriesTree";
 
 interface Props {
 	initialValue?: string;
@@ -29,33 +30,36 @@ const Search = ({ initialValue, onCategoryChange }: Props) => {
 		value: category.name,
 		key: category.id
 	}));
-
 	return (
-		<AutoComplete
-			defaultValue={initialValue}
-			className={classes.search}
-			dropdownMatchSelectWidth={252}
-			options={options}
-			onChange={value => setTemplate(value)}
-			onSelect={(v, { key }) =>
-				onCategoryChange(categories.find(c => c.id === key)!)
-			}
-			onClick={() => {
-				if (
-					!history.location.pathname.startsWith(
-						"/admin/categories/edit"
-					)
-				) {
-					history.push("/admin/categories/edit");
+		<>
+			<AutoComplete
+				defaultValue={initialValue}
+				className={classes.search}
+				dropdownMatchSelectWidth={252}
+				options={options}
+				onChange={value => setTemplate(value)}
+				onSelect={(v, { key }) =>
+					// @ts-ignore
+					onCategoryChange(categories.find(c => c.id === key)!)
 				}
-			}}
-		>
-			<SearchD
-				loading={loading}
-				placeholder="Input category name"
-				size="large"
-			/>
-		</AutoComplete>
+				onClick={() => {
+					if (
+						!history.location.pathname.startsWith(
+							"/admin/categories/edit"
+						)
+					) {
+						history.push("/admin/categories/edit");
+					}
+				}}
+			>
+				<SearchD
+					loading={loading}
+					placeholder="Input category name"
+					size="large"
+				/>
+			</AutoComplete>
+			<CategoriesTree />
+		</>
 	);
 };
 

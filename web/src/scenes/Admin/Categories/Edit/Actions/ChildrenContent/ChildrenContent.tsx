@@ -20,7 +20,7 @@ const ChildrenContent = ({ category: { id }, load }: Props) => {
 		variables: { id }
 	});
 
-	const category = data?.findCategoryById;
+	const category = (data?.categories ?? [null])[0];
 
 	const queryPush = useQueryPush();
 

@@ -29,26 +29,8 @@ export type CategoryField = {
   name: Scalars['String'];
 };
 
-export type Category = {
-  __typename?: 'Category';
-  id: Scalars['Int'];
-  name: Scalars['String'];
-  parent?: Maybe<Category>;
-  children?: Maybe<Array<Category>>;
-  fields?: Maybe<Array<CategoryField>>;
-};
-
-
-export type CategoryFieldsArgs = {
-  filter?: Maybe<CategoryFieldInput>;
-};
-
-export type CategoryFieldInput = {
-  id?: Maybe<Scalars['String']>;
-};
-
-export type ProductField = {
-  __typename?: 'ProductField';
+export type CategoryInfoField = {
+  __typename?: 'CategoryInfoField';
   id: Scalars['String'];
   value: Scalars['String'];
 };
@@ -57,6 +39,55 @@ export type Language = {
   __typename?: 'Language';
   id: Scalars['Int'];
   code: Scalars['String'];
+};
+
+export type CategoryInfo = {
+  __typename?: 'CategoryInfo';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  language: Language;
+  fields?: Maybe<Array<CategoryInfoField>>;
+  category: CategoryInfo;
+};
+
+
+export type CategoryInfoFieldsArgs = {
+  filter?: Maybe<CategoryInfoFielddInput>;
+};
+
+export type CategoryInfoFielddInput = {
+  id?: Maybe<Scalars['String']>;
+};
+
+export type Category = {
+  __typename?: 'Category';
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  parent?: Maybe<Category>;
+  level: Scalars['Int'];
+  children?: Maybe<Array<Category>>;
+  fields?: Maybe<Array<CategoryField>>;
+  info: Array<CategoryInfo>;
+};
+
+
+export type CategoryFieldsArgs = {
+  filter?: Maybe<CategoryInfoFielddInput>;
+};
+
+
+export type CategoryInfoArgs = {
+  filter?: Maybe<CategoryInfoInput>;
+};
+
+export type CategoryInfoInput = {
+  id?: Maybe<Scalars['Int']>;
+};
+
+export type ProductField = {
+  __typename?: 'ProductField';
+  id: Scalars['String'];
+  value: Scalars['String'];
 };
 
 export type ProductInfo = {
@@ -93,15 +124,22 @@ export type ProductInfoInput = {
   id?: Maybe<Scalars['Int']>;
 };
 
+export type SearchType = {
+  __typename?: 'SearchType';
+  query: Scalars['String'];
+  categories: Array<Category>;
+};
+
 export type Query = {
   __typename?: 'Query';
   currentUser?: Maybe<User>;
-  categories: Array<Category>;
   findCategoryByNameTemplate: Array<Category>;
-  findCategoryById?: Maybe<Category>;
+  categories?: Maybe<Array<Category>>;
+  findCategoryInfoByNameTemplate: Array<CategoryInfo>;
   products: Array<Product>;
   findProductInfoByNameTemplate: Array<ProductInfo>;
   languages: Array<Language>;
+  search: SearchType;
 };
 
 
@@ -110,8 +148,13 @@ export type QueryFindCategoryByNameTemplateArgs = {
 };
 
 
-export type QueryFindCategoryByIdArgs = {
-  id: Scalars['Int'];
+export type QueryCategoriesArgs = {
+  filter?: Maybe<CategoryInput>;
+};
+
+
+export type QueryFindCategoryInfoByNameTemplateArgs = {
+  template?: Maybe<Scalars['String']>;
 };
 
 
@@ -122,6 +165,16 @@ export type QueryProductsArgs = {
 
 export type QueryFindProductInfoByNameTemplateArgs = {
   template?: Maybe<Scalars['String']>;
+};
+
+
+export type QuerySearchArgs = {
+  query: Scalars['String'];
+};
+
+export type CategoryInput = {
+  id?: Maybe<Scalars['Int']>;
+  level?: Maybe<Scalars['Int']>;
 };
 
 export type ProductInput = {
@@ -138,6 +191,10 @@ export type Mutation = {
   addFieldToCategory: Category;
   changeFieldInCategory: Category;
   removeFieldFromCategory: Category;
+  addCategoryInfoToCategory: Category;
+  removeInfoFromCategory: Category;
+  changeCategoryInfo: CategoryInfo;
+  changeFieldInCategoryInfo: CategoryInfo;
   createProduct: Product;
   changeProduct: Product;
   changeCategoryInProduct: Product;
@@ -169,6 +226,7 @@ export type MutationCreateUserArgs = {
 
 export type MutationCreateCategoryArgs = {
   parentId?: Maybe<Scalars['Int']>;
+  level: Scalars['Int'];
   name: Scalars['String'];
 };
 
@@ -193,6 +251,32 @@ export type MutationChangeFieldInCategoryArgs = {
 
 
 export type MutationRemoveFieldFromCategoryArgs = {
+  fieldId: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationAddCategoryInfoToCategoryArgs = {
+  language: Scalars['Int'];
+  categoryId: Scalars['Int'];
+};
+
+
+export type MutationRemoveInfoFromCategoryArgs = {
+  infoId: Scalars['Int'];
+  categoryId: Scalars['Int'];
+};
+
+
+export type MutationChangeCategoryInfoArgs = {
+  change: ChangeCategoryInfoInput;
+  infoId: Scalars['Int'];
+  id: Scalars['Int'];
+};
+
+
+export type MutationChangeFieldInCategoryInfoArgs = {
+  value: Scalars['String'];
   fieldId: Scalars['String'];
   id: Scalars['Int'];
 };
@@ -250,6 +334,10 @@ export type MutationSetLanguageJsonArgs = {
   id: Scalars['Int'];
 };
 
+export type ChangeCategoryInfoInput = {
+  name?: Maybe<Scalars['String']>;
+};
+
 export type ChangeProductInfoInput = {
   name?: Maybe<Scalars['String']>;
 };
@@ -278,6 +366,7 @@ export type CurrentUserQuery = (
 
 export type CreateCategoryMutationVariables = Exact<{
   name: Scalars['String'];
+  level: Scalars['Int'];
   parentId?: Maybe<Scalars['Int']>;
 }>;
 
@@ -301,14 +390,14 @@ export type GetChildrenCategoryByIdQueryVariables = Exact<{
 
 export type GetChildrenCategoryByIdQuery = (
   { __typename?: 'Query' }
-  & { findCategoryById?: Maybe<(
+  & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
     & { children?: Maybe<Array<(
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name'>
     )>> }
-  )> }
+  )>> }
 );
 
 export type ChangeCategoryMutationVariables = Exact<{
@@ -368,32 +457,32 @@ export type GetFieldsCategoryByIdQueryVariables = Exact<{
 
 export type GetFieldsCategoryByIdQuery = (
   { __typename?: 'Query' }
-  & { findCategoryById?: Maybe<(
+  & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
     & { fields?: Maybe<Array<(
       { __typename?: 'CategoryField' }
       & Pick<CategoryField, 'id' | 'name'>
     )>> }
-  )> }
+  )>> }
 );
 
 export type GetFieldByIdFromCategoryByIdQueryVariables = Exact<{
-  categoryId: Scalars['Int'];
+  id: Scalars['Int'];
   fieldId: Scalars['String'];
 }>;
 
 
 export type GetFieldByIdFromCategoryByIdQuery = (
   { __typename?: 'Query' }
-  & { findCategoryById?: Maybe<(
+  & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
     & { fields?: Maybe<Array<(
       { __typename?: 'CategoryField' }
       & Pick<CategoryField, 'id' | 'name'>
     )>> }
-  )> }
+  )>> }
 );
 
 export type ChangeFieldInCategoryMutationVariables = Exact<{
@@ -415,6 +504,151 @@ export type ChangeFieldInCategoryMutation = (
   ) }
 );
 
+export type AddCategoryInfoToCategoryMutationVariables = Exact<{
+  id: Scalars['Int'];
+  languageId: Scalars['Int'];
+}>;
+
+
+export type AddCategoryInfoToCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { addCategoryInfoToCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ) }
+    )> }
+  ) }
+);
+
+export type GetCategoryInfoLanguagesQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetCategoryInfoLanguagesQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ) }
+    )> }
+  )>> }
+);
+
+export type GetCategoryInfoByCategoryIdAndInfoIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+  infoId: Scalars['Int'];
+}>;
+
+
+export type GetCategoryInfoByCategoryIdAndInfoIdQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id' | 'name'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id'>
+      ) }
+    )> }
+  )>> }
+);
+
+export type ChangeCategoryInfoMutationVariables = Exact<{
+  id: Scalars['Int'];
+  infoId: Scalars['Int'];
+  name: Scalars['String'];
+}>;
+
+
+export type ChangeCategoryInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { changeCategoryInfo: (
+    { __typename?: 'CategoryInfo' }
+    & Pick<CategoryInfo, 'id'>
+  ) }
+);
+
+export type GetFieldsCategoryInfoByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetFieldsCategoryInfoByIdQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { fields?: Maybe<Array<(
+      { __typename?: 'CategoryField' }
+      & Pick<CategoryField, 'id' | 'name'>
+    )>>, info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & { fields?: Maybe<Array<(
+        { __typename?: 'CategoryInfoField' }
+        & Pick<CategoryInfoField, 'id' | 'value'>
+      )>> }
+    )> }
+  )>> }
+);
+
+export type GetCategoryInfoByCategoryIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetCategoryInfoByCategoryIdQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ), fields?: Maybe<Array<(
+        { __typename?: 'CategoryInfoField' }
+        & Pick<CategoryInfoField, 'id' | 'value'>
+      )>> }
+    )> }
+  )>> }
+);
+
+export type RemoveCategoryInfoFromCategoryMutationVariables = Exact<{
+  categoryId: Scalars['Int'];
+  infoId: Scalars['Int'];
+}>;
+
+
+export type RemoveCategoryInfoFromCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { removeInfoFromCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id'>
+    )> }
+  ) }
+);
+
 export type GetParentCategoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -422,27 +656,50 @@ export type GetParentCategoryByIdQueryVariables = Exact<{
 
 export type GetParentCategoryByIdQuery = (
   { __typename?: 'Query' }
-  & { findCategoryById?: Maybe<(
+  & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
     & { parent?: Maybe<(
       { __typename?: 'Category' }
       & Pick<Category, 'id' | 'name'>
     )> }
-  )> }
+  )>> }
 );
 
-export type FindCategoryByIdQueryVariables = Exact<{
+export type GetCategoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
 
-export type FindCategoryByIdQuery = (
+export type GetCategoryByIdQuery = (
   { __typename?: 'Query' }
-  & { findCategoryById?: Maybe<(
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name' | 'level'>
+    & { info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id'>
+    )> }
+  )>> }
+);
+
+export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetCategoriesQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id' | 'name'>
-  )> }
+    & { children?: Maybe<Array<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'name'>
+      & { children?: Maybe<Array<(
+        { __typename?: 'Category' }
+        & Pick<Category, 'id' | 'name'>
+      )>> }
+    )>> }
+  )>> }
 );
 
 export type FindCategoryByNameTemplateQueryVariables = Exact<{
@@ -454,7 +711,7 @@ export type FindCategoryByNameTemplateQuery = (
   { __typename?: 'Query' }
   & { findCategoryByNameTemplate: Array<(
     { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name'>
+    & Pick<Category, 'id' | 'name' | 'level'>
   )> }
 );
 
@@ -525,6 +782,19 @@ export type FindProductInfoByNameTemplateQuery = (
       & Pick<ProductInfo, 'id'>
     ) }
   )> }
+);
+
+export type FindCategoryByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FindCategoryByIdQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name' | 'level'>
+  )>> }
 );
 
 export type GetProductCategoryByProductIdQueryVariables = Exact<{
@@ -824,8 +1094,8 @@ export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
 export const CreateCategoryDocument = gql`
-    mutation CreateCategory($name: String!, $parentId: Int) {
-  createCategory(name: $name, parentId: $parentId) {
+    mutation CreateCategory($name: String!, $level: Int!, $parentId: Int) {
+  createCategory(name: $name, level: $level, parentId: $parentId) {
     id
     name
     parent {
@@ -850,6 +1120,7 @@ export type CreateCategoryMutationFn = ApolloReactCommon.MutationFunction<Create
  * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
  *   variables: {
  *      name: // value for 'name'
+ *      level: // value for 'level'
  *      parentId: // value for 'parentId'
  *   },
  * });
@@ -862,7 +1133,7 @@ export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<Crea
 export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const GetChildrenCategoryByIdDocument = gql`
     query GetChildrenCategoryById($id: Int!) {
-  findCategoryById(id: $id) {
+  categories(filter: {id: $id}) {
     id
     children {
       id
@@ -1007,7 +1278,7 @@ export type RemoveFieldFromCategoryMutationResult = ApolloReactCommon.MutationRe
 export type RemoveFieldFromCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveFieldFromCategoryMutation, RemoveFieldFromCategoryMutationVariables>;
 export const GetFieldsCategoryByIdDocument = gql`
     query GetFieldsCategoryById($id: Int!) {
-  findCategoryById(id: $id) {
+  categories(filter: {id: $id}) {
     id
     fields {
       id
@@ -1043,8 +1314,8 @@ export type GetFieldsCategoryByIdQueryHookResult = ReturnType<typeof useGetField
 export type GetFieldsCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetFieldsCategoryByIdLazyQuery>;
 export type GetFieldsCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldsCategoryByIdQuery, GetFieldsCategoryByIdQueryVariables>;
 export const GetFieldByIdFromCategoryByIdDocument = gql`
-    query GetFieldByIdFromCategoryById($categoryId: Int!, $fieldId: String!) {
-  findCategoryById(id: $categoryId) {
+    query GetFieldByIdFromCategoryById($id: Int!, $fieldId: String!) {
+  categories(filter: {id: $id}) {
     id
     fields(filter: {id: $fieldId}) {
       id
@@ -1066,7 +1337,7 @@ export const GetFieldByIdFromCategoryByIdDocument = gql`
  * @example
  * const { data, loading, error } = useGetFieldByIdFromCategoryByIdQuery({
  *   variables: {
- *      categoryId: // value for 'categoryId'
+ *      id: // value for 'id'
  *      fieldId: // value for 'fieldId'
  *   },
  * });
@@ -1118,9 +1389,287 @@ export function useChangeFieldInCategoryMutation(baseOptions?: ApolloReactHooks.
 export type ChangeFieldInCategoryMutationHookResult = ReturnType<typeof useChangeFieldInCategoryMutation>;
 export type ChangeFieldInCategoryMutationResult = ApolloReactCommon.MutationResult<ChangeFieldInCategoryMutation>;
 export type ChangeFieldInCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFieldInCategoryMutation, ChangeFieldInCategoryMutationVariables>;
+export const AddCategoryInfoToCategoryDocument = gql`
+    mutation AddCategoryInfoToCategory($id: Int!, $languageId: Int!) {
+  addCategoryInfoToCategory(categoryId: $id, language: $languageId) {
+    id
+    info {
+      id
+      language {
+        id
+        code
+      }
+    }
+  }
+}
+    `;
+export type AddCategoryInfoToCategoryMutationFn = ApolloReactCommon.MutationFunction<AddCategoryInfoToCategoryMutation, AddCategoryInfoToCategoryMutationVariables>;
+
+/**
+ * __useAddCategoryInfoToCategoryMutation__
+ *
+ * To run a mutation, you first call `useAddCategoryInfoToCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCategoryInfoToCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCategoryInfoToCategoryMutation, { data, loading, error }] = useAddCategoryInfoToCategoryMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      languageId: // value for 'languageId'
+ *   },
+ * });
+ */
+export function useAddCategoryInfoToCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCategoryInfoToCategoryMutation, AddCategoryInfoToCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCategoryInfoToCategoryMutation, AddCategoryInfoToCategoryMutationVariables>(AddCategoryInfoToCategoryDocument, baseOptions);
+      }
+export type AddCategoryInfoToCategoryMutationHookResult = ReturnType<typeof useAddCategoryInfoToCategoryMutation>;
+export type AddCategoryInfoToCategoryMutationResult = ApolloReactCommon.MutationResult<AddCategoryInfoToCategoryMutation>;
+export type AddCategoryInfoToCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCategoryInfoToCategoryMutation, AddCategoryInfoToCategoryMutationVariables>;
+export const GetCategoryInfoLanguagesDocument = gql`
+    query GetCategoryInfoLanguages($id: Int!) {
+  categories(filter: {id: $id}) {
+    id
+    info {
+      id
+      language {
+        id
+        code
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryInfoLanguagesQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryInfoLanguagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryInfoLanguagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryInfoLanguagesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCategoryInfoLanguagesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryInfoLanguagesQuery, GetCategoryInfoLanguagesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryInfoLanguagesQuery, GetCategoryInfoLanguagesQueryVariables>(GetCategoryInfoLanguagesDocument, baseOptions);
+      }
+export function useGetCategoryInfoLanguagesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryInfoLanguagesQuery, GetCategoryInfoLanguagesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryInfoLanguagesQuery, GetCategoryInfoLanguagesQueryVariables>(GetCategoryInfoLanguagesDocument, baseOptions);
+        }
+export type GetCategoryInfoLanguagesQueryHookResult = ReturnType<typeof useGetCategoryInfoLanguagesQuery>;
+export type GetCategoryInfoLanguagesLazyQueryHookResult = ReturnType<typeof useGetCategoryInfoLanguagesLazyQuery>;
+export type GetCategoryInfoLanguagesQueryResult = ApolloReactCommon.QueryResult<GetCategoryInfoLanguagesQuery, GetCategoryInfoLanguagesQueryVariables>;
+export const GetCategoryInfoByCategoryIdAndInfoIdDocument = gql`
+    query GetCategoryInfoByCategoryIdAndInfoId($id: Int!, $infoId: Int!) {
+  categories(filter: {id: $id}) {
+    id
+    info(filter: {id: $infoId}) {
+      id
+      name
+      language {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryInfoByCategoryIdAndInfoIdQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryInfoByCategoryIdAndInfoIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryInfoByCategoryIdAndInfoIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryInfoByCategoryIdAndInfoIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      infoId: // value for 'infoId'
+ *   },
+ * });
+ */
+export function useGetCategoryInfoByCategoryIdAndInfoIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryInfoByCategoryIdAndInfoIdQuery, GetCategoryInfoByCategoryIdAndInfoIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryInfoByCategoryIdAndInfoIdQuery, GetCategoryInfoByCategoryIdAndInfoIdQueryVariables>(GetCategoryInfoByCategoryIdAndInfoIdDocument, baseOptions);
+      }
+export function useGetCategoryInfoByCategoryIdAndInfoIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryInfoByCategoryIdAndInfoIdQuery, GetCategoryInfoByCategoryIdAndInfoIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryInfoByCategoryIdAndInfoIdQuery, GetCategoryInfoByCategoryIdAndInfoIdQueryVariables>(GetCategoryInfoByCategoryIdAndInfoIdDocument, baseOptions);
+        }
+export type GetCategoryInfoByCategoryIdAndInfoIdQueryHookResult = ReturnType<typeof useGetCategoryInfoByCategoryIdAndInfoIdQuery>;
+export type GetCategoryInfoByCategoryIdAndInfoIdLazyQueryHookResult = ReturnType<typeof useGetCategoryInfoByCategoryIdAndInfoIdLazyQuery>;
+export type GetCategoryInfoByCategoryIdAndInfoIdQueryResult = ApolloReactCommon.QueryResult<GetCategoryInfoByCategoryIdAndInfoIdQuery, GetCategoryInfoByCategoryIdAndInfoIdQueryVariables>;
+export const ChangeCategoryInfoDocument = gql`
+    mutation ChangeCategoryInfo($id: Int!, $infoId: Int!, $name: String!) {
+  changeCategoryInfo(id: $id, infoId: $infoId, change: {name: $name}) {
+    id
+  }
+}
+    `;
+export type ChangeCategoryInfoMutationFn = ApolloReactCommon.MutationFunction<ChangeCategoryInfoMutation, ChangeCategoryInfoMutationVariables>;
+
+/**
+ * __useChangeCategoryInfoMutation__
+ *
+ * To run a mutation, you first call `useChangeCategoryInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeCategoryInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeCategoryInfoMutation, { data, loading, error }] = useChangeCategoryInfoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      infoId: // value for 'infoId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useChangeCategoryInfoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeCategoryInfoMutation, ChangeCategoryInfoMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeCategoryInfoMutation, ChangeCategoryInfoMutationVariables>(ChangeCategoryInfoDocument, baseOptions);
+      }
+export type ChangeCategoryInfoMutationHookResult = ReturnType<typeof useChangeCategoryInfoMutation>;
+export type ChangeCategoryInfoMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryInfoMutation>;
+export type ChangeCategoryInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryInfoMutation, ChangeCategoryInfoMutationVariables>;
+export const GetFieldsCategoryInfoByIdDocument = gql`
+    query GetFieldsCategoryInfoById($id: Int!) {
+  categories(filter: {id: $id}) {
+    id
+    fields {
+      id
+      name
+    }
+    info {
+      fields {
+        id
+        value
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetFieldsCategoryInfoByIdQuery__
+ *
+ * To run a query within a React component, call `useGetFieldsCategoryInfoByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetFieldsCategoryInfoByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetFieldsCategoryInfoByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetFieldsCategoryInfoByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetFieldsCategoryInfoByIdQuery, GetFieldsCategoryInfoByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetFieldsCategoryInfoByIdQuery, GetFieldsCategoryInfoByIdQueryVariables>(GetFieldsCategoryInfoByIdDocument, baseOptions);
+      }
+export function useGetFieldsCategoryInfoByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetFieldsCategoryInfoByIdQuery, GetFieldsCategoryInfoByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetFieldsCategoryInfoByIdQuery, GetFieldsCategoryInfoByIdQueryVariables>(GetFieldsCategoryInfoByIdDocument, baseOptions);
+        }
+export type GetFieldsCategoryInfoByIdQueryHookResult = ReturnType<typeof useGetFieldsCategoryInfoByIdQuery>;
+export type GetFieldsCategoryInfoByIdLazyQueryHookResult = ReturnType<typeof useGetFieldsCategoryInfoByIdLazyQuery>;
+export type GetFieldsCategoryInfoByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldsCategoryInfoByIdQuery, GetFieldsCategoryInfoByIdQueryVariables>;
+export const GetCategoryInfoByCategoryIdDocument = gql`
+    query GetCategoryInfoByCategoryId($id: Int!) {
+  categories(filter: {id: $id}) {
+    id
+    info {
+      id
+      language {
+        id
+        code
+      }
+      fields {
+        id
+        value
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryInfoByCategoryIdQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryInfoByCategoryIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryInfoByCategoryIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryInfoByCategoryIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetCategoryInfoByCategoryIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryInfoByCategoryIdQuery, GetCategoryInfoByCategoryIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryInfoByCategoryIdQuery, GetCategoryInfoByCategoryIdQueryVariables>(GetCategoryInfoByCategoryIdDocument, baseOptions);
+      }
+export function useGetCategoryInfoByCategoryIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryInfoByCategoryIdQuery, GetCategoryInfoByCategoryIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryInfoByCategoryIdQuery, GetCategoryInfoByCategoryIdQueryVariables>(GetCategoryInfoByCategoryIdDocument, baseOptions);
+        }
+export type GetCategoryInfoByCategoryIdQueryHookResult = ReturnType<typeof useGetCategoryInfoByCategoryIdQuery>;
+export type GetCategoryInfoByCategoryIdLazyQueryHookResult = ReturnType<typeof useGetCategoryInfoByCategoryIdLazyQuery>;
+export type GetCategoryInfoByCategoryIdQueryResult = ApolloReactCommon.QueryResult<GetCategoryInfoByCategoryIdQuery, GetCategoryInfoByCategoryIdQueryVariables>;
+export const RemoveCategoryInfoFromCategoryDocument = gql`
+    mutation RemoveCategoryInfoFromCategory($categoryId: Int!, $infoId: Int!) {
+  removeInfoFromCategory(categoryId: $categoryId, infoId: $infoId) {
+    id
+    info {
+      id
+    }
+  }
+}
+    `;
+export type RemoveCategoryInfoFromCategoryMutationFn = ApolloReactCommon.MutationFunction<RemoveCategoryInfoFromCategoryMutation, RemoveCategoryInfoFromCategoryMutationVariables>;
+
+/**
+ * __useRemoveCategoryInfoFromCategoryMutation__
+ *
+ * To run a mutation, you first call `useRemoveCategoryInfoFromCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveCategoryInfoFromCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeCategoryInfoFromCategoryMutation, { data, loading, error }] = useRemoveCategoryInfoFromCategoryMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      infoId: // value for 'infoId'
+ *   },
+ * });
+ */
+export function useRemoveCategoryInfoFromCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveCategoryInfoFromCategoryMutation, RemoveCategoryInfoFromCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveCategoryInfoFromCategoryMutation, RemoveCategoryInfoFromCategoryMutationVariables>(RemoveCategoryInfoFromCategoryDocument, baseOptions);
+      }
+export type RemoveCategoryInfoFromCategoryMutationHookResult = ReturnType<typeof useRemoveCategoryInfoFromCategoryMutation>;
+export type RemoveCategoryInfoFromCategoryMutationResult = ApolloReactCommon.MutationResult<RemoveCategoryInfoFromCategoryMutation>;
+export type RemoveCategoryInfoFromCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveCategoryInfoFromCategoryMutation, RemoveCategoryInfoFromCategoryMutationVariables>;
 export const GetParentCategoryByIdDocument = gql`
     query GetParentCategoryById($id: Int!) {
-  findCategoryById(id: $id) {
+  categories(filter: {id: $id}) {
     id
     parent {
       id
@@ -1155,45 +1704,91 @@ export function useGetParentCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks
 export type GetParentCategoryByIdQueryHookResult = ReturnType<typeof useGetParentCategoryByIdQuery>;
 export type GetParentCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetParentCategoryByIdLazyQuery>;
 export type GetParentCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetParentCategoryByIdQuery, GetParentCategoryByIdQueryVariables>;
-export const FindCategoryByIdDocument = gql`
-    query FindCategoryById($id: Int!) {
-  findCategoryById(id: $id) {
+export const GetCategoryByIdDocument = gql`
+    query GetCategoryById($id: Int!) {
+  categories(filter: {id: $id}) {
     id
     name
+    level
+    info {
+      id
+    }
   }
 }
     `;
 
 /**
- * __useFindCategoryByIdQuery__
+ * __useGetCategoryByIdQuery__
  *
- * To run a query within a React component, call `useFindCategoryByIdQuery` and pass it any options that fit your needs.
- * When your component renders, `useFindCategoryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetCategoryByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useFindCategoryByIdQuery({
+ * const { data, loading, error } = useGetCategoryByIdQuery({
  *   variables: {
  *      id: // value for 'id'
  *   },
  * });
  */
-export function useFindCategoryByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>) {
-        return ApolloReactHooks.useQuery<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>(FindCategoryByIdDocument, baseOptions);
+export function useGetCategoryByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryByIdQuery, GetCategoryByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryByIdQuery, GetCategoryByIdQueryVariables>(GetCategoryByIdDocument, baseOptions);
       }
-export function useFindCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>(FindCategoryByIdDocument, baseOptions);
+export function useGetCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryByIdQuery, GetCategoryByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryByIdQuery, GetCategoryByIdQueryVariables>(GetCategoryByIdDocument, baseOptions);
         }
-export type FindCategoryByIdQueryHookResult = ReturnType<typeof useFindCategoryByIdQuery>;
-export type FindCategoryByIdLazyQueryHookResult = ReturnType<typeof useFindCategoryByIdLazyQuery>;
-export type FindCategoryByIdQueryResult = ApolloReactCommon.QueryResult<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>;
+export type GetCategoryByIdQueryHookResult = ReturnType<typeof useGetCategoryByIdQuery>;
+export type GetCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetCategoryByIdLazyQuery>;
+export type GetCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetCategoryByIdQuery, GetCategoryByIdQueryVariables>;
+export const GetCategoriesDocument = gql`
+    query GetCategories {
+  categories(filter: {level: 1}) {
+    id
+    name
+    children {
+      id
+      name
+      children {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoriesQuery__
+ *
+ * To run a query within a React component, call `useGetCategoriesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoriesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoriesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetCategoriesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+      }
+export function useGetCategoriesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoriesQuery, GetCategoriesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoriesQuery, GetCategoriesQueryVariables>(GetCategoriesDocument, baseOptions);
+        }
+export type GetCategoriesQueryHookResult = ReturnType<typeof useGetCategoriesQuery>;
+export type GetCategoriesLazyQueryHookResult = ReturnType<typeof useGetCategoriesLazyQuery>;
+export type GetCategoriesQueryResult = ApolloReactCommon.QueryResult<GetCategoriesQuery, GetCategoriesQueryVariables>;
 export const FindCategoryByNameTemplateDocument = gql`
     query FindCategoryByNameTemplate($template: String) {
   findCategoryByNameTemplate(template: $template) {
     id
     name
+    level
   }
 }
     `;
@@ -1392,6 +1987,41 @@ export function useFindProductInfoByNameTemplateLazyQuery(baseOptions?: ApolloRe
 export type FindProductInfoByNameTemplateQueryHookResult = ReturnType<typeof useFindProductInfoByNameTemplateQuery>;
 export type FindProductInfoByNameTemplateLazyQueryHookResult = ReturnType<typeof useFindProductInfoByNameTemplateLazyQuery>;
 export type FindProductInfoByNameTemplateQueryResult = ApolloReactCommon.QueryResult<FindProductInfoByNameTemplateQuery, FindProductInfoByNameTemplateQueryVariables>;
+export const FindCategoryByIdDocument = gql`
+    query FindCategoryById($id: Int!) {
+  categories(filter: {id: $id}) {
+    id
+    name
+    level
+  }
+}
+    `;
+
+/**
+ * __useFindCategoryByIdQuery__
+ *
+ * To run a query within a React component, call `useFindCategoryByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindCategoryByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindCategoryByIdQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useFindCategoryByIdQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>) {
+        return ApolloReactHooks.useQuery<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>(FindCategoryByIdDocument, baseOptions);
+      }
+export function useFindCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>(FindCategoryByIdDocument, baseOptions);
+        }
+export type FindCategoryByIdQueryHookResult = ReturnType<typeof useFindCategoryByIdQuery>;
+export type FindCategoryByIdLazyQueryHookResult = ReturnType<typeof useFindCategoryByIdLazyQuery>;
+export type FindCategoryByIdQueryResult = ApolloReactCommon.QueryResult<FindCategoryByIdQuery, FindCategoryByIdQueryVariables>;
 export const GetProductCategoryByProductIdDocument = gql`
     query GetProductCategoryByProductId($id: Int!) {
   products(filter: {id: $id}) {

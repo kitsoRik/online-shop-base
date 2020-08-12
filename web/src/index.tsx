@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import "./index.scss";
 import "./defaults.less";
 import App from "./App";
-import { ApolloProvider } from "@apollo/react-hooks";
+import { ApolloProvider } from "@apollo/client";
 import { client } from "./apollo/apollo";
 import { BrowserRouter } from "react-router-dom";
 import { BrowserLocationQuery } from "react-location-query";

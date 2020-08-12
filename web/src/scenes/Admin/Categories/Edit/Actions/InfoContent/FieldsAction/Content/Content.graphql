@@ -1,0 +1,15 @@
+query GetFieldsCategoryInfoById($id: Int!) {
+	categories(filter: { id: $id }) {
+		id
+		fields {
+			id
+			name
+		}
+		info {
+			fields {
+				id
+				value
+			}
+		}
+	}
+}

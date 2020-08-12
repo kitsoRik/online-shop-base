@@ -1,6 +1,10 @@
-query FindCategoryById($id: Int!) {
-	findCategoryById(id: $id) {
+query GetCategoryById($id: Int!) {
+	categories(filter: { id: $id }) {
 		id
 		name
+		level
+		info {
+			id
+		}
 	}
 }

@@ -1,0 +1,18 @@
+query GetCategoryInfoByCategoryIdAndInfoId($id: Int!, $infoId: Int!) {
+	categories(filter: { id: $id }) {
+		id
+		info(filter: { id: $infoId }) {
+			id
+			name
+			language {
+				id
+			}
+		}
+	}
+}
+
+mutation ChangeCategoryInfo($id: Int!, $infoId: Int!, $name: String!) {
+	changeCategoryInfo(id: $id, infoId: $infoId, change: { name: $name }) {
+		id
+	}
+}

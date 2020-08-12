@@ -1,5 +1,5 @@
 query GetFieldsCategoryById($id: Int!) {
-	findCategoryById(id: $id) {
+	categories(filter: { id: $id }) {
 		id
 		fields {
 			id

@@ -1,0 +1,14 @@
+query GetCategories {
+	categories(filter: { level: 1 }) {
+		id
+		name
+		children {
+			id
+			name
+			children {
+				id
+				name
+			}
+		}
+	}
+}

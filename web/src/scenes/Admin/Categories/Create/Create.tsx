@@ -9,12 +9,13 @@ const Create = () => {
 	const onCreate = async (
 		name: string,
 		description: string,
+		level: number,
 		parentId?: number
 	) => {
 		console.log("Create ", name, description, parentId);
 
 		const { data } = await createCategory({
-			variables: { name, parentId }
+			variables: { name, level, parentId }
         });
         
 		console.log(data);

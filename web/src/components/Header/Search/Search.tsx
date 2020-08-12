@@ -3,6 +3,7 @@ import SearchD from "antd/lib/input/Search";
 import classes from "./Search.module.scss";
 import OverModal from "../../OverModal";
 import { useQueryPush } from "react-location-query";
+import Container from "./Container";
 
 const Search = () => {
 	const [active, setActive] = useState(false);
@@ -21,13 +22,12 @@ const Search = () => {
 				component={
 					<SearchD
 						onClick={() => setActive(true)}
-						onBlur={() => setActive(false)}
 						size="large"
 						onSearch={onSearch}
 					/>
 				}
 			>
-				<div>123</div>
+				<Container />
 			</OverModal>
 		</div>
 	);

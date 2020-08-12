@@ -20,7 +20,7 @@ const ParentContent = ({ category, load }: Props) => {
 		variables: { id: category?.id || -1 }
 	});
 
-	const _category = data?.findCategoryById;
+	const _category = (data?.categories ?? [null])[0];
 
 	if (!_category) return null;
 

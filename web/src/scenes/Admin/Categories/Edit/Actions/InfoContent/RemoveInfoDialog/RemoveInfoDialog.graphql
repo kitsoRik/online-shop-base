@@ -1,0 +1,8 @@
+mutation RemoveCategoryInfoFromCategory($categoryId: Int!, $infoId: Int!) {
+	removeInfoFromCategory(categoryId: $categoryId, infoId: $infoId) {
+		id
+		info {
+			id
+		}
+	}
+}

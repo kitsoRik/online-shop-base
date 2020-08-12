@@ -18,7 +18,7 @@ const ModifyDialog = () => {
 	const { data, loading } = useGetFieldByIdFromCategoryByIdQuery({
 		skip: !modify,
 		variables: {
-			categoryId: categoryId,
+			id: categoryId,
 			fieldId: modify
 		}
 	});
@@ -29,7 +29,7 @@ const ModifyDialog = () => {
 		setModify("");
 	};
 
-	const category = data?.findCategoryById;
+	const category = (data?.categories ?? [null])[0];
 
 	const field: CategoryField | null = (category?.fields ?? [null])[0];
 

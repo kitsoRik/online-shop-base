@@ -6,6 +6,7 @@ import { useLocationField, useLocationFieldT } from "react-location-query";
 import { useGetProductInfoByProductIdQuery } from "../../../../../../../generated/graphql";
 import AddInfoDialog from "./AddInfoDialog";
 import RemoveInfoDialog from "./RemoveInfoDialog";
+import LanguageActions from "../../../../../../../shared/LanguageActions";
 
 const Actions = () => {
 	const [productId] = useLocationFieldT<number>("product");
@@ -44,45 +45,27 @@ const Actions = () => {
 
 	return (
 		<>
-			<Tabs
-				tabPosition="top"
-				type="editable-card"
-				onEdit={(key, action) => {
-					if (action === "add") setAddInfo(true);
-					if (action === "remove") setRemoveInfo(+key);
-				}}
-				activeKey={infoId.toString()}
-				onTabClick={tab => setInfoId(+tab)}
-			>
-				{info
+			<LanguageActions
+				languages={info
 					.slice()
 					.sort((a, b) => a.id - b.id)
-					.map(currentInfo => (
-						<Tabs.TabPane
-							key={currentInfo.id}
-							tab={<div>{currentInfo.language.code}</div>}
-						>
-							<Tabs
-								activeKey={action}
-								tabPosition={"left"}
-								style={{ height: 220 }}
-								onTabClick={action => {
-									// if (tab === "category") {
-									// 	return queryPush("/admin/categories/edit", { category: 1 });
-									// }
-									setAction(action);
-								}}
-							>
-								<Tabs.TabPane key="editing" tab="Editing">
-									<EditAction />
-								</Tabs.TabPane>
-								<Tabs.TabPane key="fields" tab="Fields">
-									<FieldsAction />
-								</Tabs.TabPane>
-							</Tabs>
-						</Tabs.TabPane>
-					))}
-			</Tabs>
+					.map(i => i.language)}
+				activeLanguage={infoId.toString()}
+				onClickLanguage={tab => setInfoId(+tab)}
+				onAdd={() => setAddInfo(true)}
+				onRemove={key => setRemoveInfo(+key)}
+				activeKey={action}
+				onTabClick={setAction}
+				tabs={[
+					<Tabs.TabPane key="editing" tab="Editing">
+						<EditAction />
+					</Tabs.TabPane>,
+					<Tabs.TabPane key="fields" tab="Fields">
+						<FieldsAction />
+					</Tabs.TabPane>
+				]}
+			/>
+
 			<AddInfoDialog />
 			<RemoveInfoDialog />
 		</>

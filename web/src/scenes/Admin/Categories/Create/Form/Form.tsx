@@ -1,12 +1,17 @@
 import React from "react";
-import { Form as FormD, Input, Button } from "antd";
+import { Form as FormD, Input, Button, Select } from "antd";
 import { UserOutlined, PlusOutlined } from "@ant-design/icons";
 import InputCategory from "../../../../../shared/InputCategory";
 import { useForm } from "antd/lib/form/Form";
 import { useTranslation } from "react-i18next";
 
 interface Props {
-	onCreate: (name: string, description: string, parentId?: number) => void;
+	onCreate: (
+		name: string,
+		description: string,
+		level: number,
+		parentId?: number
+	) => void;
 }
 
 const Form = ({ onCreate }: Props) => {
@@ -17,8 +22,8 @@ const Form = ({ onCreate }: Props) => {
 	return (
 		<FormD
 			form={form}
-			onFinish={({ name, description, parent }) => {
-				onCreate(name, description, parent);
+			onFinish={({ name, description, level, parent }) => {
+				onCreate(name, description, level, parent);
 			}}
 			layout="vertical"
 		>
@@ -46,11 +51,18 @@ const Form = ({ onCreate }: Props) => {
 					)}
 				/>
 			</FormD.Item>
-			<FormD.Item
-				name="parent"
-				label={t("admin.categories.create.form.parent.label")}
-			>
-				<InputCategory />
+			<FormD.Item>
+				<Select>
+					<Select.Option value={0}>root</Select.Option>
+					<Select.Option value={1}>1</Select.Option>
+					<Select.Option value={2}>2</Select.Option>
+				</Select>
+				<FormD.Item
+					name="parent"
+					label={t("admin.categories.create.form.parent.label")}
+				>
+					<InputCategory />
+				</FormD.Item>
 			</FormD.Item>
 			<FormD.Item>
 				<Button type="dashed" block>

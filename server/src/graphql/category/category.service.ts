@@ -3,9 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CategoryEntity } from "./category.entity";
 import { Repository } from "typeorm";
 import { GraphQLError } from "graphql";
-import { CategoryFieldEntity } from "./category-field/category-field";
 
 import * as uuid from "uuid";
+import { CategoryFieldEntity } from "./category-field/category-field";
 
 @Injectable()
 export class CategoryService {
@@ -14,9 +14,17 @@ export class CategoryService {
 		private categoryRepository: Repository<CategoryEntity>
 	) {}
 
-	async createCategory(name: string, parentId?: number) {
+	async createCategory(name: string, level: number, parentId?: number) {
+		if (level === 0 && parentId)
+			throw new GraphQLError("Level cannot be zero with parentId");
+		if (level !== 0 && !parentId)
+			throw new GraphQLError(
+				"Level cannot be non zero with parentId = null"
+			);
+
 		const category = await this.categoryRepository.create({
 			name,
+			level,
 			parentId
 		});
 

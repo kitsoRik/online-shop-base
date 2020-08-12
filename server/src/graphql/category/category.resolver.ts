@@ -12,19 +12,27 @@ import { CategoryType } from "./category.type";
 import { CategoryService } from "./category.service";
 import { CategoryEntity } from "./category.entity";
 import { AccessAdmin } from "../user/decorators/access-admin.decorator";
-import { CategoryFieldInput } from "./category-field/category-field.input";
+import { CategoryInfoFielddInput } from "./product-info/category-info-field/category-info-field.input";
+import { CategoryFilter } from "./category.filter";
+import { CategoryInfoType } from "./product-info/category-info.type";
+import { CategoryInfoService } from "./product-info/category-info.service";
+import { CategoryInfoInput } from "./product-info/category-info.input";
 
 @Resolver(of => CategoryType)
 export class CategoryResolver {
-	constructor(private categoryService: CategoryService) {}
+	constructor(
+		private categoryService: CategoryService,
+		private categoryInfoService: CategoryInfoService
+	) {}
 
 	@Mutation(type => CategoryType)
 	@AccessAdmin()
 	createCategory(
 		@Args("name") name: string,
+		@Args("level", { type: () => Int }) level: number,
 		@Args("parentId", { type: () => Int, nullable: true }) parentId: number
 	): Promise<CategoryEntity> {
-		return this.categoryService.createCategory(name, parentId);
+		return this.categoryService.createCategory(name, level, parentId);
 	}
 
 	@Mutation(type => CategoryType)
@@ -65,20 +73,25 @@ export class CategoryResolver {
 	}
 
 	@Query(type => [CategoryType])
-	categories() {
-		return this.categoryService.getCategories();
-	}
-
-	@Query(type => [CategoryType])
 	findCategoryByNameTemplate(
 		@Args("template", { nullable: true, defaultValue: "" }) template: string
 	) {
 		return this.categoryService.findByNameTemplate(template);
 	}
 
-	@Query(type => CategoryType, { nullable: true })
-	findCategoryById(@Args("id", { type: () => Int }) id: number) {
-		return this.categoryService.findById(id);
+	@Query(type => [CategoryType], { nullable: true })
+	async categories(
+		@Args("filter", { type: () => CategoryFilter, nullable: true })
+		filter: CategoryFilter
+	) {
+		if (filter) {
+			if (filter.id) {
+				const category = await this.categoryService.findById(filter.id);
+				if (!category) return [];
+				return [category];
+			}
+		}
+		return this.categoryService.getCategories();
 	}
 
 	@ResolveField(type => CategoryType)
@@ -95,9 +108,23 @@ export class CategoryResolver {
 	@ResolveField(type => CategoryType)
 	fields(
 		@Parent() { id }: { id: number },
-		@Args("filter", { nullable: true }) filter: CategoryFieldInput
+		@Args("filter", { nullable: true }) filter: CategoryInfoFielddInput
 	) {
 		console.log(filter);
 		return this.categoryService.getFields(id);
+	}
+
+	@ResolveField(type => [CategoryInfoType])
+	info(
+		@Parent() { id }: { id: number },
+		@Args("filter", { nullable: true }) filter: CategoryInfoInput
+	) {
+		if (!filter) return this.categoryInfoService.getInfoByCategoryId(id);
+		if (filter.id) {
+			return this.categoryInfoService.getInfoByCategoryIdAndInfoId(
+				id,
+				filter.id
+			);
+		}
 	}
 }

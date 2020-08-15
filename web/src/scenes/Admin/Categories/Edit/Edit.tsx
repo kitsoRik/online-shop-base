@@ -8,6 +8,7 @@ import {
 import classes from "./Edit.module.scss";
 import { useLocationField } from "react-location-query";
 import SearchEdit from "./SearchEdit";
+import Header from "./Header";
 
 const Edit = () => {
 	const [categoryId, setCategoryId] = useLocationField("category", {
@@ -23,12 +24,13 @@ const Edit = () => {
 		skip: categoryId === -1,
 		variables: { id: categoryId }
 	});
+
 	const category = (data?.categories ?? [null])[0];
 
 	return (
 		<Page>
 			<div className={classes.edit}>
-				<SearchEdit onCategoryChange={onCategoryChange} />
+				<Header />
 				<Actions category={category} />
 			</div>
 		</Page>

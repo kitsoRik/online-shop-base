@@ -8,16 +8,16 @@ import { useQueryPush } from "react-location-query";
 import { useTranslation } from "react-i18next";
 
 interface Props {
-	category: Category;
+	category: { id: number } | null;
 
 	load: boolean;
 }
 
-const ChildrenContent = ({ category: { id }, load }: Props) => {
+const ChildrenContent = ({ category: categoryP, load }: Props) => {
 	const { t } = useTranslation();
 	const { data } = useGetChildrenCategoryByIdQuery({
-		skip: !load,
-		variables: { id }
+		skip: !load || !categoryP,
+		variables: { id: categoryP?.id ?? -1 }
 	});
 
 	const category = (data?.categories ?? [null])[0];

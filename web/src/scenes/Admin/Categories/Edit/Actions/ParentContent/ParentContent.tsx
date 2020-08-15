@@ -8,7 +8,10 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 interface Props {
-	category: Category | null;
+	category: {
+		id: number;
+		parent?: { id: number; name: string } | null;
+	} | null;
 
 	load: boolean;
 }

@@ -6,5 +6,9 @@ query GetCategoryById($id: Int!) {
 		info {
 			id
 		}
+		parent {
+			id
+			name
+		}
 	}
 }

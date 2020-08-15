@@ -679,6 +679,9 @@ export type GetCategoryByIdQuery = (
     & { info: Array<(
       { __typename?: 'CategoryInfo' }
       & Pick<CategoryInfo, 'id'>
+    )>, parent?: Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id' | 'name'>
     )> }
   )>> }
 );
@@ -1712,6 +1715,10 @@ export const GetCategoryByIdDocument = gql`
     level
     info {
       id
+    }
+    parent {
+      id
+      name
     }
   }
 }

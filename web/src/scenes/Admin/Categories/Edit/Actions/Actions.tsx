@@ -9,7 +9,12 @@ import FieldsContent from "./FieldsContent";
 import InfoContent from "./InfoContent/InfoContent";
 
 interface Props {
-	category: Category | null;
+	category: {
+		id: number;
+		name: string;
+		level: number;
+		parent?: { id: number; name: string } | null;
+	} | null;
 }
 
 const Actions = ({ category }: Props) => {
@@ -18,8 +23,6 @@ const Actions = ({ category }: Props) => {
 		initial: "editing",
 		enum: ["editing", "info", "subcategories", "parent", "fields"]
 	});
-
-	if (!category) return null;
 
 	return (
 		<Tabs
@@ -37,7 +40,7 @@ const Actions = ({ category }: Props) => {
 			<Tabs.TabPane
 				key="subcategories"
 				tab="Subcategories"
-				disabled={category.level === 2}
+				disabled={!category || category.level === 2}
 			>
 				<ChildrenContent
 					category={category}
@@ -47,7 +50,7 @@ const Actions = ({ category }: Props) => {
 			<Tabs.TabPane
 				key="parent"
 				tab="Parent category"
-				disabled={category.level === 0}
+				disabled={category?.level === 0}
 			>
 				<ParentContent category={category} load={tab === "parent"} />
 			</Tabs.TabPane>

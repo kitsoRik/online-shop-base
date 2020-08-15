@@ -6,7 +6,7 @@ import { useForm } from "antd/lib/form/Form";
 import { useTranslation } from "react-i18next";
 
 interface Props {
-	category: Category;
+	category: { id: number; name: string } | null;
 
 	load: boolean;
 }
@@ -20,7 +20,7 @@ const EditContent = ({ category, load }: Props) => {
 		try {
 			const { data } = await change({
 				variables: {
-					id: category.id,
+					id: category!.id,
 					name: name
 				}
 			});
@@ -45,7 +45,9 @@ const EditContent = ({ category, load }: Props) => {
 
 	useEffect(() => {
 		form.resetFields();
-	}, [category.id]);
+	}, [category?.id]);
+
+	if (!category) return null;
 
 	return (
 		<>

@@ -5,7 +5,6 @@ import {
 } from "../../../../../../generated/graphql";
 import { Tree } from "antd";
 import { DataNode } from "antd/lib/tree";
-import { normalize } from "normalizr";
 import { Link } from "react-location-query";
 
 const CategoriesTree = () => {
@@ -33,7 +32,7 @@ const CategoriesTree = () => {
 type InputLoopCategory = {
 	id: number;
 	name: string;
-	children?: InputLoopCategory[];
+	children?: InputLoopCategory[] | null;
 };
 
 function loopCategories(categories: InputLoopCategory[]): DataNode[] {

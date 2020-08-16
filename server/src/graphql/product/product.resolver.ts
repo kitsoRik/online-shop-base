@@ -69,7 +69,7 @@ export class ProductResolver {
 	) {
 		if (!filter) return this.productInfoService.getInfoByProductId(id);
 		if (filter.id) {
-			return this.productInfoService.getInfoByProductIdAndInfoId(
+			return this.productInfoService.getInfoByProductIdAndLanguageId(
 				id,
 				filter.id
 			);

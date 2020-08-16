@@ -104,9 +104,9 @@ export class ProductInfoService {
 		return productInfo;
 	}
 
-	async getInfoByProductIdAndInfoId(productId: number, infoId: number) {
+	async getInfoByProductIdAndLanguageId(productId: number, infoId: number) {
 		const productInfo = await this.productInfoRepository.find({
-			where: { productId, id: infoId }
+			where: { productId, languageId: infoId }
 		});
 
 		return productInfo;

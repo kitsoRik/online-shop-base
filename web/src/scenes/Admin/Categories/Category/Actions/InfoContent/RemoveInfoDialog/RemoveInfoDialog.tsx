@@ -2,10 +2,12 @@ import React from "react";
 import { Modal, notification } from "antd";
 import { useLocationFieldT } from "react-location-query";
 import { useRemoveCategoryInfoFromCategoryMutation } from "../../../../../../../generated/graphql";
+import { useParams } from "react-router";
 
 const RemoveInfoDialog = () => {
 	const [removeInfo, setRemoveInfo] = useLocationFieldT<number>("removeInfo");
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
 
 	const [removeCategoryInfo] = useRemoveCategoryInfoFromCategoryMutation();
 

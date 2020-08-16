@@ -6,13 +6,15 @@ import {
 	useChangeCategoryInfoMutation,
 	useGetCategoryInfoByCategoryIdAndInfoIdQuery
 } from "../../../../../../../../generated/graphql";
+import { useParams } from "react-router";
 
 interface Props {
 	load: boolean;
 }
 
 const Content = ({ load }: Props) => {
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
 	const [infoId] = useLocationFieldT<number>("info");
 
 	const [change] = useChangeCategoryInfoMutation();

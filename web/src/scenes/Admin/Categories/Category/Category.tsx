@@ -1,20 +1,14 @@
 import React, { useState } from "react";
 import Page from "../../../../shared/Page";
 import Actions from "./Actions";
-import {
-	Category,
-	useGetCategoryByIdQuery
-} from "../../../../generated/graphql";
-import classes from "./Edit.module.scss";
-import { useLocationField } from "react-location-query";
+import { useGetCategoryByIdQuery } from "../../../../generated/graphql";
+import classes from "./Category.module.scss";
 import Header from "./Header";
+import { useParams } from "react-router";
 
-const Edit = () => {
-	const [categoryId, setCategoryId] = useLocationField("category", {
-		type: "number",
-		initial: -1,
-		hideIfInitial: true
-	});
+const Category = () => {
+	const { id } = useParams();
+	const categoryId = +id;
 
 	const { data, loading } = useGetCategoryByIdQuery({
 		skip: categoryId === -1,
@@ -33,4 +27,4 @@ const Edit = () => {
 	);
 };
 
-export default Edit;
+export default Category;

@@ -9,10 +9,12 @@ import { useLocationFieldT } from "react-location-query";
 import { Form, Input, notification } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
 
 const ModifyDialog = () => {
 	const { t } = useTranslation();
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
 	const [modify, setModify] = useLocationFieldT<string>("modify");
 
 	const { data, loading } = useGetFieldByIdFromCategoryByIdQuery({

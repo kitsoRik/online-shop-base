@@ -19,7 +19,7 @@ const CategoriesTree = () => {
 				className="draggable-tree"
 				defaultExpandAll={true}
 				titleRender={({ key, title }) => (
-					<Link to="/admin/categories/edit" query={{ category: key }}>
+					<Link to={`/admin/categories/${key}`} query={{}}>
 						{title}
 					</Link>
 				)}

@@ -39,7 +39,7 @@ const Search = ({ initialValue }: Props) => {
 				options={options}
 				onChange={value => setTemplate(value)}
 				onSelect={(v, { key }) =>
-					queryPush("/admin/categories/edit", { category: key })
+					queryPush(`/admin/categories/${key}`, {})
 				}
 			>
 				<SearchD

@@ -8,10 +8,12 @@ import {
 } from "../../../../../../../generated/graphql";
 import { useForm } from "antd/lib/form/Form";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
 
 const AddFieldDialog = () => {
 	const { t } = useTranslation();
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
 	const [add, setAdd] = useLocationFieldT<boolean>("add");
 
 	const [addFieldToCategory] = useAddFieldToCategoryMutation();

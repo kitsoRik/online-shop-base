@@ -8,13 +8,15 @@ import { Button, List, Tabs } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { useLocationField, useLocationFieldT } from "react-location-query";
 import CategoryFields from "./CategoryFields";
+import { useParams } from "react-router";
 
 interface Props {
 	load: boolean;
 }
 
 const Content = ({ load }: Props) => {
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
 
 	const [] = useLocationField("modify", {
 		type: "string",
@@ -36,12 +38,8 @@ const Content = ({ load }: Props) => {
 
 	return (
 		<>
-			<CategoryFields
-				categoryFields={categoryFields}
-			/>
-			<CategoryFields
-				categoryFields={categoryFields}
-			/>
+			<CategoryFields categoryFields={categoryFields} />
+			<CategoryFields categoryFields={categoryFields} />
 		</>
 	);
 };

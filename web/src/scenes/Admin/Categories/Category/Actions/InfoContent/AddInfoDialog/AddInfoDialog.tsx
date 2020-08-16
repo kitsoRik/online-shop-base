@@ -7,10 +7,12 @@ import {
 } from "../../../../../../../generated/graphql";
 import { useForm } from "antd/lib/form/Form";
 import InputLanguage from "../../../../../../../shared/InputLanguage";
+import { useParams } from "react-router";
 
 const AddInfoDialog = () => {
 	const [addInfo, setAddInfo] = useLocationFieldT<boolean>("addInfo");
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
 
 	const { data } = useGetCategoryInfoLanguagesQuery({
 		variables: { id: categoryId }

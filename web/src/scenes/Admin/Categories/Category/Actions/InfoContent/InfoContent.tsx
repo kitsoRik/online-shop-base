@@ -7,9 +7,11 @@ import { useGetCategoryInfoByCategoryIdQuery } from "../../../../../../generated
 import AddInfoDialog from "./AddInfoDialog";
 import RemoveInfoDialog from "./RemoveInfoDialog";
 import LanguageActions from "../../../../../../shared/LanguageActions";
+import { useParams } from "react-router";
 
 const InfoContent = () => {
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
 	const [action, setAction] = useLocationField("action", {
 		type: "string",
 		initial: "editing",

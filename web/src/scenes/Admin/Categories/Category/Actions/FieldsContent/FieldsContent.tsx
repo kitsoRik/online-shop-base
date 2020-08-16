@@ -10,6 +10,7 @@ import { useLocationField, useLocationFieldT } from "react-location-query";
 import FieldItem from "./FieldItem";
 import ModifyDialog from "./ModifyDialog";
 import { useTranslation } from "react-i18next";
+import { useParams } from "react-router";
 
 interface Props {
 	load: boolean;
@@ -17,7 +18,9 @@ interface Props {
 
 const FieldsContent = ({ load }: Props) => {
 	const { t } = useTranslation();
-	const [categoryId] = useLocationFieldT<number>("category");
+	const { id } = useParams();
+	const categoryId = +id;
+
 	const [, setAdd] = useLocationField("add", {
 		type: "boolean",
 		initial: false,

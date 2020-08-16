@@ -23,7 +23,7 @@ const Category = () => {
 	return (
 		<>
 			<Link
-				to="/admin/categories/edit"
+				to={`/admin/categories/${category?.id}`}
 				query={{ category: category?.id }}
 			>
 				Link to category page

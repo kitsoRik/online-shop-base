@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Routes from "./Routes";
 import { Menu } from "antd";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 const Admin = () => {
@@ -10,6 +10,8 @@ const Admin = () => {
 
 export const AdminHeader = () => {
 	const { t } = useTranslation();
+
+	const { id } = useParams();
 
 	return (
 		<Menu theme="dark" mode="horizontal" selectable={false}>
@@ -32,7 +34,7 @@ export const AdminHeader = () => {
 					</Link>
 				</Menu.Item>
 				<Menu.Item>
-					<Link to="/admin/categories/edit?tab=editing">
+					<Link to={`/admin/categories/${id}?tab=editing`}>
 						{t("admin.menu.categories.view")}
 					</Link>
 				</Menu.Item>

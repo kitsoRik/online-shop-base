@@ -1,0 +1,34 @@
+query SearchProductsContainer($nameTemplate: String!, $languageCode: String!) {
+	searchProducts(
+		filter: { nameTemplate: $nameTemplate, languageCode: $languageCode }
+	) {
+		productsInfo {
+			id
+			name
+			language {
+				id
+				code
+			}
+			product {
+				id
+				category {
+					id
+					name
+					parent {
+						id
+						name
+						parent {
+							id
+							name
+						}
+					}
+					info(filter: { languageCode: $languageCode }) {
+						id
+						name
+					}
+				}
+			}
+		}
+		count
+	}
+}

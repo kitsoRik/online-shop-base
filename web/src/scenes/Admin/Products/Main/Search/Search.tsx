@@ -22,7 +22,7 @@ const Search = ({ initialValue }: Props) => {
 		}
 	});
 
-	const productsInfo = data?.findProductInfoByNameTemplate ?? [];
+	const productsInfo = data?.searchProducts.productsInfo ?? [];
 
 	const options = productsInfo.map(info => ({
 		value: info.name,

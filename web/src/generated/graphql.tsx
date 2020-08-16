@@ -82,6 +82,7 @@ export type CategoryInfoArgs = {
 
 export type CategoryInfoInput = {
   id?: Maybe<Scalars['Int']>;
+  languageCode?: Maybe<Scalars['String']>;
 };
 
 export type ProductField = {
@@ -96,7 +97,7 @@ export type ProductInfo = {
   name: Scalars['String'];
   language: Language;
   fields?: Maybe<Array<ProductField>>;
-  product: ProductInfo;
+  product: Product;
 };
 
 
@@ -124,6 +125,12 @@ export type ProductInfoInput = {
   id?: Maybe<Scalars['Int']>;
 };
 
+export type SearchProductsOutput = {
+  __typename?: 'SearchProductsOutput';
+  productsInfo: Array<ProductInfo>;
+  count: Scalars['Int'];
+};
+
 export type SearchType = {
   __typename?: 'SearchType';
   query: Scalars['String'];
@@ -137,7 +144,7 @@ export type Query = {
   categories?: Maybe<Array<Category>>;
   findCategoryInfoByNameTemplate: Array<CategoryInfo>;
   products: Array<Product>;
-  findProductInfoByNameTemplate: Array<ProductInfo>;
+  searchProducts: SearchProductsOutput;
   languages: Array<Language>;
   search: SearchType;
 };
@@ -163,8 +170,8 @@ export type QueryProductsArgs = {
 };
 
 
-export type QueryFindProductInfoByNameTemplateArgs = {
-  template?: Maybe<Scalars['String']>;
+export type QuerySearchProductsArgs = {
+  filter?: Maybe<SearchProductsInput>;
 };
 
 
@@ -179,6 +186,11 @@ export type CategoryInput = {
 
 export type ProductInput = {
   id?: Maybe<Scalars['Int']>;
+};
+
+export type SearchProductsInput = {
+  nameTemplate?: Maybe<Scalars['String']>;
+  languageCode?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -351,6 +363,46 @@ export type GetApplicationLanguagesQuery = (
     { __typename?: 'Language' }
     & Pick<Language, 'id' | 'code'>
   )> }
+);
+
+export type SearchProductsContainerQueryVariables = Exact<{
+  nameTemplate: Scalars['String'];
+  languageCode: Scalars['String'];
+}>;
+
+
+export type SearchProductsContainerQuery = (
+  { __typename?: 'Query' }
+  & { searchProducts: (
+    { __typename?: 'SearchProductsOutput' }
+    & Pick<SearchProductsOutput, 'count'>
+    & { productsInfo: Array<(
+      { __typename?: 'ProductInfo' }
+      & Pick<ProductInfo, 'id' | 'name'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ), product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'id'>
+        & { category: (
+          { __typename?: 'Category' }
+          & Pick<Category, 'id' | 'name'>
+          & { parent?: Maybe<(
+            { __typename?: 'Category' }
+            & Pick<Category, 'id' | 'name'>
+            & { parent?: Maybe<(
+              { __typename?: 'Category' }
+              & Pick<Category, 'id' | 'name'>
+            )> }
+          )>, info: Array<(
+            { __typename?: 'CategoryInfo' }
+            & Pick<CategoryInfo, 'id' | 'name'>
+          )> }
+        ) }
+      ) }
+    )> }
+  ) }
 );
 
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never; }>;
@@ -777,14 +829,20 @@ export type FindProductInfoByNameTemplateQueryVariables = Exact<{
 
 export type FindProductInfoByNameTemplateQuery = (
   { __typename?: 'Query' }
-  & { findProductInfoByNameTemplate: Array<(
-    { __typename?: 'ProductInfo' }
-    & Pick<ProductInfo, 'id' | 'name'>
-    & { product: (
+  & { searchProducts: (
+    { __typename?: 'SearchProductsOutput' }
+    & { productsInfo: Array<(
       { __typename?: 'ProductInfo' }
-      & Pick<ProductInfo, 'id'>
-    ) }
-  )> }
+      & Pick<ProductInfo, 'id' | 'name'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id' | 'code'>
+      ), product: (
+        { __typename?: 'Product' }
+        & Pick<Product, 'id'>
+      ) }
+    )> }
+  ) }
 );
 
 export type FindCategoryByIdQueryVariables = Exact<{
@@ -1059,6 +1117,67 @@ export function useGetApplicationLanguagesLazyQuery(baseOptions?: ApolloReactHoo
 export type GetApplicationLanguagesQueryHookResult = ReturnType<typeof useGetApplicationLanguagesQuery>;
 export type GetApplicationLanguagesLazyQueryHookResult = ReturnType<typeof useGetApplicationLanguagesLazyQuery>;
 export type GetApplicationLanguagesQueryResult = ApolloReactCommon.QueryResult<GetApplicationLanguagesQuery, GetApplicationLanguagesQueryVariables>;
+export const SearchProductsContainerDocument = gql`
+    query SearchProductsContainer($nameTemplate: String!, $languageCode: String!) {
+  searchProducts(filter: {nameTemplate: $nameTemplate, languageCode: $languageCode}) {
+    productsInfo {
+      id
+      name
+      language {
+        id
+        code
+      }
+      product {
+        id
+        category {
+          id
+          name
+          parent {
+            id
+            name
+            parent {
+              id
+              name
+            }
+          }
+          info(filter: {languageCode: $languageCode}) {
+            id
+            name
+          }
+        }
+      }
+    }
+    count
+  }
+}
+    `;
+
+/**
+ * __useSearchProductsContainerQuery__
+ *
+ * To run a query within a React component, call `useSearchProductsContainerQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchProductsContainerQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchProductsContainerQuery({
+ *   variables: {
+ *      nameTemplate: // value for 'nameTemplate'
+ *      languageCode: // value for 'languageCode'
+ *   },
+ * });
+ */
+export function useSearchProductsContainerQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchProductsContainerQuery, SearchProductsContainerQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchProductsContainerQuery, SearchProductsContainerQueryVariables>(SearchProductsContainerDocument, baseOptions);
+      }
+export function useSearchProductsContainerLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchProductsContainerQuery, SearchProductsContainerQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchProductsContainerQuery, SearchProductsContainerQueryVariables>(SearchProductsContainerDocument, baseOptions);
+        }
+export type SearchProductsContainerQueryHookResult = ReturnType<typeof useSearchProductsContainerQuery>;
+export type SearchProductsContainerLazyQueryHookResult = ReturnType<typeof useSearchProductsContainerLazyQuery>;
+export type SearchProductsContainerQueryResult = ApolloReactCommon.QueryResult<SearchProductsContainerQuery, SearchProductsContainerQueryVariables>;
 export const CurrentUserDocument = gql`
     query CurrentUser {
   currentUser {
@@ -1959,11 +2078,17 @@ export type CreateProductMutationResult = ApolloReactCommon.MutationResult<Creat
 export type CreateProductMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateProductMutation, CreateProductMutationVariables>;
 export const FindProductInfoByNameTemplateDocument = gql`
     query FindProductInfoByNameTemplate($template: String) {
-  findProductInfoByNameTemplate(template: $template) {
-    id
-    name
-    product {
+  searchProducts(filter: {nameTemplate: $template}) {
+    productsInfo {
       id
+      name
+      language {
+        id
+        code
+      }
+      product {
+        id
+      }
     }
   }
 }

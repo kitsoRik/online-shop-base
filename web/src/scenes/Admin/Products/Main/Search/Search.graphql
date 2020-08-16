@@ -1,9 +1,15 @@
 query FindProductInfoByNameTemplate($template: String) {
-	findProductInfoByNameTemplate(template: $template) {
-		id
-		name
-		product {
+	searchProducts(filter: { nameTemplate: $template }) {
+		productsInfo {
 			id
+			name
+			language {
+				id
+				code
+			}
+			product {
+				id
+			}
 		}
 	}
 }

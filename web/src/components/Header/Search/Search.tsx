@@ -7,6 +7,7 @@ import Container from "./Container";
 
 const Search = () => {
 	const [active, setActive] = useState(false);
+	const [searchText, setSearchText] = useState("");
 
 	const queryPush = useQueryPush();
 
@@ -24,10 +25,11 @@ const Search = () => {
 						onClick={() => setActive(true)}
 						size="large"
 						onSearch={onSearch}
+						onChange={e => setSearchText(e.target.value)}
 					/>
 				}
 			>
-				<Container />
+				<Container searchText={searchText} />
 			</OverModal>
 		</div>
 	);

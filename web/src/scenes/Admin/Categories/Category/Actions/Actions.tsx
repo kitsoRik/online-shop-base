@@ -33,7 +33,11 @@ const Actions = ({ category }: Props) => {
 			<Tabs.TabPane key="editing" tab="Editing">
 				<EditContent category={category} load={tab === "edit"} />
 			</Tabs.TabPane>
-			<Tabs.TabPane key="info" tab="Info">
+			<Tabs.TabPane
+				key="info"
+				tab="Info"
+				disabled={category?.level !== 2}
+			>
 				<InfoContent />
 			</Tabs.TabPane>
 			<Tabs.TabPane
@@ -53,7 +57,11 @@ const Actions = ({ category }: Props) => {
 			>
 				<ParentContent category={category} load={tab === "parent"} />
 			</Tabs.TabPane>
-			<Tabs.TabPane key="fields" tab="Fields">
+			<Tabs.TabPane
+				key="fields"
+				tab="Fields"
+				disabled={category?.level !== 2}
+			>
 				<FieldsContent load={tab === "fields"} />
 			</Tabs.TabPane>
 		</Tabs>

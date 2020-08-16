@@ -5,12 +5,10 @@ import Search from "./Search";
 import { Link } from "react-router-dom";
 
 const Main = () => {
-	let product: { id: number } | null = null;
-
 	return (
 		<Page>
 			<Typography.Title>Search product to edit</Typography.Title>
-			<Search onProductChange={p => (product = p)} />
+			<Search />
 			<Typography.Link>
 				<Link to="/admin/products/create">
 					or click create new category

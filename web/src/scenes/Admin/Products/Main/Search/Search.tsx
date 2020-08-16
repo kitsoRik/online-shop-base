@@ -4,13 +4,13 @@ import { useFindProductInfoByNameTemplateQuery } from "../../../../../generated/
 import { AutoComplete } from "antd";
 import { useHistory } from "react-router";
 import classes from "./Search.module.scss";
+import { useQueryPush } from "react-location-query";
 
 interface Props {
 	initialValue?: string;
-	onProductChange: (product: { id: number }) => void;
 }
 
-const Search = ({ initialValue, onProductChange }: Props) => {
+const Search = ({ initialValue }: Props) => {
 	const [template, setTemplate] = useState("");
 
 	const history = useHistory();
@@ -29,6 +29,8 @@ const Search = ({ initialValue, onProductChange }: Props) => {
 		key: info.product.id
 	}));
 
+	const queryPush = useQueryPush();
+
 	return (
 		<AutoComplete
 			defaultValue={initialValue}
@@ -36,18 +38,7 @@ const Search = ({ initialValue, onProductChange }: Props) => {
 			dropdownMatchSelectWidth={252}
 			options={options}
 			onChange={value => setTemplate(value)}
-			onSelect={(v, { key }) =>
-				onProductChange(productsInfo.find(c => c.product.id === key)!)
-			}
-			onClick={() => {
-				if (
-					!history.location.pathname.startsWith(
-						"/admin/products/edit"
-					)
-				) {
-					history.push("/admin/products/edit");
-				}
-			}}
+			onSelect={(v, { key }) => queryPush(`/admin/products/${key}`, {})}
 		>
 			<SearchD
 				loading={loading}

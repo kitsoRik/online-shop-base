@@ -6,13 +6,15 @@ import {
 	useChangeProductInfoMutation,
 	useGetProductInfoByProductIdAndInfoIdQuery
 } from "../../../../../../../../../generated/graphql";
+import { useParams } from "react-router";
 
 interface Props {
 	load: boolean;
 }
 
 const Content = ({ load }: Props) => {
-	const [productId] = useLocationFieldT<number>("product");
+	const { id } = useParams();
+	const productId = +id;
 	const [infoId] = useLocationFieldT<number>("info");
 
 	const [change] = useChangeProductInfoMutation();

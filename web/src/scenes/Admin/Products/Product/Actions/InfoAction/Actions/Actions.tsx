@@ -7,9 +7,11 @@ import { useGetProductInfoByProductIdQuery } from "../../../../../../../generate
 import AddInfoDialog from "./AddInfoDialog";
 import RemoveInfoDialog from "./RemoveInfoDialog";
 import LanguageActions from "../../../../../../../shared/LanguageActions";
+import { useParams } from "react-router";
 
 const Actions = () => {
-	const [productId] = useLocationFieldT<number>("product");
+	const { id } = useParams();
+	const productId = +id;
 	const [action, setAction] = useLocationField("action", {
 		type: "string",
 		initial: "editing",

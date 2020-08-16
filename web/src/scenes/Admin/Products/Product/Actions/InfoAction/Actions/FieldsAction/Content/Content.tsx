@@ -10,13 +10,15 @@ import { useLocationField, useLocationFieldT } from "react-location-query";
 import FieldItem from "./ProductFields/FieldItem";
 import CategoryFields from "./CategoryFields";
 import ProductFields from "./ProductFields";
+import { useParams } from "react-router";
 
 interface Props {
 	load: boolean;
 }
 
 const Content = ({ load }: Props) => {
-	const [productId] = useLocationFieldT<number>("product");
+	const { id } = useParams();
+	const productId = +id;
 
 	const [] = useLocationField("modify", {
 		type: "string",

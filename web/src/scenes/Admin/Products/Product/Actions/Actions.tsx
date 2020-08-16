@@ -5,9 +5,11 @@ import InfoAction from "./InfoAction";
 import { Link } from "react-location-query";
 import { useFindCategoryByIdQuery } from "../../../../../generated/graphql";
 import Category from "./Category";
+import { useParams } from "react-router";
 
 const Actions = () => {
-	const [productId] = useLocationField("product");
+	const { id } = useParams();
+	const productId = +id;
 	const [tab, setTab] = useLocationField("tab", {
 		type: "string",
 		initial: "info",

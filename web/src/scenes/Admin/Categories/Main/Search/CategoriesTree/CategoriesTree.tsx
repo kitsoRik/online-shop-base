@@ -36,6 +36,7 @@ type InputLoopCategory = {
 };
 
 function loopCategories(categories: InputLoopCategory[]): DataNode[] {
+	console.log(categories);
 	return categories.map(root => ({
 		key: root.id,
 		title: root.name,

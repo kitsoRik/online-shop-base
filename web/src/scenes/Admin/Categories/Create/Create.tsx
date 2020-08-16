@@ -12,13 +12,11 @@ const Create = () => {
 		level: number,
 		parentId?: number
 	) => {
-		console.log("Create ", name, description, parentId);
 
 		const { data } = await createCategory({
 			variables: { name, level, parentId }
         });
         
-		console.log(data);
 	};
 
 	return (

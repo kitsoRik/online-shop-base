@@ -5,6 +5,7 @@ import {
 } from "../../../../../../../../../../../generated/graphql";
 import { List, Typography } from "antd";
 import { useLocationFieldT } from "react-location-query";
+import { useParams } from "react-router";
 
 interface Props {
 	productField?: ProductField;
@@ -12,7 +13,8 @@ interface Props {
 }
 
 const FieldItem = ({ productField, categoryField }: Props) => {
-	const [productId] = useLocationFieldT<number>("product");
+	const { id } = useParams();
+	const productId = +id;
 
 	return (
 		<>

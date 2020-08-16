@@ -2,10 +2,12 @@ import React from "react";
 import { Modal, notification } from "antd";
 import { useLocationFieldT } from "react-location-query";
 import { useRemoveProductInfoFromProductMutation } from "../../../../../../../../generated/graphql";
+import { useParams } from "react-router";
 
 const RemoveInfoDialog = () => {
 	const [removeInfo, setRemoveInfo] = useLocationFieldT<number>("removeInfo");
-	const [productId] = useLocationFieldT<number>("product");
+	const { id } = useParams();
+	const productId = +id;
 
 	const [removeProductInfo] = useRemoveProductInfoFromProductMutation();
 

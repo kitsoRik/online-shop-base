@@ -3,10 +3,12 @@ import { Link, useLocationFieldT } from "react-location-query";
 import { useGetProductCategoryByProductIdQuery } from "../../../../../../generated/graphql";
 import { Button } from "antd";
 import ChangeDialog from "./ChangeDialog";
+import { useParams } from "react-router";
 
 const Category = () => {
 	const [isChange, setIsChange] = useState(false);
-	const [productId] = useLocationFieldT<number>("product");
+	const { id } = useParams();
+	const productId = +id;
 
 	const { data } = useGetProductCategoryByProductIdQuery({
 		variables: {

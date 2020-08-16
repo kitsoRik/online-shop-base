@@ -5,6 +5,7 @@ import InputCategory from "../../../../../../../shared/InputCategory";
 import { useChangeCategoryInProductMutation } from "../../../../../../../generated/graphql";
 import { useLocationFieldT } from "react-location-query";
 import { useForm } from "antd/lib/form/Form";
+import { useParams } from "react-router";
 
 interface Props {
 	categoryId: number;
@@ -14,7 +15,8 @@ interface Props {
 }
 
 const ChangeDialog = ({ categoryId, visible, onClose }: Props) => {
-	const [productId] = useLocationFieldT<number>("product");
+	const { id } = useParams();
+	const productId = +id;
 
 	const [changeCategory] = useChangeCategoryInProductMutation();
 

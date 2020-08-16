@@ -1,5 +1,5 @@
 query GetCategories {
-	categories(filter: { level: 1 }) {
+	categories(filter: { level: 0 }) {
 		id
 		name
 		children {

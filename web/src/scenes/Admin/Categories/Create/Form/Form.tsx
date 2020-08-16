@@ -51,8 +51,10 @@ const Form = ({ onCreate }: Props) => {
 					)}
 				/>
 			</FormD.Item>
-			<FormD.Item>
-				<Select>
+			<FormD.Item label="Level" name="level">
+				<Select
+					onSelect={value => form.setFieldsValue({ level: value })}
+				>
 					<Select.Option value={0}>root</Select.Option>
 					<Select.Option value={1}>1</Select.Option>
 					<Select.Option value={2}>2</Select.Option>

@@ -364,25 +364,6 @@ export type CurrentUserQuery = (
   )> }
 );
 
-export type CreateCategoryMutationVariables = Exact<{
-  name: Scalars['String'];
-  level: Scalars['Int'];
-  parentId?: Maybe<Scalars['Int']>;
-}>;
-
-
-export type CreateCategoryMutation = (
-  { __typename?: 'Mutation' }
-  & { createCategory: (
-    { __typename?: 'Category' }
-    & Pick<Category, 'id' | 'name'>
-    & { parent?: Maybe<(
-      { __typename?: 'Category' }
-      & Pick<Category, 'id'>
-    )> }
-  ) }
-);
-
 export type GetChildrenCategoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -684,6 +665,25 @@ export type GetCategoryByIdQuery = (
       & Pick<Category, 'id' | 'name'>
     )> }
   )>> }
+);
+
+export type CreateCategoryMutationVariables = Exact<{
+  name: Scalars['String'];
+  level: Scalars['Int'];
+  parentId?: Maybe<Scalars['Int']>;
+}>;
+
+
+export type CreateCategoryMutation = (
+  { __typename?: 'Mutation' }
+  & { createCategory: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id' | 'name'>
+    & { parent?: Maybe<(
+      { __typename?: 'Category' }
+      & Pick<Category, 'id'>
+    )> }
+  ) }
 );
 
 export type GetCategoriesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -1096,44 +1096,6 @@ export function useCurrentUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type CurrentUserQueryHookResult = ReturnType<typeof useCurrentUserQuery>;
 export type CurrentUserLazyQueryHookResult = ReturnType<typeof useCurrentUserLazyQuery>;
 export type CurrentUserQueryResult = ApolloReactCommon.QueryResult<CurrentUserQuery, CurrentUserQueryVariables>;
-export const CreateCategoryDocument = gql`
-    mutation CreateCategory($name: String!, $level: Int!, $parentId: Int) {
-  createCategory(name: $name, level: $level, parentId: $parentId) {
-    id
-    name
-    parent {
-      id
-    }
-  }
-}
-    `;
-export type CreateCategoryMutationFn = ApolloReactCommon.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
-
-/**
- * __useCreateCategoryMutation__
- *
- * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
- *   variables: {
- *      name: // value for 'name'
- *      level: // value for 'level'
- *      parentId: // value for 'parentId'
- *   },
- * });
- */
-export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
-        return ApolloReactHooks.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, baseOptions);
-      }
-export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
-export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
-export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const GetChildrenCategoryByIdDocument = gql`
     query GetChildrenCategoryById($id: Int!) {
   categories(filter: {id: $id}) {
@@ -1749,9 +1711,47 @@ export function useGetCategoryByIdLazyQuery(baseOptions?: ApolloReactHooks.LazyQ
 export type GetCategoryByIdQueryHookResult = ReturnType<typeof useGetCategoryByIdQuery>;
 export type GetCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetCategoryByIdLazyQuery>;
 export type GetCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetCategoryByIdQuery, GetCategoryByIdQueryVariables>;
+export const CreateCategoryDocument = gql`
+    mutation CreateCategory($name: String!, $level: Int!, $parentId: Int) {
+  createCategory(name: $name, level: $level, parentId: $parentId) {
+    id
+    name
+    parent {
+      id
+    }
+  }
+}
+    `;
+export type CreateCategoryMutationFn = ApolloReactCommon.MutationFunction<CreateCategoryMutation, CreateCategoryMutationVariables>;
+
+/**
+ * __useCreateCategoryMutation__
+ *
+ * To run a mutation, you first call `useCreateCategoryMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCategoryMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCategoryMutation, { data, loading, error }] = useCreateCategoryMutation({
+ *   variables: {
+ *      name: // value for 'name'
+ *      level: // value for 'level'
+ *      parentId: // value for 'parentId'
+ *   },
+ * });
+ */
+export function useCreateCategoryMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateCategoryMutation, CreateCategoryMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateCategoryMutation, CreateCategoryMutationVariables>(CreateCategoryDocument, baseOptions);
+      }
+export type CreateCategoryMutationHookResult = ReturnType<typeof useCreateCategoryMutation>;
+export type CreateCategoryMutationResult = ApolloReactCommon.MutationResult<CreateCategoryMutation>;
+export type CreateCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateCategoryMutation, CreateCategoryMutationVariables>;
 export const GetCategoriesDocument = gql`
     query GetCategories {
-  categories(filter: {level: 1}) {
+  categories(filter: {level: 0}) {
     id
     name
     children {

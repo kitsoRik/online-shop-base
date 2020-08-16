@@ -91,7 +91,7 @@ export class CategoryResolver {
 				return [category];
 			}
 		}
-		return this.categoryService.getCategories();
+		return this.categoryService.getCategories(filter);
 	}
 
 	@ResolveField(type => CategoryType)

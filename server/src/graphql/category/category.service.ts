@@ -6,6 +6,7 @@ import { GraphQLError } from "graphql";
 
 import * as uuid from "uuid";
 import { CategoryFieldEntity } from "./category-field/category-field";
+import { CategoryFilter } from "./category.filter";
 
 @Injectable()
 export class CategoryService {
@@ -117,8 +118,13 @@ export class CategoryService {
 		return category;
 	}
 
-	async getCategories() {
-		const categories = await this.categoryRepository.find();
+	async getCategories(filter?: CategoryFilter) {
+		const query = this.categoryRepository.createQueryBuilder("categories");
+		if (filter.level !== undefined) {
+			query.andWhere("level = :level", { level: filter.level });
+		}
+
+		const categories = await query.getMany();
 		return categories;
 	}
 

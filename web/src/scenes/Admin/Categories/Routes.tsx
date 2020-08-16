@@ -8,8 +8,8 @@ const Routes = () => {
 	return (
 		<Switch>
 			<Route path="/admin/categories" exact component={Main} />
-			<Route path="/admin/categories/:id" exact component={Category} />
 			<Route path="/admin/categories/create" exact component={Create} />
+			<Route path="/admin/categories/:id" exact component={Category} />
 		</Switch>
 	);
 };

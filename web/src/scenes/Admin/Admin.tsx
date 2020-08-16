@@ -34,7 +34,7 @@ export const AdminHeader = () => {
 					</Link>
 				</Menu.Item>
 				<Menu.Item>
-					<Link to={`/admin/categories/${id}?tab=editing`}>
+					<Link to={`/admin/categories/`}>
 						{t("admin.menu.categories.view")}
 					</Link>
 				</Menu.Item>

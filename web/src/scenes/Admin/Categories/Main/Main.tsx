@@ -8,14 +8,13 @@ import { useTranslation } from "react-i18next";
 
 const Main = () => {
 	const { t } = useTranslation();
-	let category: Category | null = null;
 
 	return (
-		<Page>
+		<Page vAlign="top">
 			<Typography.Title>
 				{t("admin.categories.main.title")}
 			</Typography.Title>
-			<Search onCategoryChange={c => (category = c)} />
+			<Search />
 			<Typography.Link>
 				<Link to="/admin/categories/create">
 					{t("admin.categories.main.link")}

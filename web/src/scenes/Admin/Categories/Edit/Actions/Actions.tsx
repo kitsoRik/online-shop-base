@@ -28,7 +28,6 @@ const Actions = ({ category }: Props) => {
 		<Tabs
 			activeKey={tab}
 			tabPosition={"left"}
-			style={{ height: 220 }}
 			onTabClick={tab => setTab(tab)}
 		>
 			<Tabs.TabPane key="editing" tab="Editing">

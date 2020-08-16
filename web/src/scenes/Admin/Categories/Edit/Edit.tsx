@@ -7,7 +7,6 @@ import {
 } from "../../../../generated/graphql";
 import classes from "./Edit.module.scss";
 import { useLocationField } from "react-location-query";
-import SearchEdit from "./SearchEdit";
 import Header from "./Header";
 
 const Edit = () => {
@@ -16,9 +15,6 @@ const Edit = () => {
 		initial: -1,
 		hideIfInitial: true
 	});
-	const onCategoryChange = (category: Category) => {
-		setCategoryId(category.id);
-	};
 
 	const { data, loading } = useGetCategoryByIdQuery({
 		skip: categoryId === -1,

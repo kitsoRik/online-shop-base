@@ -6,16 +6,16 @@ import { AutoComplete } from "antd";
 import { useHistory } from "react-router";
 import classes from "./Search.module.scss";
 import CategoriesTree from "./CategoriesTree";
+import { useQueryPush } from "react-location-query";
 
 interface Props {
 	initialValue?: string;
-	onCategoryChange: (category: Category) => void;
 }
 
-const Search = ({ initialValue, onCategoryChange }: Props) => {
+const Search = ({ initialValue }: Props) => {
 	const [template, setTemplate] = useState("");
 
-	const history = useHistory();
+	const queryPush = useQueryPush();
 
 	const { data, loading } = useFindCategoryByNameTemplateQuery({
 		skip: template === "",
@@ -39,18 +39,8 @@ const Search = ({ initialValue, onCategoryChange }: Props) => {
 				options={options}
 				onChange={value => setTemplate(value)}
 				onSelect={(v, { key }) =>
-					// @ts-ignore
-					onCategoryChange(categories.find(c => c.id === key)!)
+					queryPush("/admin/categories/edit", { category: key })
 				}
-				onClick={() => {
-					if (
-						!history.location.pathname.startsWith(
-							"/admin/categories/edit"
-						)
-					) {
-						history.push("/admin/categories/edit");
-					}
-				}}
 			>
 				<SearchD
 					loading={loading}

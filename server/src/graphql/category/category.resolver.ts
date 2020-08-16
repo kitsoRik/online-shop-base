@@ -110,7 +110,6 @@ export class CategoryResolver {
 		@Parent() { id }: { id: number },
 		@Args("filter", { nullable: true }) filter: CategoryInfoFielddInput
 	) {
-		console.log(filter);
 		return this.categoryService.getFields(id);
 	}
 
@@ -120,11 +119,6 @@ export class CategoryResolver {
 		@Args("filter", { nullable: true }) filter: CategoryInfoInput
 	) {
 		if (!filter) return this.categoryInfoService.getInfoByCategoryId(id);
-		if (filter.id) {
-			return this.categoryInfoService.getInfoByCategoryIdAndInfoId(
-				id,
-				filter.id
-			);
-		}
+		return this.categoryInfoService.getInfo(id, filter);
 	}
 }

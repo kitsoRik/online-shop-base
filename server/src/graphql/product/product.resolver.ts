@@ -51,7 +51,6 @@ export class ProductResolver {
 		@Args("filter", { type: () => ProductInput, nullable: true })
 		filter: ProductInput
 	) {
-		console.log(filter);
 		if (filter.id !== undefined) {
 			return [this.productService.findById(filter.id)];
 		}

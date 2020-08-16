@@ -3,7 +3,10 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CategoryInfoEntity } from "./category-info.entity";
 import { Repository } from "typeorm";
 import { GraphQLError } from "graphql";
-import { ChangeCategoryInfoInput } from "./category-info.input";
+import {
+	ChangeCategoryInfoInput,
+	CategoryInfoInput
+} from "./category-info.input";
 import { CategoryService } from "../category.service";
 
 @Injectable()
@@ -54,8 +57,6 @@ export class CategoryInfoService {
 
 		categoryInfo = { ...categoryInfo, ...change };
 
-		console.log(categoryInfo);
-
 		await this.categoryInfoRepository.save(categoryInfo);
 
 		return categoryInfo;
@@ -104,10 +105,26 @@ export class CategoryInfoService {
 		return categoryInfo;
 	}
 
-	async getInfoByCategoryIdAndInfoId(categoryId: number, infoId: number) {
-		const categoryInfo = await this.categoryInfoRepository.find({
-			where: { categoryId, languageId: infoId }
-		});
+	async getInfo(categoryId: number, filter?: CategoryInfoInput) {
+		const query = this.categoryInfoRepository
+			.createQueryBuilder("categories_info")
+			.where("category_id = :categoryId", { categoryId });
+
+		if (filter) {
+			if (filter.id) {
+				query.andWhere("id = :id", { id: filter.id });
+			}
+			if (filter.languageCode) {
+				query.andWhere(
+					"language_id IN (SELECT id FROM config_languages WHERE code = :languageCode)",
+					{
+						languageCode: filter.languageCode
+					}
+				);
+			}
+		}
+
+		const categoryInfo = await query.getMany();
 
 		return categoryInfo;
 	}

@@ -20,7 +20,6 @@ export class LanguageService {
 	}
 
 	async setLanguageJson(id: number, jsonName: string) {
-		console.log(jsonName);
 
 		const language = await this.languageRepository.findOne({
 			where: { id }

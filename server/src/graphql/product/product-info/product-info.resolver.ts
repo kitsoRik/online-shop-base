@@ -18,6 +18,8 @@ import { ProductService } from "../product.service";
 import { ProductType } from "../product.type";
 import { LanguageService } from "src/config/language/language.service";
 import { ProductInfoEntity } from "./product-info.entity";
+import { SearchProductsInput } from "./search-products.input";
+import { SearchProductsOutput } from "./search-products.output";
 
 @Resolver(of => ProductInfoType)
 export class ProductInfoResolver {
@@ -67,7 +69,7 @@ export class ProductInfoResolver {
 		return this.productInfoService.changeField(id, fieldId, value);
 	}
 
-	@ResolveField(type => ProductInfoType)
+	@ResolveField(type => ProductType)
 	product(@Parent() { productId }: ProductInfoEntity) {
 		return this.productService.findById(productId);
 	}
@@ -85,10 +87,15 @@ export class ProductInfoResolver {
 		return this.languageService.getLanguageById(parent.languageId);
 	}
 
-	@Query(type => [ProductInfoType])
-	findProductInfoByNameTemplate(
-		@Args("template", { nullable: true, defaultValue: "" }) template: string
-	) {
-		return this.productInfoService.findByNameTemplate(template);
+	@Query(type => SearchProductsOutput)
+	async searchProducts(
+		@Args("filter", { nullable: true, defaultValue: "" })
+		filter: SearchProductsInput
+	): Promise<{ productsInfo: ProductInfoEntity[]; count: number }> {
+		const [
+			productsInfo,
+			count
+		] = await this.productInfoService.searchProducts(filter);
+		return { productsInfo, count };
 	}
 }

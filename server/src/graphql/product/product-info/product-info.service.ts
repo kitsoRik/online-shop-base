@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { GraphQLError } from "graphql";
 import { ChangeProductInfoInput } from "./product-info.input";
 import { ProductService } from "../product.service";
+import { SearchProductsInput } from "./search-products.input";
 
 @Injectable()
 export class ProductInfoService {
@@ -80,12 +81,29 @@ export class ProductInfoService {
 		return productInfo;
 	}
 
-	async findByNameTemplate(template: string) {
-		const query = await this.productInfoRepository
-			.createQueryBuilder("products_info")
-			.where("name LIKE :template", { template: `%${template}%` });
-		const products = await query.getMany();
-		return products;
+	async searchProducts(filter?: SearchProductsInput) {
+		const query = await this.productInfoRepository.createQueryBuilder(
+			"products_info"
+		);
+		if (filter) {
+			if (filter.nameTemplate) {
+				query.andWhere("name LIKE :template", {
+					template: `%${filter.nameTemplate}%`
+				});
+			}
+
+			if (filter.languageCode !== undefined) {
+				query.andWhere(
+					"language_id IN (SELECT id FROM config_languages WHERE code = :languageCode)",
+					{
+						languageCode: filter.languageCode
+					}
+				);
+			}
+		}
+
+		const result = await query.getManyAndCount();
+		return result;
 	}
 
 	async getFields(id: number) {

@@ -21,6 +21,8 @@ import { LanguageService } from "src/config/language/language.service";
 import { ProductInfoEntity } from "./product-info.entity";
 import { SearchProductsInput } from "./search-products.input";
 import { SearchProductsOutput } from "./search-products.output";
+import { SearchProductsPaginationInput } from "./search-products-pagination.input";
+import { CategoryType } from "src/graphql/category/category.type";
 
 @Resolver(of => ProductInfoType)
 export class ProductInfoResolver {
@@ -77,15 +79,28 @@ export class ProductInfoResolver {
 		return this.languageService.getLanguageById(parent.languageId);
 	}
 
+	@Query(type => [CategoryType])
+	async searchProductsCategory(
+		@Args("filter", { nullable: true })
+		filter: SearchProductsInput
+	) {
+		const categories = await this.productInfoService.searchProductsCategory(
+			filter
+		);
+		return categories;
+	}
+
 	@Query(type => SearchProductsOutput)
 	async searchProducts(
-		@Args("filter", { nullable: true, defaultValue: "" })
-		filter: SearchProductsInput
+		@Args("filter", { nullable: true })
+		filter: SearchProductsInput,
+		@Args("pagination")
+		pagination: SearchProductsPaginationInput
 	): Promise<{ productsInfo: ProductInfoEntity[]; count: number }> {
 		const [
 			productsInfo,
 			count
-		] = await this.productInfoService.searchProducts(filter);
+		] = await this.productInfoService.searchProducts(pagination, filter);
 		return { productsInfo, count };
 	}
 }

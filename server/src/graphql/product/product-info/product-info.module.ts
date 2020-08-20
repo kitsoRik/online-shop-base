@@ -8,10 +8,11 @@ import { ProductInfoFieldModule } from "./product-info-field/product-info-field.
 import { ProductModule } from "../product.module";
 import { LanguageModule } from "src/config/language/language.module";
 import { ProductInfoFieldEntity } from "./product-info-field/product-info-field.entity";
+import { CategoryEntity } from "src/graphql/category/category.entity";
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([ProductInfoEntity, ProductInfoFieldEntity]),
+		TypeOrmModule.forFeature([ProductInfoEntity, ProductInfoFieldEntity, CategoryEntity]),
 		CategoryModule,
 		ProductInfoFieldModule,
 		LanguageModule,

@@ -7,4 +7,7 @@ export class SearchProductsInput {
 
 	@Field({ nullable: true })
 	languageCode: string;
+
+	@Field(type => Int, { nullable: true })
+	categoryId: number;
 }

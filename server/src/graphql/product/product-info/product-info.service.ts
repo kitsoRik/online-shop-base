@@ -8,6 +8,9 @@ import { ProductService } from "../product.service";
 import { SearchProductsInput } from "./search-products.input";
 import { ProductInfoFieldInput } from "./product-info-field/product-info-field.input";
 import { ProductInfoFieldEntity } from "./product-info-field/product-info-field.entity";
+import { SearchProductsPaginationInput } from "./search-products-pagination.input";
+import { ProductEntity } from "../product.entity";
+import { CategoryEntity } from "src/graphql/category/category.entity";
 
 @Injectable()
 export class ProductInfoService {
@@ -16,6 +19,8 @@ export class ProductInfoService {
 		private productInfoRepository: Repository<ProductInfoEntity>,
 		@InjectRepository(ProductInfoFieldEntity)
 		private productInfoFieldRepository: Repository<ProductInfoFieldEntity>,
+		@InjectRepository(CategoryEntity)
+		private categoryRepository: Repository<CategoryEntity>,
 		private productService: ProductService
 	) {}
 
@@ -69,7 +74,10 @@ export class ProductInfoService {
 		return productInfo;
 	}
 
-	async searchProducts(filter?: SearchProductsInput) {
+	async searchProducts(
+		pagination?: SearchProductsPaginationInput,
+		filter?: SearchProductsInput
+	) {
 		const query = await this.productInfoRepository.createQueryBuilder(
 			"products_info"
 		);
@@ -88,10 +96,74 @@ export class ProductInfoService {
 					}
 				);
 			}
+
+			if (filter.categoryId) {
+				query.andWhere(
+					"product_id IN (SELECT id FROM products WHERE category_id = :categoryId)",
+					{
+						categoryId: filter.categoryId
+					}
+				);
+			}
+		}
+
+		if (pagination) {
+			query.offset(pagination.offset);
+			query.limit(pagination.limit);
 		}
 
 		const result = await query.getManyAndCount();
 		return result;
+	}
+
+	async searchProductsCategory(filter?: SearchProductsInput) {
+		const query = this.categoryRepository.createQueryBuilder();
+
+		const subquery = this.productInfoRepository.createQueryBuilder(
+			"products_info"
+		);
+
+		subquery.select("id");
+
+		subquery.select("products.category_id");
+
+		subquery.leftJoin(
+			ProductEntity,
+			"products",
+			"products.id = products_info.product_id"
+		);
+
+		if (filter) {
+			if (filter.nameTemplate) {
+				subquery.andWhere("name LIKE :template", {
+					template: `%${filter.nameTemplate}%`
+				});
+			}
+
+			if (filter.languageCode !== undefined) {
+				subquery.andWhere(
+					"language_id IN (SELECT id FROM config_languages WHERE code = :languageCode)",
+					{
+						languageCode: filter.languageCode
+					}
+				);
+			}
+
+			if (filter.categoryId) {
+				subquery.andWhere(
+					"product_id IN (SELECT id FROM products WHERE category_id = :categoryId)",
+					{
+						categoryId: filter.categoryId
+					}
+				);
+			}
+		}
+
+		subquery.groupBy("products.category_id");
+		query.where(`id IN (${subquery.getQuery()})`);
+
+		query.setParameter("languageCode", filter.languageCode);
+		return await query.getMany();
 	}
 
 	async getFields(id: number, filter: ProductInfoFieldInput) {

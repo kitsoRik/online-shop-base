@@ -1,32 +1,31 @@
-import {
-	SearchProductsContainerQuery,
-	ProductInfo
-} from "../../../../../generated/graphql";
-
-const normalizeSearchProducts = (data?: SearchProductsContainerQuery) => {
-	if (!data) return [];
-	const productsInfo = data.searchProducts.productsInfo;
-	const categories = getAllCategories(productsInfo);
-	const normalized = normalizeCategories(categories);
+const normalizeSearchProductsCategory = (
+	categories: {
+		id: number;
+		name: string;
+		parent?: {
+			id: number;
+			name: string;
+			parent?: { id: number; name: string } | null;
+		} | null;
+	}[]
+) => {
+	const allCategories = getAllCategories(categories);
+	const normalized = normalizeCategories(allCategories);
 
 	return normalized;
 };
 
-export default normalizeSearchProducts;
+export default normalizeSearchProductsCategory;
 
 const getAllCategories = (
-	info: {
-		product: {
-			category: {
-				id: number;
-				name: string;
-				parent?: {
-					id: number;
-					name: string;
-					parent?: { id: number; name: string };
-				} | null;
-			};
-		};
+	inCategories: {
+		id: number;
+		name: string;
+		parent?: {
+			id: number;
+			name: string;
+			parent?: { id: number; name: string } | null;
+		} | null;
 	}[]
 ) => {
 	const categories: {
@@ -34,8 +33,8 @@ const getAllCategories = (
 		name: string;
 		parent?: { id: number; name: string } | null;
 	}[] = [];
-	for (let i = 0; i < info.length; i++) {
-		const category = info[i].product.category;
+	for (let i = 0; i < inCategories.length; i++) {
+		const category = inCategories[i];
 		categories.push({
 			id: category.id,
 			name: category.name,

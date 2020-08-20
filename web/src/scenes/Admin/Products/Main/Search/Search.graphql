@@ -1,5 +1,12 @@
-query FindProductInfoByNameTemplate($template: String) {
-	searchProducts(filter: { nameTemplate: $template }) {
+query FindProductInfoByNameTemplate(
+	$template: String
+	$offset: Int!
+	$limit: Int!
+) {
+	searchProducts(
+		filter: { nameTemplate: $template }
+		pagination: { offset: $offset, limit: $limit }
+	) {
 		productsInfo {
 			id
 			name

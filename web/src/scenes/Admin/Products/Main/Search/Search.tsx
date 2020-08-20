@@ -18,7 +18,9 @@ const Search = ({ initialValue }: Props) => {
 	const { data, loading } = useFindProductInfoByNameTemplateQuery({
 		skip: template === "",
 		variables: {
-			template
+			template,
+			offset: 0,
+			limit: 10
 		}
 	});
 

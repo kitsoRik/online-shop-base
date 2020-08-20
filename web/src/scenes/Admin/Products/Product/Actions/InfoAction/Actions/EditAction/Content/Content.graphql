@@ -11,8 +11,8 @@ query GetProductInfoByProductIdAndInfoId($id: Int!, $infoId: Int!) {
 	}
 }
 
-mutation ChangeProductInfo($id: Int!, $infoId: Int!, $name: String!) {
-	changeProductInfo(id: $id, infoId: $infoId, change: { name: $name }) {
+mutation ChangeProductInfo($id: Int!, $name: String!) {
+	changeProductInfo(id: $id, change: { name: $name }) {
 		id
 	}
 }

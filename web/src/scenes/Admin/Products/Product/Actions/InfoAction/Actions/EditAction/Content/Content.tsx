@@ -30,7 +30,6 @@ const Content = ({ load }: Props) => {
 			const { data } = await change({
 				variables: {
 					id: info.id,
-					infoId: 1,
 					name
 				}
 			});

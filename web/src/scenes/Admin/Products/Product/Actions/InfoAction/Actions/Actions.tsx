@@ -52,8 +52,12 @@ const Actions = () => {
 					.slice()
 					.sort((a, b) => a.id - b.id)
 					.map(i => i.language)}
-				activeLanguage={infoId.toString()}
-				onClickLanguage={tab => setInfoId(+tab)}
+				activeLanguage={info
+					.find(i => i.id === infoId)
+					?.language.id.toString()}
+				onClickLanguage={tab =>
+					setInfoId(info.find(i => +i.language.id === tab)?.id ?? -1)
+				}
 				onAdd={() => setAddInfo(true)}
 				onRemove={key => setRemoveInfo(+key)}
 				activeKey={action}

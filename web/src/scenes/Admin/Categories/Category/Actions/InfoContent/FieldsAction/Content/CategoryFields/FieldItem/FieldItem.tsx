@@ -1,31 +1,20 @@
 import React from "react";
-import { CategoryField } from "../../../../../../../../../../generated/graphql";
-import { List, Typography } from "antd";
-import { useLocationFieldT } from "react-location-query";
-import { useParams } from "react-router";
+import {
+	CategoryField,
+	CategoryInfoField} from "../../../../../../../../../../generated/graphql";
+import InitializedItem from "./InitializedItem";
+import UnInitializedItem from "./UnInitializedItem/UnInitializedItem";
 
 interface Props {
 	categoryField: CategoryField;
+	categoryInfoField?: CategoryInfoField | null;
 }
 
-const FieldItem = ({ categoryField }: Props) => {
-	const { id } = useParams();
-	const categoryId = +id;
+const FieldItem = ({ categoryField, categoryInfoField }: Props) => {
+	if(categoryInfoField)
+		return <InitializedItem categoryField={categoryField} categoryInfoField={categoryInfoField}/>
 
-	return (
-		<>
-			<List.Item actions={[]}>
-				<List.Item.Meta
-					description={
-						<Typography.Text>
-							{categoryField.name}{" "}
-							{categoryField ?? "Has not value"}
-						</Typography.Text>
-					}
-				/>
-			</List.Item>
-		</>
-	);
+	return <UnInitializedItem categoryField={categoryField}/>
 };
 
 export default FieldItem;

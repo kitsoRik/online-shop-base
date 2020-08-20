@@ -1,9 +1,16 @@
-mutation RemoveFieldFromCategory($id: Int!, $fieldId: String!) {
-	removeFieldFromCategory(id: $id, fieldId: $fieldId) {
+mutation InitializeCategoryInfoField(
+	$categoryInfoId: Int!
+	$categoryFieldId: Int!
+) {
+	initializeCategoryInfoField(
+		categoryInfoId: $categoryInfoId
+		categoryFieldId: $categoryFieldId
+	) {
 		id
-		fields {
+		name
+		value
+		categoryField {
 			id
-			name
 		}
 	}
 }

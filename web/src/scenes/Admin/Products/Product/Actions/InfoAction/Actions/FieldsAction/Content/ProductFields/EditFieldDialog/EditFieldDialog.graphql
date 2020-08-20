@@ -1,0 +1,21 @@
+query GetProductInfoField($infoId: Int!, $fieldId: Int!) {
+	products {
+		id
+		info(filter: { id: $infoId }) {
+			id
+			fields(filter: { id: $fieldId }) {
+				id
+				name
+				value
+			}
+		}
+	}
+}
+
+mutation ChangeFieldInProductInfo($id: Int!, $name: String!, $value: String!) {
+	changeFieldInProductInfo(id: $id, change: { name: $name, value: $value }) {
+		id
+		name
+		value
+	}
+}

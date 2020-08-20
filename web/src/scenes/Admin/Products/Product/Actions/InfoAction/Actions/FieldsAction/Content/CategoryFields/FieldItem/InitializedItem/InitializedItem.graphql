@@ -1,0 +1,10 @@
+mutation ChangeCategoryFieldInProductInfo($fieldId: Int!, $value: String!) {
+	changeFieldInProductInfo(
+		id: $fieldId
+		change: { name: null, value: $value }
+	) {
+		id
+		name
+		value
+	}
+}

@@ -2,30 +2,52 @@ import React from "react";
 import { List, Typography, ConfigProvider } from "antd";
 import {
 	CategoryField,
-	ProductField
+	ProductInfoField,
+	CategoryInfoField
 } from "../../../../../../../../../../generated/graphql";
 import FieldItem from "./FieldItem/FieldItem";
 
 interface Props {
 	categoryFields: CategoryField[];
-	productFields: ProductField[];
+	categoryInfoFields: Exclude<
+		{
+			id: number;
+			name?: string | null;
+			categoryField?: CategoryField | null;
+		},
+		CategoryInfoField
+	>[];
+	productInfoFields: Exclude<
+		{ id: number; categoryInfoField?: { id: number } | null },
+		ProductInfoField
+	>[];
 }
 
-const CategoryFields = ({ categoryFields, productFields }: Props) => {
+const CategoryFields = ({
+	categoryFields,
+	categoryInfoFields,
+	productInfoFields
+}: Props) => {
 	return (
 		<>
 			<Typography.Title level={3}>From category</Typography.Title>
 			<ConfigProvider renderEmpty={() => <div>123</div>}>
 				<List
 					itemLayout="horizontal"
-					dataSource={categoryFields}
+					dataSource={categoryInfoFields}
 					locale={{ emptyText: "No fields" }}
-					renderItem={categoryField => (
+					renderItem={categoryInfoField => (
 						<FieldItem
-							productField={productFields.find(
-								f => f.id === categoryField.id
+							productField={productInfoFields.find(
+								f =>
+									f.categoryInfoField?.id ===
+									categoryInfoField.id
 							)}
-							categoryField={categoryField}
+							categoryField={categoryFields.find(
+								f =>
+									f.id === categoryInfoField.categoryField?.id
+							)}
+							categoryInfoField={categoryInfoField}
 						/>
 					)}
 				/>

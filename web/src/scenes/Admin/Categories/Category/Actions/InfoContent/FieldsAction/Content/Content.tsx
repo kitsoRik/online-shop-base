@@ -18,9 +18,11 @@ const Content = ({ load }: Props) => {
 	const { id } = useParams();
 	const categoryId = +id;
 
+	const [infoId] = useLocationFieldT<number>("info");
+
 	const [] = useLocationField("modify", {
-		type: "string",
-		initial: "",
+		type: "number",
+		initial: -1,
 		hideIfInitial: true
 	});
 
@@ -35,11 +37,16 @@ const Content = ({ load }: Props) => {
 	if (!category) throw new Error("Unknown category");
 
 	const categoryFields = category.fields ?? [];
+	const categoryInfoFields =
+		category.info?.find(i => i.id === infoId)?.fields ?? [];
 
 	return (
 		<>
-			<CategoryFields categoryFields={categoryFields} />
-			<CategoryFields categoryFields={categoryFields} />
+			<CategoryFields
+				categoryFields={categoryFields}
+				// @ts-ignore
+				categoryInfoFields={categoryInfoFields}
+			/>
 		</>
 	);
 };

@@ -6,9 +6,14 @@ query GetFieldsCategoryInfoById($id: Int!) {
 			name
 		}
 		info {
+			id
 			fields {
 				id
 				value
+				name
+				categoryField {
+					id
+				}
 			}
 		}
 	}

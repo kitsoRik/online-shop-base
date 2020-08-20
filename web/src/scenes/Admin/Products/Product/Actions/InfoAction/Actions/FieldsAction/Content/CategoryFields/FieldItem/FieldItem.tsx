@@ -1,34 +1,43 @@
 import React from "react";
 import {
-	ProductField,
-	CategoryField
+	ProductInfoField,
+	CategoryField,
+	CategoryInfoField
 } from "../../../../../../../../../../../generated/graphql";
-import { List, Typography } from "antd";
-import { useLocationFieldT } from "react-location-query";
-import { useParams } from "react-router";
+import InitializedItem from "./InitializedItem";
+import UninitializedItem from "./UninitializedItem";
 
 interface Props {
-	productField?: ProductField;
-	categoryField: CategoryField;
+	productField?: Exclude<
+		{ id: number; name?: string | null; value?: string | null },
+		ProductInfoField
+	>;
+	categoryField?: CategoryField;
+	categoryInfoField: Exclude<
+		{ id: number; name?: string | null },
+		CategoryInfoField
+	>;
 }
 
-const FieldItem = ({ productField, categoryField }: Props) => {
-	const { id } = useParams();
-	const productId = +id;
+const FieldItem = ({
+	productField,
+	categoryField,
+	categoryInfoField
+}: Props) => {
+	if (productField)
+		return (
+			<InitializedItem
+				productInfoField={productField}
+				categoryInfoField={categoryInfoField}
+				categoryField={categoryField}
+			/>
+		);
 
 	return (
-		<>
-			<List.Item actions={[]}>
-				<List.Item.Meta
-					description={
-						<Typography.Text>
-							{categoryField.name}{" "}
-							{productField ?? "Has not value"}
-						</Typography.Text>
-					}
-				/>
-			</List.Item>
-		</>
+		<UninitializedItem
+			categoryInfoField={categoryInfoField}
+			categoryField={categoryField}
+		/>
 	);
 };
 

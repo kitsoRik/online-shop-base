@@ -15,7 +15,7 @@ const ModifyDialog = () => {
 	const { t } = useTranslation();
 	const { id } = useParams();
 	const categoryId = +id;
-	const [modify, setModify] = useLocationFieldT<string>("modify");
+	const [modify, setModify] = useLocationFieldT<number>("modify");
 
 	const { data, loading } = useGetFieldByIdFromCategoryByIdQuery({
 		skip: !modify,
@@ -28,7 +28,7 @@ const ModifyDialog = () => {
 	const [changeField] = useChangeFieldInCategoryMutation();
 
 	const onCancel = () => {
-		setModify("");
+		setModify(-1);
 	};
 
 	const category = (data?.categories ?? [null])[0];
@@ -47,7 +47,6 @@ const ModifyDialog = () => {
 		try {
 			const {} = await changeField({
 				variables: {
-					categoryId,
 					fieldId: field?.id,
 					name
 				}
@@ -67,15 +66,15 @@ const ModifyDialog = () => {
 			console.error(e.message);
 		}
 
-		setModify("");
+		setModify(-1);
 	};
 
 	return (
 		<Modal
-			visible={!!modify}
+			visible={modify !== -1}
 			onCancel={onCancel}
 			closable={false}
-			onOk={() => form.submit()}
+			onOk={ form.submit}
 			okButtonProps={{ disabled: !field }}
 			okText={t(
 				"admin.categories.edit.actions.fields.modifyDialog.okText"

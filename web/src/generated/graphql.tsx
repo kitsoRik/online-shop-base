@@ -25,14 +25,16 @@ export type User = {
 
 export type CategoryField = {
   __typename?: 'CategoryField';
-  id: Scalars['String'];
+  id: Scalars['Int'];
   name: Scalars['String'];
 };
 
 export type CategoryInfoField = {
   __typename?: 'CategoryInfoField';
-  id: Scalars['String'];
-  value: Scalars['String'];
+  id: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
+  value?: Maybe<Scalars['String']>;
+  categoryField: CategoryField;
 };
 
 export type Language = {
@@ -56,7 +58,7 @@ export type CategoryInfoFieldsArgs = {
 };
 
 export type CategoryInfoFielddInput = {
-  id?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']>;
 };
 
 export type Category = {
@@ -85,10 +87,12 @@ export type CategoryInfoInput = {
   languageCode?: Maybe<Scalars['String']>;
 };
 
-export type ProductField = {
-  __typename?: 'ProductField';
-  id: Scalars['String'];
+export type ProductInfoField = {
+  __typename?: 'ProductInfoField';
+  id: Scalars['Int'];
+  name?: Maybe<Scalars['String']>;
   value: Scalars['String'];
+  categoryInfoField?: Maybe<CategoryInfoField>;
 };
 
 export type ProductInfo = {
@@ -96,17 +100,17 @@ export type ProductInfo = {
   id: Scalars['Int'];
   name: Scalars['String'];
   language: Language;
-  fields?: Maybe<Array<ProductField>>;
+  fields?: Maybe<Array<ProductInfoField>>;
   product: Product;
 };
 
 
 export type ProductInfoFieldsArgs = {
-  filter?: Maybe<ProductFieldInput>;
+  filter?: Maybe<ProductInfoFieldInput>;
 };
 
-export type ProductFieldInput = {
-  id?: Maybe<Scalars['String']>;
+export type ProductInfoFieldInput = {
+  id?: Maybe<Scalars['Int']>;
 };
 
 export type Product = {
@@ -200,20 +204,22 @@ export type Mutation = {
   createUser: User;
   createCategory: Category;
   changeCategory: Category;
-  addFieldToCategory: Category;
-  changeFieldInCategory: Category;
-  removeFieldFromCategory: Category;
   addCategoryInfoToCategory: Category;
   removeInfoFromCategory: Category;
   changeCategoryInfo: CategoryInfo;
-  changeFieldInCategoryInfo: CategoryInfo;
+  changeFieldInCategoryInfo: CategoryInfoField;
+  initializeCategoryInfoField: CategoryInfoField;
+  addFieldToCategory: Category;
+  changeFieldInCategory: CategoryField;
+  removeFieldFromCategory: Category;
   createProduct: Product;
   changeProduct: Product;
   changeCategoryInProduct: Product;
   addProductInfoToProduct: Product;
   removeInfoFromProduct: Product;
   changeProductInfo: ProductInfo;
-  changeFieldInProductInfo: ProductInfo;
+  addFieldToProductInfo: ProductInfoField;
+  changeFieldInProductInfo: ProductInfoField;
   addLanguage: Language;
   setLanguageJson: Scalars['Boolean'];
 };
@@ -249,25 +255,6 @@ export type MutationChangeCategoryArgs = {
 };
 
 
-export type MutationAddFieldToCategoryArgs = {
-  name: Scalars['String'];
-  id: Scalars['Int'];
-};
-
-
-export type MutationChangeFieldInCategoryArgs = {
-  name: Scalars['String'];
-  fieldId: Scalars['String'];
-  id: Scalars['Int'];
-};
-
-
-export type MutationRemoveFieldFromCategoryArgs = {
-  fieldId: Scalars['String'];
-  id: Scalars['Int'];
-};
-
-
 export type MutationAddCategoryInfoToCategoryArgs = {
   language: Scalars['Int'];
   categoryId: Scalars['Int'];
@@ -288,9 +275,31 @@ export type MutationChangeCategoryInfoArgs = {
 
 
 export type MutationChangeFieldInCategoryInfoArgs = {
-  value: Scalars['String'];
-  fieldId: Scalars['String'];
-  id: Scalars['Int'];
+  change: CategoryInfoFieldChangeInput;
+  fieldId: Scalars['Int'];
+};
+
+
+export type MutationInitializeCategoryInfoFieldArgs = {
+  categoryFieldId: Scalars['Int'];
+  categoryInfoId: Scalars['Int'];
+};
+
+
+export type MutationAddFieldToCategoryArgs = {
+  name: Scalars['String'];
+  categoryId: Scalars['Int'];
+};
+
+
+export type MutationChangeFieldInCategoryArgs = {
+  name: Scalars['String'];
+  fieldId: Scalars['Int'];
+};
+
+
+export type MutationRemoveFieldFromCategoryArgs = {
+  fieldId: Scalars['Int'];
 };
 
 
@@ -324,15 +333,21 @@ export type MutationRemoveInfoFromProductArgs = {
 
 export type MutationChangeProductInfoArgs = {
   change: ChangeProductInfoInput;
-  infoId: Scalars['Int'];
   id: Scalars['Int'];
 };
 
 
-export type MutationChangeFieldInProductInfoArgs = {
+export type MutationAddFieldToProductInfoArgs = {
   value: Scalars['String'];
-  fieldId: Scalars['String'];
-  id: Scalars['Int'];
+  label?: Maybe<Scalars['String']>;
+  categoryInfoFieldId?: Maybe<Scalars['Int']>;
+  productInfoId: Scalars['Int'];
+};
+
+
+export type MutationChangeFieldInProductInfoArgs = {
+  change: ProductInfoFieldChangeInput;
+  id?: Maybe<Scalars['Int']>;
 };
 
 
@@ -350,8 +365,18 @@ export type ChangeCategoryInfoInput = {
   name?: Maybe<Scalars['String']>;
 };
 
+export type CategoryInfoFieldChangeInput = {
+  name: Scalars['String'];
+  value: Scalars['String'];
+};
+
 export type ChangeProductInfoInput = {
   name?: Maybe<Scalars['String']>;
+};
+
+export type ProductInfoFieldChangeInput = {
+  name?: Maybe<Scalars['String']>;
+  value: Scalars['String'];
 };
 
 export type GetApplicationLanguagesQueryVariables = Exact<{ [key: string]: never; }>;
@@ -448,7 +473,7 @@ export type ChangeCategoryMutation = (
 );
 
 export type AddFieldToCategoryMutationVariables = Exact<{
-  id: Scalars['Int'];
+  categoryId: Scalars['Int'];
   name: Scalars['String'];
 }>;
 
@@ -466,8 +491,7 @@ export type AddFieldToCategoryMutation = (
 );
 
 export type RemoveFieldFromCategoryMutationVariables = Exact<{
-  id: Scalars['Int'];
-  fieldId: Scalars['String'];
+  fieldId: Scalars['Int'];
 }>;
 
 
@@ -502,7 +526,7 @@ export type GetFieldsCategoryByIdQuery = (
 
 export type GetFieldByIdFromCategoryByIdQueryVariables = Exact<{
   id: Scalars['Int'];
-  fieldId: Scalars['String'];
+  fieldId: Scalars['Int'];
 }>;
 
 
@@ -519,8 +543,7 @@ export type GetFieldByIdFromCategoryByIdQuery = (
 );
 
 export type ChangeFieldInCategoryMutationVariables = Exact<{
-  categoryId: Scalars['Int'];
-  fieldId: Scalars['String'];
+  fieldId: Scalars['Int'];
   name: Scalars['String'];
 }>;
 
@@ -528,12 +551,8 @@ export type ChangeFieldInCategoryMutationVariables = Exact<{
 export type ChangeFieldInCategoryMutation = (
   { __typename?: 'Mutation' }
   & { changeFieldInCategory: (
-    { __typename?: 'Category' }
-    & Pick<Category, 'id'>
-    & { fields?: Maybe<Array<(
-      { __typename?: 'CategoryField' }
-      & Pick<CategoryField, 'id' | 'name'>
-    )>> }
+    { __typename?: 'CategoryField' }
+    & Pick<CategoryField, 'id' | 'name'>
   ) }
 );
 
@@ -617,6 +636,62 @@ export type ChangeCategoryInfoMutation = (
   ) }
 );
 
+export type InitializeCategoryInfoFieldMutationVariables = Exact<{
+  categoryInfoId: Scalars['Int'];
+  categoryFieldId: Scalars['Int'];
+}>;
+
+
+export type InitializeCategoryInfoFieldMutation = (
+  { __typename?: 'Mutation' }
+  & { initializeCategoryInfoField: (
+    { __typename?: 'CategoryInfoField' }
+    & Pick<CategoryInfoField, 'id' | 'name' | 'value'>
+    & { categoryField: (
+      { __typename?: 'CategoryField' }
+      & Pick<CategoryField, 'id'>
+    ) }
+  ) }
+);
+
+export type GetCategoryInfoFieldQueryVariables = Exact<{
+  categoryId: Scalars['Int'];
+  infoId: Scalars['Int'];
+  fieldId: Scalars['Int'];
+}>;
+
+
+export type GetCategoryInfoFieldQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { info: Array<(
+      { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id'>
+      & { fields?: Maybe<Array<(
+        { __typename?: 'CategoryInfoField' }
+        & Pick<CategoryInfoField, 'id' | 'name' | 'value'>
+      )>> }
+    )> }
+  )>> }
+);
+
+export type ChangeFieldInCategoryInfoMutationVariables = Exact<{
+  fieldId: Scalars['Int'];
+  name: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type ChangeFieldInCategoryInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFieldInCategoryInfo: (
+    { __typename?: 'CategoryInfoField' }
+    & Pick<CategoryInfoField, 'id' | 'name' | 'value'>
+  ) }
+);
+
 export type GetFieldsCategoryInfoByIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -632,9 +707,14 @@ export type GetFieldsCategoryInfoByIdQuery = (
       & Pick<CategoryField, 'id' | 'name'>
     )>>, info: Array<(
       { __typename?: 'CategoryInfo' }
+      & Pick<CategoryInfo, 'id'>
       & { fields?: Maybe<Array<(
         { __typename?: 'CategoryInfoField' }
-        & Pick<CategoryInfoField, 'id' | 'value'>
+        & Pick<CategoryInfoField, 'id' | 'value' | 'name'>
+        & { categoryField: (
+          { __typename?: 'CategoryField' }
+          & Pick<CategoryField, 'id'>
+        ) }
       )>> }
     )> }
   )>> }
@@ -910,8 +990,8 @@ export type GetProductInfoByProductIdQuery = (
         { __typename?: 'Language' }
         & Pick<Language, 'id' | 'code'>
       ), fields?: Maybe<Array<(
-        { __typename?: 'ProductField' }
-        & Pick<ProductField, 'id' | 'value'>
+        { __typename?: 'ProductInfoField' }
+        & Pick<ProductInfoField, 'id' | 'value'>
       )>> }
     )> }
   )> }
@@ -984,7 +1064,6 @@ export type GetProductInfoByProductIdAndInfoIdQuery = (
 
 export type ChangeProductInfoMutationVariables = Exact<{
   id: Scalars['Int'];
-  infoId: Scalars['Int'];
   name: Scalars['String'];
 }>;
 
@@ -994,6 +1073,40 @@ export type ChangeProductInfoMutation = (
   & { changeProductInfo: (
     { __typename?: 'ProductInfo' }
     & Pick<ProductInfo, 'id'>
+  ) }
+);
+
+export type ChangeCategoryFieldInProductInfoMutationVariables = Exact<{
+  fieldId: Scalars['Int'];
+  value: Scalars['String'];
+}>;
+
+
+export type ChangeCategoryFieldInProductInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFieldInProductInfo: (
+    { __typename?: 'ProductInfoField' }
+    & Pick<ProductInfoField, 'id' | 'name' | 'value'>
+  ) }
+);
+
+export type InitializeProductInfoFieldMutationVariables = Exact<{
+  label?: Maybe<Scalars['String']>;
+  value: Scalars['String'];
+  productInfoId: Scalars['Int'];
+  categoryInfoFieldId: Scalars['Int'];
+}>;
+
+
+export type InitializeProductInfoFieldMutation = (
+  { __typename?: 'Mutation' }
+  & { addFieldToProductInfo: (
+    { __typename?: 'ProductInfoField' }
+    & Pick<ProductInfoField, 'id' | 'name' | 'value'>
+    & { categoryInfoField?: Maybe<(
+      { __typename?: 'CategoryInfoField' }
+      & Pick<CategoryInfoField, 'id'>
+    )> }
   ) }
 );
 
@@ -1009,19 +1122,93 @@ export type GetFieldsProductByIdQuery = (
     & Pick<Product, 'id'>
     & { info: Array<(
       { __typename?: 'ProductInfo' }
-      & { fields?: Maybe<Array<(
-        { __typename?: 'ProductField' }
-        & Pick<ProductField, 'id' | 'value'>
+      & Pick<ProductInfo, 'id'>
+      & { language: (
+        { __typename?: 'Language' }
+        & Pick<Language, 'id'>
+      ), fields?: Maybe<Array<(
+        { __typename?: 'ProductInfoField' }
+        & Pick<ProductInfoField, 'id' | 'name' | 'value'>
+        & { categoryInfoField?: Maybe<(
+          { __typename?: 'CategoryInfoField' }
+          & Pick<CategoryInfoField, 'id'>
+        )> }
       )>> }
     )>, category: (
       { __typename?: 'Category' }
       & Pick<Category, 'id'>
-      & { fields?: Maybe<Array<(
+      & { info: Array<(
+        { __typename?: 'CategoryInfo' }
+        & Pick<CategoryInfo, 'id'>
+        & { language: (
+          { __typename?: 'Language' }
+          & Pick<Language, 'id'>
+        ), fields?: Maybe<Array<(
+          { __typename?: 'CategoryInfoField' }
+          & Pick<CategoryInfoField, 'id' | 'name' | 'value'>
+          & { categoryField: (
+            { __typename?: 'CategoryField' }
+            & Pick<CategoryField, 'id' | 'name'>
+          ) }
+        )>> }
+      )>, fields?: Maybe<Array<(
         { __typename?: 'CategoryField' }
         & Pick<CategoryField, 'id' | 'name'>
       )>> }
     ) }
   )> }
+);
+
+export type AddFieldToProductInfoMutationVariables = Exact<{
+  productInfoId: Scalars['Int'];
+  label: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type AddFieldToProductInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { addFieldToProductInfo: (
+    { __typename?: 'ProductInfoField' }
+    & Pick<ProductInfoField, 'id' | 'value'>
+  ) }
+);
+
+export type GetProductInfoFieldQueryVariables = Exact<{
+  infoId: Scalars['Int'];
+  fieldId: Scalars['Int'];
+}>;
+
+
+export type GetProductInfoFieldQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+    & { info: Array<(
+      { __typename?: 'ProductInfo' }
+      & Pick<ProductInfo, 'id'>
+      & { fields?: Maybe<Array<(
+        { __typename?: 'ProductInfoField' }
+        & Pick<ProductInfoField, 'id' | 'name' | 'value'>
+      )>> }
+    )> }
+  )> }
+);
+
+export type ChangeFieldInProductInfoMutationVariables = Exact<{
+  id: Scalars['Int'];
+  name: Scalars['String'];
+  value: Scalars['String'];
+}>;
+
+
+export type ChangeFieldInProductInfoMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFieldInProductInfo: (
+    { __typename?: 'ProductInfoField' }
+    & Pick<ProductInfoField, 'id' | 'name' | 'value'>
+  ) }
 );
 
 export type RemoveProductInfoFromProductMutationVariables = Exact<{
@@ -1287,8 +1474,8 @@ export type ChangeCategoryMutationHookResult = ReturnType<typeof useChangeCatego
 export type ChangeCategoryMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryMutation>;
 export type ChangeCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryMutation, ChangeCategoryMutationVariables>;
 export const AddFieldToCategoryDocument = gql`
-    mutation AddFieldToCategory($id: Int!, $name: String!) {
-  addFieldToCategory(id: $id, name: $name) {
+    mutation AddFieldToCategory($categoryId: Int!, $name: String!) {
+  addFieldToCategory(categoryId: $categoryId, name: $name) {
     id
     fields {
       id
@@ -1312,7 +1499,7 @@ export type AddFieldToCategoryMutationFn = ApolloReactCommon.MutationFunction<Ad
  * @example
  * const [addFieldToCategoryMutation, { data, loading, error }] = useAddFieldToCategoryMutation({
  *   variables: {
- *      id: // value for 'id'
+ *      categoryId: // value for 'categoryId'
  *      name: // value for 'name'
  *   },
  * });
@@ -1324,8 +1511,8 @@ export type AddFieldToCategoryMutationHookResult = ReturnType<typeof useAddField
 export type AddFieldToCategoryMutationResult = ApolloReactCommon.MutationResult<AddFieldToCategoryMutation>;
 export type AddFieldToCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<AddFieldToCategoryMutation, AddFieldToCategoryMutationVariables>;
 export const RemoveFieldFromCategoryDocument = gql`
-    mutation RemoveFieldFromCategory($id: Int!, $fieldId: String!) {
-  removeFieldFromCategory(id: $id, fieldId: $fieldId) {
+    mutation RemoveFieldFromCategory($fieldId: Int!) {
+  removeFieldFromCategory(fieldId: $fieldId) {
     id
     fields {
       id
@@ -1349,7 +1536,6 @@ export type RemoveFieldFromCategoryMutationFn = ApolloReactCommon.MutationFuncti
  * @example
  * const [removeFieldFromCategoryMutation, { data, loading, error }] = useRemoveFieldFromCategoryMutation({
  *   variables: {
- *      id: // value for 'id'
  *      fieldId: // value for 'fieldId'
  *   },
  * });
@@ -1398,7 +1584,7 @@ export type GetFieldsCategoryByIdQueryHookResult = ReturnType<typeof useGetField
 export type GetFieldsCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetFieldsCategoryByIdLazyQuery>;
 export type GetFieldsCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldsCategoryByIdQuery, GetFieldsCategoryByIdQueryVariables>;
 export const GetFieldByIdFromCategoryByIdDocument = gql`
-    query GetFieldByIdFromCategoryById($id: Int!, $fieldId: String!) {
+    query GetFieldByIdFromCategoryById($id: Int!, $fieldId: Int!) {
   categories(filter: {id: $id}) {
     id
     fields(filter: {id: $fieldId}) {
@@ -1436,13 +1622,10 @@ export type GetFieldByIdFromCategoryByIdQueryHookResult = ReturnType<typeof useG
 export type GetFieldByIdFromCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetFieldByIdFromCategoryByIdLazyQuery>;
 export type GetFieldByIdFromCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldByIdFromCategoryByIdQuery, GetFieldByIdFromCategoryByIdQueryVariables>;
 export const ChangeFieldInCategoryDocument = gql`
-    mutation ChangeFieldInCategory($categoryId: Int!, $fieldId: String!, $name: String!) {
-  changeFieldInCategory(id: $categoryId, fieldId: $fieldId, name: $name) {
+    mutation ChangeFieldInCategory($fieldId: Int!, $name: String!) {
+  changeFieldInCategory(fieldId: $fieldId, name: $name) {
     id
-    fields {
-      id
-      name
-    }
+    name
   }
 }
     `;
@@ -1461,7 +1644,6 @@ export type ChangeFieldInCategoryMutationFn = ApolloReactCommon.MutationFunction
  * @example
  * const [changeFieldInCategoryMutation, { data, loading, error }] = useChangeFieldInCategoryMutation({
  *   variables: {
- *      categoryId: // value for 'categoryId'
  *      fieldId: // value for 'fieldId'
  *      name: // value for 'name'
  *   },
@@ -1628,6 +1810,123 @@ export function useChangeCategoryInfoMutation(baseOptions?: ApolloReactHooks.Mut
 export type ChangeCategoryInfoMutationHookResult = ReturnType<typeof useChangeCategoryInfoMutation>;
 export type ChangeCategoryInfoMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryInfoMutation>;
 export type ChangeCategoryInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryInfoMutation, ChangeCategoryInfoMutationVariables>;
+export const InitializeCategoryInfoFieldDocument = gql`
+    mutation InitializeCategoryInfoField($categoryInfoId: Int!, $categoryFieldId: Int!) {
+  initializeCategoryInfoField(categoryInfoId: $categoryInfoId, categoryFieldId: $categoryFieldId) {
+    id
+    name
+    value
+    categoryField {
+      id
+    }
+  }
+}
+    `;
+export type InitializeCategoryInfoFieldMutationFn = ApolloReactCommon.MutationFunction<InitializeCategoryInfoFieldMutation, InitializeCategoryInfoFieldMutationVariables>;
+
+/**
+ * __useInitializeCategoryInfoFieldMutation__
+ *
+ * To run a mutation, you first call `useInitializeCategoryInfoFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitializeCategoryInfoFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [initializeCategoryInfoFieldMutation, { data, loading, error }] = useInitializeCategoryInfoFieldMutation({
+ *   variables: {
+ *      categoryInfoId: // value for 'categoryInfoId'
+ *      categoryFieldId: // value for 'categoryFieldId'
+ *   },
+ * });
+ */
+export function useInitializeCategoryInfoFieldMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<InitializeCategoryInfoFieldMutation, InitializeCategoryInfoFieldMutationVariables>) {
+        return ApolloReactHooks.useMutation<InitializeCategoryInfoFieldMutation, InitializeCategoryInfoFieldMutationVariables>(InitializeCategoryInfoFieldDocument, baseOptions);
+      }
+export type InitializeCategoryInfoFieldMutationHookResult = ReturnType<typeof useInitializeCategoryInfoFieldMutation>;
+export type InitializeCategoryInfoFieldMutationResult = ApolloReactCommon.MutationResult<InitializeCategoryInfoFieldMutation>;
+export type InitializeCategoryInfoFieldMutationOptions = ApolloReactCommon.BaseMutationOptions<InitializeCategoryInfoFieldMutation, InitializeCategoryInfoFieldMutationVariables>;
+export const GetCategoryInfoFieldDocument = gql`
+    query GetCategoryInfoField($categoryId: Int!, $infoId: Int!, $fieldId: Int!) {
+  categories(filter: {id: $categoryId}) {
+    id
+    info(filter: {id: $infoId}) {
+      id
+      fields(filter: {id: $fieldId}) {
+        id
+        name
+        value
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryInfoFieldQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryInfoFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryInfoFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryInfoFieldQuery({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      infoId: // value for 'infoId'
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useGetCategoryInfoFieldQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryInfoFieldQuery, GetCategoryInfoFieldQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryInfoFieldQuery, GetCategoryInfoFieldQueryVariables>(GetCategoryInfoFieldDocument, baseOptions);
+      }
+export function useGetCategoryInfoFieldLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryInfoFieldQuery, GetCategoryInfoFieldQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryInfoFieldQuery, GetCategoryInfoFieldQueryVariables>(GetCategoryInfoFieldDocument, baseOptions);
+        }
+export type GetCategoryInfoFieldQueryHookResult = ReturnType<typeof useGetCategoryInfoFieldQuery>;
+export type GetCategoryInfoFieldLazyQueryHookResult = ReturnType<typeof useGetCategoryInfoFieldLazyQuery>;
+export type GetCategoryInfoFieldQueryResult = ApolloReactCommon.QueryResult<GetCategoryInfoFieldQuery, GetCategoryInfoFieldQueryVariables>;
+export const ChangeFieldInCategoryInfoDocument = gql`
+    mutation ChangeFieldInCategoryInfo($fieldId: Int!, $name: String!, $value: String!) {
+  changeFieldInCategoryInfo(fieldId: $fieldId, change: {name: $name, value: $value}) {
+    id
+    name
+    value
+  }
+}
+    `;
+export type ChangeFieldInCategoryInfoMutationFn = ApolloReactCommon.MutationFunction<ChangeFieldInCategoryInfoMutation, ChangeFieldInCategoryInfoMutationVariables>;
+
+/**
+ * __useChangeFieldInCategoryInfoMutation__
+ *
+ * To run a mutation, you first call `useChangeFieldInCategoryInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFieldInCategoryInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFieldInCategoryInfoMutation, { data, loading, error }] = useChangeFieldInCategoryInfoMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      name: // value for 'name'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useChangeFieldInCategoryInfoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFieldInCategoryInfoMutation, ChangeFieldInCategoryInfoMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFieldInCategoryInfoMutation, ChangeFieldInCategoryInfoMutationVariables>(ChangeFieldInCategoryInfoDocument, baseOptions);
+      }
+export type ChangeFieldInCategoryInfoMutationHookResult = ReturnType<typeof useChangeFieldInCategoryInfoMutation>;
+export type ChangeFieldInCategoryInfoMutationResult = ApolloReactCommon.MutationResult<ChangeFieldInCategoryInfoMutation>;
+export type ChangeFieldInCategoryInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFieldInCategoryInfoMutation, ChangeFieldInCategoryInfoMutationVariables>;
 export const GetFieldsCategoryInfoByIdDocument = gql`
     query GetFieldsCategoryInfoById($id: Int!) {
   categories(filter: {id: $id}) {
@@ -1637,9 +1936,14 @@ export const GetFieldsCategoryInfoByIdDocument = gql`
       name
     }
     info {
+      id
       fields {
         id
         value
+        name
+        categoryField {
+          id
+        }
       }
     }
   }
@@ -2392,8 +2696,8 @@ export type GetProductInfoByProductIdAndInfoIdQueryHookResult = ReturnType<typeo
 export type GetProductInfoByProductIdAndInfoIdLazyQueryHookResult = ReturnType<typeof useGetProductInfoByProductIdAndInfoIdLazyQuery>;
 export type GetProductInfoByProductIdAndInfoIdQueryResult = ApolloReactCommon.QueryResult<GetProductInfoByProductIdAndInfoIdQuery, GetProductInfoByProductIdAndInfoIdQueryVariables>;
 export const ChangeProductInfoDocument = gql`
-    mutation ChangeProductInfo($id: Int!, $infoId: Int!, $name: String!) {
-  changeProductInfo(id: $id, infoId: $infoId, change: {name: $name}) {
+    mutation ChangeProductInfo($id: Int!, $name: String!) {
+  changeProductInfo(id: $id, change: {name: $name}) {
     id
   }
 }
@@ -2414,7 +2718,6 @@ export type ChangeProductInfoMutationFn = ApolloReactCommon.MutationFunction<Cha
  * const [changeProductInfoMutation, { data, loading, error }] = useChangeProductInfoMutation({
  *   variables: {
  *      id: // value for 'id'
- *      infoId: // value for 'infoId'
  *      name: // value for 'name'
  *   },
  * });
@@ -2425,18 +2728,116 @@ export function useChangeProductInfoMutation(baseOptions?: ApolloReactHooks.Muta
 export type ChangeProductInfoMutationHookResult = ReturnType<typeof useChangeProductInfoMutation>;
 export type ChangeProductInfoMutationResult = ApolloReactCommon.MutationResult<ChangeProductInfoMutation>;
 export type ChangeProductInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeProductInfoMutation, ChangeProductInfoMutationVariables>;
+export const ChangeCategoryFieldInProductInfoDocument = gql`
+    mutation ChangeCategoryFieldInProductInfo($fieldId: Int!, $value: String!) {
+  changeFieldInProductInfo(id: $fieldId, change: {name: null, value: $value}) {
+    id
+    name
+    value
+  }
+}
+    `;
+export type ChangeCategoryFieldInProductInfoMutationFn = ApolloReactCommon.MutationFunction<ChangeCategoryFieldInProductInfoMutation, ChangeCategoryFieldInProductInfoMutationVariables>;
+
+/**
+ * __useChangeCategoryFieldInProductInfoMutation__
+ *
+ * To run a mutation, you first call `useChangeCategoryFieldInProductInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeCategoryFieldInProductInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeCategoryFieldInProductInfoMutation, { data, loading, error }] = useChangeCategoryFieldInProductInfoMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useChangeCategoryFieldInProductInfoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeCategoryFieldInProductInfoMutation, ChangeCategoryFieldInProductInfoMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeCategoryFieldInProductInfoMutation, ChangeCategoryFieldInProductInfoMutationVariables>(ChangeCategoryFieldInProductInfoDocument, baseOptions);
+      }
+export type ChangeCategoryFieldInProductInfoMutationHookResult = ReturnType<typeof useChangeCategoryFieldInProductInfoMutation>;
+export type ChangeCategoryFieldInProductInfoMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryFieldInProductInfoMutation>;
+export type ChangeCategoryFieldInProductInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryFieldInProductInfoMutation, ChangeCategoryFieldInProductInfoMutationVariables>;
+export const InitializeProductInfoFieldDocument = gql`
+    mutation InitializeProductInfoField($label: String, $value: String!, $productInfoId: Int!, $categoryInfoFieldId: Int!) {
+  addFieldToProductInfo(label: $label, value: $value, productInfoId: $productInfoId, categoryInfoFieldId: $categoryInfoFieldId) {
+    id
+    name
+    value
+    categoryInfoField {
+      id
+    }
+  }
+}
+    `;
+export type InitializeProductInfoFieldMutationFn = ApolloReactCommon.MutationFunction<InitializeProductInfoFieldMutation, InitializeProductInfoFieldMutationVariables>;
+
+/**
+ * __useInitializeProductInfoFieldMutation__
+ *
+ * To run a mutation, you first call `useInitializeProductInfoFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitializeProductInfoFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [initializeProductInfoFieldMutation, { data, loading, error }] = useInitializeProductInfoFieldMutation({
+ *   variables: {
+ *      label: // value for 'label'
+ *      value: // value for 'value'
+ *      productInfoId: // value for 'productInfoId'
+ *      categoryInfoFieldId: // value for 'categoryInfoFieldId'
+ *   },
+ * });
+ */
+export function useInitializeProductInfoFieldMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<InitializeProductInfoFieldMutation, InitializeProductInfoFieldMutationVariables>) {
+        return ApolloReactHooks.useMutation<InitializeProductInfoFieldMutation, InitializeProductInfoFieldMutationVariables>(InitializeProductInfoFieldDocument, baseOptions);
+      }
+export type InitializeProductInfoFieldMutationHookResult = ReturnType<typeof useInitializeProductInfoFieldMutation>;
+export type InitializeProductInfoFieldMutationResult = ApolloReactCommon.MutationResult<InitializeProductInfoFieldMutation>;
+export type InitializeProductInfoFieldMutationOptions = ApolloReactCommon.BaseMutationOptions<InitializeProductInfoFieldMutation, InitializeProductInfoFieldMutationVariables>;
 export const GetFieldsProductByIdDocument = gql`
     query GetFieldsProductById($id: Int!) {
   products(filter: {id: $id}) {
     id
     info {
+      id
+      language {
+        id
+      }
       fields {
         id
+        name
         value
+        categoryInfoField {
+          id
+        }
       }
     }
     category {
       id
+      info {
+        id
+        language {
+          id
+        }
+        fields {
+          id
+          name
+          value
+          categoryField {
+            id
+            name
+          }
+        }
+      }
       fields {
         id
         name
@@ -2471,6 +2872,119 @@ export function useGetFieldsProductByIdLazyQuery(baseOptions?: ApolloReactHooks.
 export type GetFieldsProductByIdQueryHookResult = ReturnType<typeof useGetFieldsProductByIdQuery>;
 export type GetFieldsProductByIdLazyQueryHookResult = ReturnType<typeof useGetFieldsProductByIdLazyQuery>;
 export type GetFieldsProductByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldsProductByIdQuery, GetFieldsProductByIdQueryVariables>;
+export const AddFieldToProductInfoDocument = gql`
+    mutation AddFieldToProductInfo($productInfoId: Int!, $label: String!, $value: String!) {
+  addFieldToProductInfo(productInfoId: $productInfoId, label: $label, value: $value) {
+    id
+    value
+  }
+}
+    `;
+export type AddFieldToProductInfoMutationFn = ApolloReactCommon.MutationFunction<AddFieldToProductInfoMutation, AddFieldToProductInfoMutationVariables>;
+
+/**
+ * __useAddFieldToProductInfoMutation__
+ *
+ * To run a mutation, you first call `useAddFieldToProductInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFieldToProductInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFieldToProductInfoMutation, { data, loading, error }] = useAddFieldToProductInfoMutation({
+ *   variables: {
+ *      productInfoId: // value for 'productInfoId'
+ *      label: // value for 'label'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useAddFieldToProductInfoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddFieldToProductInfoMutation, AddFieldToProductInfoMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddFieldToProductInfoMutation, AddFieldToProductInfoMutationVariables>(AddFieldToProductInfoDocument, baseOptions);
+      }
+export type AddFieldToProductInfoMutationHookResult = ReturnType<typeof useAddFieldToProductInfoMutation>;
+export type AddFieldToProductInfoMutationResult = ApolloReactCommon.MutationResult<AddFieldToProductInfoMutation>;
+export type AddFieldToProductInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<AddFieldToProductInfoMutation, AddFieldToProductInfoMutationVariables>;
+export const GetProductInfoFieldDocument = gql`
+    query GetProductInfoField($infoId: Int!, $fieldId: Int!) {
+  products {
+    id
+    info(filter: {id: $infoId}) {
+      id
+      fields(filter: {id: $fieldId}) {
+        id
+        name
+        value
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProductInfoFieldQuery__
+ *
+ * To run a query within a React component, call `useGetProductInfoFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductInfoFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductInfoFieldQuery({
+ *   variables: {
+ *      infoId: // value for 'infoId'
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useGetProductInfoFieldQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProductInfoFieldQuery, GetProductInfoFieldQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetProductInfoFieldQuery, GetProductInfoFieldQueryVariables>(GetProductInfoFieldDocument, baseOptions);
+      }
+export function useGetProductInfoFieldLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProductInfoFieldQuery, GetProductInfoFieldQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetProductInfoFieldQuery, GetProductInfoFieldQueryVariables>(GetProductInfoFieldDocument, baseOptions);
+        }
+export type GetProductInfoFieldQueryHookResult = ReturnType<typeof useGetProductInfoFieldQuery>;
+export type GetProductInfoFieldLazyQueryHookResult = ReturnType<typeof useGetProductInfoFieldLazyQuery>;
+export type GetProductInfoFieldQueryResult = ApolloReactCommon.QueryResult<GetProductInfoFieldQuery, GetProductInfoFieldQueryVariables>;
+export const ChangeFieldInProductInfoDocument = gql`
+    mutation ChangeFieldInProductInfo($id: Int!, $name: String!, $value: String!) {
+  changeFieldInProductInfo(id: $id, change: {name: $name, value: $value}) {
+    id
+    name
+    value
+  }
+}
+    `;
+export type ChangeFieldInProductInfoMutationFn = ApolloReactCommon.MutationFunction<ChangeFieldInProductInfoMutation, ChangeFieldInProductInfoMutationVariables>;
+
+/**
+ * __useChangeFieldInProductInfoMutation__
+ *
+ * To run a mutation, you first call `useChangeFieldInProductInfoMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFieldInProductInfoMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFieldInProductInfoMutation, { data, loading, error }] = useChangeFieldInProductInfoMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *      name: // value for 'name'
+ *      value: // value for 'value'
+ *   },
+ * });
+ */
+export function useChangeFieldInProductInfoMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFieldInProductInfoMutation, ChangeFieldInProductInfoMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFieldInProductInfoMutation, ChangeFieldInProductInfoMutationVariables>(ChangeFieldInProductInfoDocument, baseOptions);
+      }
+export type ChangeFieldInProductInfoMutationHookResult = ReturnType<typeof useChangeFieldInProductInfoMutation>;
+export type ChangeFieldInProductInfoMutationResult = ApolloReactCommon.MutationResult<ChangeFieldInProductInfoMutation>;
+export type ChangeFieldInProductInfoMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFieldInProductInfoMutation, ChangeFieldInProductInfoMutationVariables>;
 export const RemoveProductInfoFromProductDocument = gql`
     mutation RemoveProductInfoFromProduct($productId: Int!, $infoId: Int!) {
   removeInfoFromProduct(productId: $productId, infoId: $infoId) {

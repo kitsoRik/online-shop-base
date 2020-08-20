@@ -1,4 +1,4 @@
-query GetFieldByIdFromCategoryById($id: Int!, $fieldId: String!) {
+query GetFieldByIdFromCategoryById($id: Int!, $fieldId: Int!) {
 	categories(filter: { id: $id }) {
 		id
 		fields(filter: { id: $fieldId }) {
@@ -8,16 +8,9 @@ query GetFieldByIdFromCategoryById($id: Int!, $fieldId: String!) {
 	}
 }
 
-mutation ChangeFieldInCategory(
-	$categoryId: Int!
-	$fieldId: String!
-	$name: String!
-) {
-	changeFieldInCategory(id: $categoryId, fieldId: $fieldId, name: $name) {
+mutation ChangeFieldInCategory($fieldId: Int!, $name: String!) {
+	changeFieldInCategory(fieldId: $fieldId, name: $name) {
 		id
-		fields {
-			id
-			name
-		}
+		name
 	}
 }

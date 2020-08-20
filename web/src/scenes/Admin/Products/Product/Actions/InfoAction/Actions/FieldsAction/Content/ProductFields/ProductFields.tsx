@@ -1,37 +1,44 @@
 import React from "react";
-import { List, ConfigProvider, Button } from "antd";
+import { List, ConfigProvider, Button, Typography } from "antd";
 import {
-	ProductField,
-	CategoryField
+	ProductInfoField,
+	CategoryField,
+	CategoryInfoField
 } from "../../../../../../../../../../generated/graphql";
 import FieldItem from "./FieldItem";
 import { PlusOutlined } from "@ant-design/icons";
 import { useLocationField } from "react-location-query";
 import AddFieldDialog from "./AddFieldDialog";
+import EditFieldDialog from "./EditFieldDialog";
 
 interface Props {
-	productFields: ProductField[];
-	categoryFields: CategoryField[];
+	productInfoFields: Exclude<
+		{ id: number; categoryInfoField?: { id: number } | null },
+		ProductInfoField
+	>[];
+	categoryInfoFields: CategoryInfoField[];
 }
 
-const ProductFields = ({ productFields, categoryFields }: Props) => {
+const ProductFields = ({ productInfoFields, categoryInfoFields }: Props) => {
 	const [, setAdd] = useLocationField("add", {
 		type: "boolean",
 		initial: false,
 		hideIfInitial: true
 	});
+	console.log(productInfoFields);
 	return (
 		<>
+			<Typography.Title level={3}>Additional fields</Typography.Title>
 			<ConfigProvider
 				renderEmpty={() => <div>You have no additional field</div>}
 			>
 				<List
 					itemLayout="horizontal"
-					dataSource={productFields.filter(
-						f => !categoryFields.map(c => c.id).includes(f.id)
+					dataSource={productInfoFields.filter(
+						f => !f.categoryInfoField
 					)}
-					renderItem={productField => (
-						<FieldItem productField={productField} />
+					renderItem={productInfoField => (
+						<FieldItem productInfoField={productInfoField} />
 					)}
 				/>
 			</ConfigProvider>
@@ -42,6 +49,7 @@ const ProductFields = ({ productFields, categoryFields }: Props) => {
 				</Button>
 			</div>
 			<AddFieldDialog />
+			<EditFieldDialog />
 		</>
 	);
 };

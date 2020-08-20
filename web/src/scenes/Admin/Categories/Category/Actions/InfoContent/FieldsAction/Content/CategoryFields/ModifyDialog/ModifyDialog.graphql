@@ -1,0 +1,28 @@
+query GetCategoryInfoField($categoryId: Int!, $infoId: Int!, $fieldId: Int!) {
+	categories(filter: { id: $categoryId }) {
+		id
+		info(filter: { id: $infoId }) {
+			id
+			fields(filter: { id: $fieldId }) {
+				id
+				name
+				value
+			}
+		}
+	}
+}
+
+mutation ChangeFieldInCategoryInfo(
+	$fieldId: Int!
+	$name: String!
+	$value: String!
+) {
+	changeFieldInCategoryInfo(
+		fieldId: $fieldId
+		change: { name: $name, value: $value }
+	) {
+		id
+		name
+		value
+	}
+}

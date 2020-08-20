@@ -2,7 +2,8 @@ import React from "react";
 import {
 	useGetFieldsProductByIdQuery,
 	Category,
-	ProductField
+	ProductInfoField,
+	ProductInfo
 } from "../../../../../../../../../generated/graphql";
 import { Button, List, Tabs } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
@@ -20,9 +21,11 @@ const Content = ({ load }: Props) => {
 	const { id } = useParams();
 	const productId = +id;
 
+	const [infoId] = useLocationFieldT<number>("info");
+
 	const [] = useLocationField("modify", {
-		type: "string",
-		initial: "",
+		type: "number",
+		initial: -1,
 		hideIfInitial: true
 	});
 
@@ -36,18 +39,31 @@ const Content = ({ load }: Props) => {
 
 	if (!product) throw new Error("Unknown category");
 
-	const productFields: ProductField[] = [];
+	const productInfoFields =
+		product.info.find(
+			i =>
+				i.language.id ===
+				product.info.find(i => i.id === infoId)?.language.id
+		)?.fields ?? [];
+
 	const categoryFields = product.category.fields ?? [];
+	const categoryInfoFields =
+		product.category.info.find(
+			i =>
+				i.language.id ===
+				product.info.find(i => i.id === infoId)?.language.id
+		)?.fields ?? [];
 
 	return (
 		<>
 			<CategoryFields
 				categoryFields={categoryFields}
-				productFields={productFields}
+				categoryInfoFields={categoryInfoFields}
+				productInfoFields={productInfoFields}
 			/>
 			<ProductFields
-				categoryFields={categoryFields}
-				productFields={productFields}
+				categoryInfoFields={categoryInfoFields}
+				productInfoFields={productInfoFields}
 			/>
 		</>
 	);

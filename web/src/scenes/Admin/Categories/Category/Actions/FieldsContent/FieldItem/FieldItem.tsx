@@ -16,7 +16,7 @@ interface Props {
 
 const FieldItem = ({ categoryId, field }: Props) => {
 	const { t } = useTranslation();
-	const [, setModify] = useLocationFieldT<string>("modify");
+	const [, setModify] = useLocationFieldT<number>("modify");
 
 	const [removeField] = useRemoveFieldFromCategoryMutation();
 
@@ -24,7 +24,6 @@ const FieldItem = ({ categoryId, field }: Props) => {
 		try {
 			const {} = removeField({
 				variables: {
-					id: categoryId,
 					fieldId: field.id
 				}
 			});

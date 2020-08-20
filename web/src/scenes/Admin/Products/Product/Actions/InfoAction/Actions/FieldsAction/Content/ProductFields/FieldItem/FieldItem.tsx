@@ -1,21 +1,34 @@
 import React from "react";
-import { ProductField } from "../../../../../../../../../../../generated/graphql";
-import { List } from "antd";
+import {
+	ProductInfoField,
+	CategoryInfoField
+} from "../../../../../../../../../../../generated/graphql";
+import { List, Button } from "antd";
 import { useLocationFieldT } from "react-location-query";
 import { useParams } from "react-router";
 
 interface Props {
-	productField: ProductField;
+	productInfoField: Exclude<
+		{ id: number; name?: string | null; value?: string | null },
+		ProductInfoField
+	>;
 }
 
-const FieldItem = ({ productField }: Props) => {
-	const { id } = useParams();
-	const productId = +id;
+const FieldItem = ({ productInfoField }: Props) => {
+	const [, setModify] = useLocationFieldT<number>("modify");
 
 	return (
 		<>
-			<List.Item actions={[]}>
-				<List.Item.Meta description={productField.value} />
+			<List.Item
+				actions={[
+					<Button onClick={() => setModify(productInfoField.id)}>
+						Edit
+					</Button>
+				]}
+			>
+				<List.Item.Meta
+					description={`${productInfoField.name} - ${productInfoField.value}`}
+				/>
 			</List.Item>
 		</>
 	);

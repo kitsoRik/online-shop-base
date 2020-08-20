@@ -45,7 +45,7 @@ const ParentContent = ({ category, load }: Props) => {
 			<br />
 			<Typography.Link>
 				<Link
-					to={`/admin/categories/edit?category=${parentCategory.id}`}
+					to={`/admin/categories/${parentCategory.id}`}
 				>
 					{t("admin.categories.edit.actions.parent.goto")}
 				</Link>

@@ -4,7 +4,7 @@ import { Tabs } from "antd";
 interface Props {
 	languages: { id: number; code: string }[];
 	activeLanguage: any;
-	onClickLanguage: (language: string) => void;
+	onClickLanguage: (languageId: number) => void;
 
 	onAdd: () => void;
 	onRemove: (key: string) => void;
@@ -36,7 +36,7 @@ const LanguageActions = ({
 						onRemove(typeof key === "string" ? key : "");
 				}}
 				activeKey={activeLanguage}
-				onTabClick={onClickLanguage}
+				onTabClick={k => onClickLanguage(+k)}
 			>
 				{languages.map(language => (
 					<Tabs.TabPane
@@ -46,7 +46,6 @@ const LanguageActions = ({
 						<Tabs
 							activeKey={activeKey}
 							tabPosition={"left"}
-							style={{ height: 220 }}
 							onTabClick={onTabClick}
 						>
 							{tabs}

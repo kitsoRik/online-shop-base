@@ -25,7 +25,7 @@ const AddFieldDialog = () => {
 	const onAddField = async (name: string) => {
 		try {
 			const {} = await addFieldToCategory({
-				variables: { id: categoryId, name }
+				variables: { categoryId, name }
 			});
 			notification.success({
 				message: t(

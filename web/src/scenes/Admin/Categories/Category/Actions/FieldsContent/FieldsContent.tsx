@@ -28,8 +28,8 @@ const FieldsContent = ({ load }: Props) => {
 	});
 
 	const [] = useLocationField("modify", {
-		type: "string",
-		initial: "",
+		type: "number",
+		initial: -1,
 		hideIfInitial: true
 	});
 

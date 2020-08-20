@@ -5,6 +5,7 @@ import { CategoryEntity } from "./category.entity";
 import { CategoryResolver } from "./category.resolver";
 import { CategoryInfoModule } from "./product-info/category-info.module";
 import { CategoryFieldModule } from "./category-field/category-field.module";
+import { CategoryFieldEntity } from "./category-field/category-field.entity";
 
 @Module({
 	imports: [

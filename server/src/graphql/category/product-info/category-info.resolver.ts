@@ -59,16 +59,6 @@ export class CategoryInfoResolver {
 		return this.categoryInfoService.changeCategoryInfo(id, change);
 	}
 
-	@Mutation(type => CategoryInfoType)
-	@AccessAdmin()
-	changeFieldInCategoryInfo(
-		@Args("id", { type: () => Int }) id: number,
-		@Args("fieldId") fieldId: string,
-		@Args("value") value: string
-	) {
-		return this.categoryInfoService.changeField(id, fieldId, value);
-	}
-
 	@ResolveField(type => CategoryInfoType)
 	category(@Parent() { categoryId }: CategoryInfoEntity) {
 		return this.categoryService.findById(categoryId);
@@ -79,7 +69,7 @@ export class CategoryInfoResolver {
 		@Parent() { id }: { id: number },
 		@Args("filter", { nullable: true }) filter: CategoryInfoFielddInput
 	) {
-		return this.categoryInfoService.getFields(id);
+		return this.categoryInfoService.getFields(id, filter);
 	}
 
 	@ResolveField(type => CategoryInfoType)

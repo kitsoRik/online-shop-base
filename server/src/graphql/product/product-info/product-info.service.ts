@@ -6,12 +6,16 @@ import { GraphQLError } from "graphql";
 import { ChangeProductInfoInput } from "./product-info.input";
 import { ProductService } from "../product.service";
 import { SearchProductsInput } from "./search-products.input";
+import { ProductInfoFieldInput } from "./product-info-field/product-info-field.input";
+import { ProductInfoFieldEntity } from "./product-info-field/product-info-field.entity";
 
 @Injectable()
 export class ProductInfoService {
 	constructor(
 		@InjectRepository(ProductInfoEntity)
 		private productInfoRepository: Repository<ProductInfoEntity>,
+		@InjectRepository(ProductInfoFieldEntity)
+		private productInfoFieldRepository: Repository<ProductInfoFieldEntity>,
 		private productService: ProductService
 	) {}
 
@@ -55,22 +59,6 @@ export class ProductInfoService {
 
 		productInfo = { ...productInfo, ...change };
 
-		console.log(productInfo);
-
-		await this.productInfoRepository.save(productInfo);
-
-		return productInfo;
-	}
-
-	async changeField(id: number, fieldId: string, value: string) {
-		const productInfo = await this.findById(id);
-
-		const oldField = productInfo.fields.find(f => f.id === fieldId);
-
-		if (!oldField) throw new Error("UNKNOWN_FIELD");
-
-		oldField.value = value;
-
 		await this.productInfoRepository.save(productInfo);
 
 		return productInfo;
@@ -106,27 +94,17 @@ export class ProductInfoService {
 		return result;
 	}
 
-	async getFields(id: number) {
-		const productInfo = await this.productInfoRepository.findOne({
-			id
-		});
+	async getFields(id: number, filter: ProductInfoFieldInput) {
+		const query = this.productInfoFieldRepository.createQueryBuilder();
 
-		return productInfo.fields;
-	}
+		query.where("product_info_id = :id", { id });
+		console.log(filter);
+		if (filter) {
+			if (filter.id !== undefined) {
+				query.where("id = :id", { id: filter.id });
+			}
+		}
 
-	async getInfoByProductId(productId: number) {
-		const productInfo = await this.productInfoRepository.find({
-			where: { productId }
-		});
-
-		return productInfo;
-	}
-
-	async getInfoByProductIdAndLanguageId(productId: number, infoId: number) {
-		const productInfo = await this.productInfoRepository.find({
-			where: { productId, languageId: infoId }
-		});
-
-		return productInfo;
+		return query.getMany();
 	}
 }

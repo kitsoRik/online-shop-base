@@ -5,7 +5,7 @@ import { UserModule } from "./user/user.module";
 import { CategoryModule } from "./category/category.module";
 import { ProductModule } from "./product/product.module";
 import { GeneralModule } from "./general/general.module";
-import { SearchModule } from './search/search.module';
+import { SearchModule } from "./search/search.module";
 @Module({
 	imports: [
 		TypeOrmModule,

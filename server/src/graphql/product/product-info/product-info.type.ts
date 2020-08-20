@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from "@nestjs/graphql";
-import { ProductFieldType } from "./product-field/product-field.type";
+import { ProductInfoFieldType } from "./product-info-field/product-info-field.type";
 import { LanguageType } from "src/graphql/general/language/language.type";
 
 @ObjectType("ProductInfo")
@@ -13,6 +13,6 @@ export class ProductInfoType {
 	@Field()
 	language: LanguageType;
 
-	@Field(type => [ProductFieldType], { nullable: true })
-	fields: ProductFieldType[];
+	@Field(type => [ProductInfoFieldType], { nullable: true })
+	fields: ProductInfoFieldType[];
 }

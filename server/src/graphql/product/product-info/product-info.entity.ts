@@ -5,7 +5,6 @@ import {
 	ManyToOne,
 	JoinColumn
 } from "typeorm";
-import { ProductFieldEntity } from "./product-field/product-field";
 import { ProductEntity } from "../product.entity";
 
 @Entity({ name: "products_info" })
@@ -28,11 +27,4 @@ export class ProductInfoEntity {
 
 	@Column({ name: "product_id", default: -1 })
 	productId: number;
-
-	@Column({
-		name: "fields",
-		default: JSON.stringify([]),
-		type: "json"
-	})
-	fields: ProductFieldEntity[];
 }

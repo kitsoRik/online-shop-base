@@ -8,13 +8,21 @@ import {
 	CategoryInfoInput
 } from "./category-info.input";
 import { CategoryService } from "../category.service";
+import { CategoryInfoFieldService } from "./category-info-field/category-info-field.service";
+import { CategoryInfoFielddInput } from "./category-info-field/category-info-field.input";
+import { CategoryInfoFieldEntity } from "./category-info-field/category-info-field.entity";
 
 @Injectable()
 export class CategoryInfoService {
 	constructor(
 		@InjectRepository(CategoryInfoEntity)
 		private categoryInfoRepository: Repository<CategoryInfoEntity>,
-		private categoryService: CategoryService
+		@InjectRepository(CategoryInfoFieldEntity)
+		private categoryInfoFieldRepository: Repository<
+			CategoryInfoFieldEntity
+		>,
+		private categoryService: CategoryService,
+		private categoryInfoFieldService: CategoryInfoFieldService
 	) {}
 
 	async addCategoryInfo(categoryId: number, languageId: number) {
@@ -62,20 +70,6 @@ export class CategoryInfoService {
 		return categoryInfo;
 	}
 
-	async changeField(id: number, fieldId: string, value: string) {
-		const categoryInfo = await this.findById(id);
-
-		const oldField = categoryInfo.fields.find(f => f.id === fieldId);
-
-		if (!oldField) throw new Error("UNKNOWN_FIELD");
-
-		oldField.value = value;
-
-		await this.categoryInfoRepository.save(categoryInfo);
-
-		return categoryInfo;
-	}
-
 	async findById(id: number) {
 		const categoryInfo = await this.categoryInfoRepository.findOne({ id });
 		return categoryInfo;
@@ -89,12 +83,18 @@ export class CategoryInfoService {
 		return categories;
 	}
 
-	async getFields(id: number) {
-		const categoryInfo = await this.categoryInfoRepository.findOne({
-			id
-		});
+	async getFields(categoryInfoId: number, filter: CategoryInfoFielddInput) {
+		const query = this.categoryInfoFieldRepository.createQueryBuilder();
 
-		return categoryInfo.fields;
+		query.where("category_info_id = :categoryInfoId", { categoryInfoId });
+
+		if (filter) {
+			if (filter.id !== undefined) {
+				query.andWhere("id = :id", { id: filter.id });
+			}
+		}
+
+		return query.getMany();
 	}
 
 	async getInfoByCategoryId(categoryId: number) {

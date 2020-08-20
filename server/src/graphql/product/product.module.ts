@@ -5,10 +5,11 @@ import { ProductEntity } from "./product.entity";
 import { ProductResolver } from "./product.resolver";
 import { CategoryModule } from "../category/category.module";
 import { ProductInfoModule } from "./product-info/product-info.module";
+import { ProductInfoEntity } from "./product-info/product-info.entity";
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([ProductEntity]),
+		TypeOrmModule.forFeature([ProductEntity, ProductInfoEntity]),
 		CategoryModule,
 		ProductInfoModule
 	],

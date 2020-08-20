@@ -51,9 +51,12 @@ export class ProductResolver {
 		@Args("filter", { type: () => ProductInput, nullable: true })
 		filter: ProductInput
 	) {
-		if (filter.id !== undefined) {
-			return [this.productService.findById(filter.id)];
+		if (filter) {
+			if (filter.id !== undefined) {
+				return [this.productService.findById(filter.id)];
+			}
 		}
+		return this.productService.getProducts();
 	}
 
 	@ResolveField(type => ProductType)
@@ -63,15 +66,9 @@ export class ProductResolver {
 
 	@ResolveField(type => [ProductInfoType])
 	info(
-		@Parent() { id }: { id: number },
+		@Parent() parent: { id: number },
 		@Args("filter", { nullable: true }) filter: ProductInfoInput
 	) {
-		if (!filter) return this.productInfoService.getInfoByProductId(id);
-		if (filter.id) {
-			return this.productInfoService.getInfoByProductIdAndLanguageId(
-				id,
-				filter.id
-			);
-		}
+		return this.productService.getInfo(parent.id, filter);
 	}
 }

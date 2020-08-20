@@ -17,12 +17,14 @@ import { CategoryFilter } from "./category.filter";
 import { CategoryInfoType } from "./product-info/category-info.type";
 import { CategoryInfoService } from "./product-info/category-info.service";
 import { CategoryInfoInput } from "./product-info/category-info.input";
+import { CategoryFieldService } from "./category-field/category-field.service";
 
 @Resolver(of => CategoryType)
 export class CategoryResolver {
 	constructor(
 		private categoryService: CategoryService,
-		private categoryInfoService: CategoryInfoService
+		private categoryInfoService: CategoryInfoService,
+		private categoryFieldService: CategoryFieldService,
 	) {}
 
 	@Mutation(type => CategoryType)
@@ -42,34 +44,6 @@ export class CategoryResolver {
 		@Args("name") name: string
 	): Promise<CategoryEntity> {
 		return this.categoryService.changeCategory(id, name);
-	}
-
-	@Mutation(type => CategoryType)
-	@AccessAdmin()
-	addFieldToCategory(
-		@Args("id", { type: () => Int }) id: number,
-		@Args("name") name: string
-	): Promise<CategoryEntity> {
-		return this.categoryService.addField(id, name);
-	}
-
-	@Mutation(type => CategoryType)
-	@AccessAdmin()
-	changeFieldInCategory(
-		@Args("id", { type: () => Int }) id: number,
-		@Args("fieldId") fieldId: string,
-		@Args("name") name: string
-	): Promise<CategoryEntity> {
-		return this.categoryService.changeField(id, fieldId, name);
-	}
-
-	@Mutation(type => CategoryType)
-	@AccessAdmin()
-	removeFieldFromCategory(
-		@Args("id", { type: () => Int }) id: number,
-		@Args("fieldId") fieldId: string
-	): Promise<CategoryEntity> {
-		return this.categoryService.removeField(id, fieldId);
 	}
 
 	@Query(type => [CategoryType])
@@ -110,7 +84,7 @@ export class CategoryResolver {
 		@Parent() { id }: { id: number },
 		@Args("filter", { nullable: true }) filter: CategoryInfoFielddInput
 	) {
-		return this.categoryService.getFields(id);
+		return this.categoryFieldService.getFields(id);
 	}
 
 	@ResolveField(type => [CategoryInfoType])

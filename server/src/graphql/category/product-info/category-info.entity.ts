@@ -5,7 +5,7 @@ import {
 	ManyToOne,
 	JoinColumn
 } from "typeorm";
-import { CategoryInfoFieldEntity } from "./category-info-field/category-info-field";
+import { CategoryInfoFieldEntity } from "./category-info-field/category-info-field.entity";
 import { CategoryEntity } from "../category.entity";
 
 @Entity({ name: "categories_info" })

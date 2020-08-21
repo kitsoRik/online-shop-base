@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "antd";
+import { Card, Typography } from "antd";
 import Meta from "antd/lib/card/Meta";
 
 interface Props {
@@ -19,7 +19,10 @@ const ProductCard = ({
 			style={{ width: 240 }}
 			cover={<img alt="Photo" src={photoUrl} />}
 		>
-			<Meta title={title} description={price} />
+			<Meta
+				title={<Typography.Title>{title}</Typography.Title>}
+				description={price}
+			/>
 		</Card>
 	);
 };

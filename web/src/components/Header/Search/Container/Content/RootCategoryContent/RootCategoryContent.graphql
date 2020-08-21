@@ -1,0 +1,21 @@
+query SearchRootCategoryProducts(
+	$nameTemplate: String!
+	$languageCode: String!
+	$rootCategoryId: Int!
+	$offset: Int!
+	$limit: Int!
+) {
+	searchProducts(
+		filter: {
+			nameTemplate: $nameTemplate
+			languageCode: $languageCode
+			rootCategoryId: $rootCategoryId
+		}
+		pagination: { offset: $offset, limit: $limit }
+	) {
+		productsInfo {
+			id
+			name
+		}
+	}
+}

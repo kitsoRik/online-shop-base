@@ -1,0 +1,21 @@
+query SearchSubCategoryProducts(
+	$nameTemplate: String!
+	$languageCode: String!
+	$subCategoryId: Int!
+	$offset: Int!
+	$limit: Int!
+) {
+	searchProducts(
+		filter: {
+			nameTemplate: $nameTemplate
+			languageCode: $languageCode
+			subCategoryId: $subCategoryId
+		}
+		pagination: { offset: $offset, limit: $limit }
+	) {
+		productsInfo {
+			id
+			name
+		}
+	}
+}

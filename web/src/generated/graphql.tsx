@@ -203,6 +203,8 @@ export type SearchProductsInput = {
   nameTemplate?: Maybe<Scalars['String']>;
   languageCode?: Maybe<Scalars['String']>;
   categoryId?: Maybe<Scalars['Int']>;
+  subCategoryId?: Maybe<Scalars['Int']>;
+  rootCategoryId?: Maybe<Scalars['Int']>;
 };
 
 export type SearchProductsPaginationInput = {
@@ -430,6 +432,46 @@ export type SearchProductsCategoryQuery = (
       ) }
     )> }
   )> }
+);
+
+export type SearchRootCategoryProductsQueryVariables = Exact<{
+  nameTemplate: Scalars['String'];
+  languageCode: Scalars['String'];
+  rootCategoryId: Scalars['Int'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
+
+
+export type SearchRootCategoryProductsQuery = (
+  { __typename?: 'Query' }
+  & { searchProducts: (
+    { __typename?: 'SearchProductsOutput' }
+    & { productsInfo: Array<(
+      { __typename?: 'ProductInfo' }
+      & Pick<ProductInfo, 'id' | 'name'>
+    )> }
+  ) }
+);
+
+export type SearchSubCategoryProductsQueryVariables = Exact<{
+  nameTemplate: Scalars['String'];
+  languageCode: Scalars['String'];
+  subCategoryId: Scalars['Int'];
+  offset: Scalars['Int'];
+  limit: Scalars['Int'];
+}>;
+
+
+export type SearchSubCategoryProductsQuery = (
+  { __typename?: 'Query' }
+  & { searchProducts: (
+    { __typename?: 'SearchProductsOutput' }
+    & { productsInfo: Array<(
+      { __typename?: 'ProductInfo' }
+      & Pick<ProductInfo, 'id' | 'name'>
+    )> }
+  ) }
 );
 
 export type SearchSubsubCategoryProductsQueryVariables = Exact<{
@@ -1378,6 +1420,86 @@ export function useSearchProductsCategoryLazyQuery(baseOptions?: ApolloReactHook
 export type SearchProductsCategoryQueryHookResult = ReturnType<typeof useSearchProductsCategoryQuery>;
 export type SearchProductsCategoryLazyQueryHookResult = ReturnType<typeof useSearchProductsCategoryLazyQuery>;
 export type SearchProductsCategoryQueryResult = ApolloReactCommon.QueryResult<SearchProductsCategoryQuery, SearchProductsCategoryQueryVariables>;
+export const SearchRootCategoryProductsDocument = gql`
+    query SearchRootCategoryProducts($nameTemplate: String!, $languageCode: String!, $rootCategoryId: Int!, $offset: Int!, $limit: Int!) {
+  searchProducts(filter: {nameTemplate: $nameTemplate, languageCode: $languageCode, rootCategoryId: $rootCategoryId}, pagination: {offset: $offset, limit: $limit}) {
+    productsInfo {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchRootCategoryProductsQuery__
+ *
+ * To run a query within a React component, call `useSearchRootCategoryProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchRootCategoryProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchRootCategoryProductsQuery({
+ *   variables: {
+ *      nameTemplate: // value for 'nameTemplate'
+ *      languageCode: // value for 'languageCode'
+ *      rootCategoryId: // value for 'rootCategoryId'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSearchRootCategoryProductsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchRootCategoryProductsQuery, SearchRootCategoryProductsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchRootCategoryProductsQuery, SearchRootCategoryProductsQueryVariables>(SearchRootCategoryProductsDocument, baseOptions);
+      }
+export function useSearchRootCategoryProductsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchRootCategoryProductsQuery, SearchRootCategoryProductsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchRootCategoryProductsQuery, SearchRootCategoryProductsQueryVariables>(SearchRootCategoryProductsDocument, baseOptions);
+        }
+export type SearchRootCategoryProductsQueryHookResult = ReturnType<typeof useSearchRootCategoryProductsQuery>;
+export type SearchRootCategoryProductsLazyQueryHookResult = ReturnType<typeof useSearchRootCategoryProductsLazyQuery>;
+export type SearchRootCategoryProductsQueryResult = ApolloReactCommon.QueryResult<SearchRootCategoryProductsQuery, SearchRootCategoryProductsQueryVariables>;
+export const SearchSubCategoryProductsDocument = gql`
+    query SearchSubCategoryProducts($nameTemplate: String!, $languageCode: String!, $subCategoryId: Int!, $offset: Int!, $limit: Int!) {
+  searchProducts(filter: {nameTemplate: $nameTemplate, languageCode: $languageCode, subCategoryId: $subCategoryId}, pagination: {offset: $offset, limit: $limit}) {
+    productsInfo {
+      id
+      name
+    }
+  }
+}
+    `;
+
+/**
+ * __useSearchSubCategoryProductsQuery__
+ *
+ * To run a query within a React component, call `useSearchSubCategoryProductsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useSearchSubCategoryProductsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSearchSubCategoryProductsQuery({
+ *   variables: {
+ *      nameTemplate: // value for 'nameTemplate'
+ *      languageCode: // value for 'languageCode'
+ *      subCategoryId: // value for 'subCategoryId'
+ *      offset: // value for 'offset'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useSearchSubCategoryProductsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SearchSubCategoryProductsQuery, SearchSubCategoryProductsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SearchSubCategoryProductsQuery, SearchSubCategoryProductsQueryVariables>(SearchSubCategoryProductsDocument, baseOptions);
+      }
+export function useSearchSubCategoryProductsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SearchSubCategoryProductsQuery, SearchSubCategoryProductsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SearchSubCategoryProductsQuery, SearchSubCategoryProductsQueryVariables>(SearchSubCategoryProductsDocument, baseOptions);
+        }
+export type SearchSubCategoryProductsQueryHookResult = ReturnType<typeof useSearchSubCategoryProductsQuery>;
+export type SearchSubCategoryProductsLazyQueryHookResult = ReturnType<typeof useSearchSubCategoryProductsLazyQuery>;
+export type SearchSubCategoryProductsQueryResult = ApolloReactCommon.QueryResult<SearchSubCategoryProductsQuery, SearchSubCategoryProductsQueryVariables>;
 export const SearchSubsubCategoryProductsDocument = gql`
     query SearchSubsubCategoryProducts($nameTemplate: String!, $languageCode: String!, $categoryId: Int!, $offset: Int!, $limit: Int!) {
   searchProducts(filter: {nameTemplate: $nameTemplate, languageCode: $languageCode, categoryId: $categoryId}, pagination: {offset: $offset, limit: $limit}) {

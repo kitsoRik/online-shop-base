@@ -4,6 +4,8 @@ import { Category } from "../../../../../generated/graphql";
 import getCategoryType from "./utils/getCategoryType";
 import SubsubCategoryContent from "./SubsubCategoryContent";
 import { useTranslation } from "react-i18next";
+import SubCategoryContent from "./SubCategoryContent";
+import RootCategoryContent from "./RootCategoryContent";
 
 interface Props {
 	categories: Exclude<
@@ -41,8 +43,24 @@ const Content = ({ categories }: Props) => {
 				languageCode={i18n.language}
 			/>
 		);
+	if (categoryType === "sub")
+		return (
+			<SubCategoryContent
+				searchText={search_text}
+				subCategoryId={searchSelectedCategory}
+				languageCode={i18n.language}
+			/>
+		);
+	if (categoryType === "root")
+		return (
+			<RootCategoryContent
+				searchText={search_text}
+				rootCategoryId={searchSelectedCategory}
+				languageCode={i18n.language}
+			/>
+		);
 
-	return <>Content {categoryType}</>;
+	throw new Error("Reached non-reachable place");
 };
 
 export default Content;

@@ -2,19 +2,24 @@ import React from "react";
 import { Card } from "antd";
 import Meta from "antd/lib/card/Meta";
 
-const ProductCard = () => {
+interface Props {
+	title: string;
+	price: string;
+	photoUrl?: string;
+}
+
+const ProductCard = ({
+	title,
+	price,
+	photoUrl = "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
+}: Props) => {
 	return (
 		<Card
 			hoverable
 			style={{ width: 240 }}
-			cover={
-				<img
-					alt="example"
-					src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-				/>
-			}
+			cover={<img alt="Photo" src={photoUrl} />}
 		>
-			<Meta title="Europe Street beat" description="www.instagram.com" />
+			<Meta title={title} description={price} />
 		</Card>
 	);
 };

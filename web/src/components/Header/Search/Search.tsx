@@ -32,6 +32,7 @@ const Search = () => {
 	return (
 		<div className={classes.search}>
 			<OverModal
+				onClose={() => setActive(false)}
 				visible={active}
 				component={
 					<SearchD

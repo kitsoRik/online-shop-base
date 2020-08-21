@@ -4,7 +4,7 @@ import Meta from "antd/lib/card/Meta";
 
 interface Props {
 	title: string;
-	price: string;
+	price: number;
 	photoUrl?: string;
 }
 

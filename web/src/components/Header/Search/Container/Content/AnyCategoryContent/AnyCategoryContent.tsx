@@ -2,6 +2,7 @@ import React from "react";
 import { SearchSubsubCategoryProductsQuery } from "../../../../../../generated/graphql";
 import ProductsContainer from "../../../../../../shared/ProductsContainer";
 import ProductCard from "../../../../../../shared/ProductCard";
+import ProductCardWrapper from "../../../../../../wrappers/ProductCardWrapper";
 
 interface Props {
 	data?: SearchSubsubCategoryProductsQuery;
@@ -13,7 +14,13 @@ const AnyCategoryContent = ({ data, loading }: Props) => {
 	return (
 		<>
 			<ProductsContainer
-				cards={productsInfo?.map(p => <ProductCard title={p.name} price={3.00} />) ?? []}
+				cards={
+					productsInfo?.map(p => (
+						<ProductCardWrapper.Default>
+							<ProductCard title={p.name} price={3.0} />
+						</ProductCardWrapper.Default>
+					)) ?? []
+				}
 			/>
 		</>
 	);

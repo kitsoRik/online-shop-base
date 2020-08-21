@@ -146,87 +146,94 @@ export class ProductInfoService {
 
 	async searchProductsCategory(filter?: SearchProductsInput) {
 		const query = this.categoryRepository.createQueryBuilder();
+		query.where(qb => {
+			const subquery = this.productInfoRepository.createQueryBuilder(
+				"products_info"
+			);
 
-		const subquery = this.productInfoRepository.createQueryBuilder(
-			"products_info"
-		);
+			subquery.select("id");
 
-		subquery.select("id");
+			subquery.select("products.category_id");
 
-		subquery.select("products.category_id");
+			subquery.leftJoin(
+				ProductEntity,
+				"products",
+				"products.id = products_info.product_id"
+			);
 
-		subquery.leftJoin(
-			ProductEntity,
-			"products",
-			"products.id = products_info.product_id"
-		);
+			if (filter) {
+				if (filter.nameTemplate) {
+					subquery.andWhere("name LIKE :nameTemplate", {
+						nameTemplate: `%${filter.nameTemplate}%`
+					});
+				}
 
-		if (filter) {
-			if (filter.nameTemplate) {
-				subquery.andWhere("name LIKE :template", {
-					template: `%${filter.nameTemplate}%`
-				});
-			}
+				if (filter.languageCode !== undefined) {
+					subquery.andWhere(
+						"language_id IN (SELECT id FROM config_languages WHERE code = :languageCode)",
+						{
+							languageCode: filter.languageCode
+						}
+					);
+				}
 
-			if (filter.languageCode !== undefined) {
-				subquery.andWhere(
-					"language_id IN (SELECT id FROM config_languages WHERE code = :languageCode)",
-					{
-						languageCode: filter.languageCode
-					}
-				);
-			}
+				if (
+					filter.categoryId !== undefined &&
+					filter.categoryId !== null
+				) {
+					subquery.andWhere(
+						"product_id IN (SELECT id FROM products WHERE category_id = :categoryId)",
+						{
+							categoryId: filter.categoryId
+						}
+					);
+				}
 
-			if (filter.categoryId !== undefined && filter.categoryId !== null) {
-				subquery.andWhere(
-					"product_id IN (SELECT id FROM products WHERE category_id = :categoryId)",
-					{
-						categoryId: filter.categoryId
-					}
-				);
-			}
+				if (
+					filter.subCategoryId !== undefined &&
+					filter.subCategoryId !== null
+				) {
+					subquery.andWhere(
+						`product_id IN (SELECT id FROM products WHERE category_id  IN (
+								SELECT id from categories WHERE categories.parent_id = :subCategoryId
+							)
+						)`,
+						{
+							subCategoryId: filter.subCategoryId
+						}
+					);
+				}
 
-			if (
-				filter.subCategoryId !== undefined &&
-				filter.subCategoryId !== null
-			) {
-				subquery.andWhere(
-					`product_id IN (SELECT id FROM products WHERE category_id  IN (
-							SELECT id from categories WHERE categories.parent_id = :subCategoryId
-						)
-					)`,
-					{
-						subCategoryId: filter.subCategoryId
-					}
-				);
-			}
-
-			if (
-				filter.rootCategoryId !== undefined &&
-				filter.rootCategoryId !== null
-			) {
-				subquery.andWhere(
-					`product_id IN (
-						SELECT products.id FROM products
-							WHERE category_id IN (
-								SELECT id from categories c1 WHERE c1.parent_id IN (
-									SELECT id from categories c2 WHERE c2.parent_id = :rootCategoryId
+				if (
+					filter.rootCategoryId !== undefined &&
+					filter.rootCategoryId !== null
+				) {
+					subquery.andWhere(
+						`product_id IN (
+							SELECT products.id FROM products
+								WHERE category_id IN (
+									SELECT id from categories c1 WHERE c1.parent_id IN (
+										SELECT id from categories c2 WHERE c2.parent_id = :rootCategoryId
+									)
 								)
 							)
-						)
-					`,
-					{
-						rootCategoryId: filter.rootCategoryId
-					}
-				);
+						`,
+						{
+							rootCategoryId: filter.rootCategoryId
+						}
+					);
+				}
 			}
-		}
 
-		subquery.groupBy("products.category_id");
-		query.where(`id IN (${subquery.getQuery()})`);
+			subquery.groupBy("products.category_id");
 
-		query.setParameter("languageCode", filter.languageCode);
-		query.setParameter("template", `%${filter.nameTemplate}%`);
+			return `id IN (${subquery.getQuery()})`;
+		});
+
+		query.setParameters({
+			...filter,
+			nameTemplate: `%${filter.nameTemplate}%`
+		});
 
 		return await query.getMany();
 	}
@@ -235,7 +242,6 @@ export class ProductInfoService {
 		const query = this.productInfoFieldRepository.createQueryBuilder();
 
 		query.where("product_info_id = :id", { id });
-		console.log(filter);
 		if (filter) {
 			if (filter.id !== undefined) {
 				query.where("id = :id", { id: filter.id });

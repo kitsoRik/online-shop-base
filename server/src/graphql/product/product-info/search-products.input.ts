@@ -10,4 +10,10 @@ export class SearchProductsInput {
 
 	@Field(type => Int, { nullable: true })
 	categoryId: number;
+
+	@Field(type => Int, { nullable: true })
+	subCategoryId: number;
+
+	@Field(type => Int, { nullable: true })
+	rootCategoryId: number;
 }

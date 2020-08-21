@@ -105,6 +105,34 @@ export class ProductInfoService {
 					}
 				);
 			}
+
+			if (filter.subCategoryId !== undefined) {
+				query.andWhere(
+					`product_id IN (SELECT id FROM products WHERE category_id  IN (
+						SELECT id from categories WHERE categories.parent_id = :subCategoryId
+					))`,
+					{
+						subCategoryId: filter.subCategoryId
+					}
+				);
+			}
+
+			if (filter.rootCategoryId !== undefined) {
+				query.andWhere(
+					`product_id IN (
+						SELECT products.id FROM products
+							WHERE category_id IN (
+								SELECT id from categories c1 WHERE c1.parent_id IN (
+									SELECT id from categories c2 WHERE c2.parent_id = :rootCategoryId
+								)
+							)
+						)
+					`,
+					{
+						rootCategoryId: filter.rootCategoryId
+					}
+				);
+			}
 		}
 
 		if (pagination) {
@@ -149,11 +177,46 @@ export class ProductInfoService {
 				);
 			}
 
-			if (filter.categoryId) {
+			if (filter.categoryId !== undefined && filter.categoryId !== null) {
 				subquery.andWhere(
 					"product_id IN (SELECT id FROM products WHERE category_id = :categoryId)",
 					{
 						categoryId: filter.categoryId
+					}
+				);
+			}
+
+			if (
+				filter.subCategoryId !== undefined &&
+				filter.subCategoryId !== null
+			) {
+				subquery.andWhere(
+					`product_id IN (SELECT id FROM products WHERE category_id  IN (
+							SELECT id from categories WHERE categories.parent_id = :subCategoryId
+						)
+					)`,
+					{
+						subCategoryId: filter.subCategoryId
+					}
+				);
+			}
+
+			if (
+				filter.rootCategoryId !== undefined &&
+				filter.rootCategoryId !== null
+			) {
+				subquery.andWhere(
+					`product_id IN (
+						SELECT products.id FROM products
+							WHERE category_id IN (
+								SELECT id from categories c1 WHERE c1.parent_id IN (
+									SELECT id from categories c2 WHERE c2.parent_id = :rootCategoryId
+								)
+							)
+						)
+					`,
+					{
+						rootCategoryId: filter.rootCategoryId
 					}
 				);
 			}
@@ -163,6 +226,8 @@ export class ProductInfoService {
 		query.where(`id IN (${subquery.getQuery()})`);
 
 		query.setParameter("languageCode", filter.languageCode);
+		query.setParameter("template", `%${filter.nameTemplate}%`);
+
 		return await query.getMany();
 	}
 

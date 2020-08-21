@@ -6,9 +6,16 @@ interface Props {
 
 	visible?: boolean;
 	component: JSX.Element;
+
+	onClose: () => void;
 }
 
-const OverModal = ({ visible = false, component, children }: Props) => {
+const OverModal = ({
+	visible = false,
+	component,
+	children,
+	onClose
+}: Props) => {
 	const newComponent = React.cloneElement(component, {
 		style: { zIndex: 10001 }
 	});
@@ -16,7 +23,7 @@ const OverModal = ({ visible = false, component, children }: Props) => {
 	return (
 		<>
 			{newComponent}
-			{visible && <Over>{children}</Over>}
+			{visible && <Over onClose={onClose}>{children}</Over>}
 		</>
 	);
 };

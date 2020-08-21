@@ -13,7 +13,7 @@ const AnyCategoryContent = ({ data, loading }: Props) => {
 	return (
 		<>
 			<ProductsContainer
-				cards={productsInfo?.map(p => <ProductCard />) ?? []}
+				cards={productsInfo?.map(p => <ProductCard title={p.name} price={3.00} />) ?? []}
 			/>
 		</>
 	);

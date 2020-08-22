@@ -6,12 +6,15 @@ import { GraphQLError } from "graphql";
 
 import * as uuid from "uuid";
 import { CategoryFilter } from "./category.filter";
+import { FilterEntity } from "./filter/filter.entity";
 
 @Injectable()
 export class CategoryService {
 	constructor(
 		@InjectRepository(CategoryEntity)
-		private categoryRepository: Repository<CategoryEntity>
+		private categoryRepository: Repository<CategoryEntity>,
+		@InjectRepository(CategoryEntity)
+		private filterService: Repository<FilterEntity>
 	) {}
 
 	async createCategory(name: string, level: number, parentId?: number) {
@@ -71,6 +74,10 @@ export class CategoryService {
 
 		const categories = await query.getMany();
 		return categories;
+	}
+
+	async getFilter(categoryId: number) {
+		return await this.filterService.findOne({ where: { categoryId } });
 	}
 
 	async findByNameTemplate(template: string) {

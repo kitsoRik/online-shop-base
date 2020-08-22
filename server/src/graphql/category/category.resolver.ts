@@ -18,6 +18,7 @@ import { CategoryInfoType } from "./product-info/category-info.type";
 import { CategoryInfoService } from "./product-info/category-info.service";
 import { CategoryInfoInput } from "./product-info/category-info.input";
 import { CategoryFieldService } from "./category-field/category-field.service";
+import { FilterType } from "./filter/filter.type";
 
 @Resolver(of => CategoryType)
 export class CategoryResolver {
@@ -94,5 +95,10 @@ export class CategoryResolver {
 	) {
 		if (!filter) return this.categoryInfoService.getInfoByCategoryId(id);
 		return this.categoryInfoService.getInfo(id, filter);
+	}
+
+	@ResolveField(type => FilterType)
+	filter(@Parent() parent: CategoryEntity) {
+		return this.categoryService.getFilter(parent.id);
 	}
 }

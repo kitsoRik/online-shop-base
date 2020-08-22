@@ -6,14 +6,18 @@ import { CategoryResolver } from "./category.resolver";
 import { CategoryInfoModule } from "./product-info/category-info.module";
 import { CategoryFieldModule } from "./category-field/category-field.module";
 import { CategoryFieldEntity } from "./category-field/category-field.entity";
+import { FilterModule } from "./filter/filter.module";
+import { CategoryType } from "./category.type";
+import { FilterEntity } from "./filter/filter.entity";
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([CategoryEntity]),
+		TypeOrmModule.forFeature([CategoryEntity, FilterEntity]),
 		CategoryFieldModule,
-		CategoryInfoModule
+		CategoryInfoModule,
+		FilterModule
 	],
-	exports: [CategoryService],
-	providers: [CategoryResolver, CategoryService]
+	exports: [CategoryService, CategoryType],
+	providers: [CategoryResolver, CategoryService, CategoryType]
 })
 export class CategoryModule {}

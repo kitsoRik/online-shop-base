@@ -8,6 +8,8 @@ const Search = () => {
 		hideIfInitial: true
 	});
 
+	console.log(q);
+
 	return <>{q}</>;
 };
 

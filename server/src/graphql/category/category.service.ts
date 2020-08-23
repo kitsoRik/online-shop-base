@@ -13,8 +13,8 @@ export class CategoryService {
 	constructor(
 		@InjectRepository(CategoryEntity)
 		private categoryRepository: Repository<CategoryEntity>,
-		@InjectRepository(CategoryEntity)
-		private filterService: Repository<FilterEntity>
+		@InjectRepository(FilterEntity)
+		private filterRepository: Repository<FilterEntity>
 	) {}
 
 	async createCategory(name: string, level: number, parentId?: number) {
@@ -77,7 +77,7 @@ export class CategoryService {
 	}
 
 	async getFilter(categoryId: number) {
-		return await this.filterService.findOne({ where: { categoryId } });
+		return await this.filterRepository.findOne({ where: { categoryId } });
 	}
 
 	async findByNameTemplate(template: string) {

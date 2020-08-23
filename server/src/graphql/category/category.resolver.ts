@@ -25,7 +25,7 @@ export class CategoryResolver {
 	constructor(
 		private categoryService: CategoryService,
 		private categoryInfoService: CategoryInfoService,
-		private categoryFieldService: CategoryFieldService,
+		private categoryFieldService: CategoryFieldService
 	) {}
 
 	@Mutation(type => CategoryType)
@@ -97,7 +97,7 @@ export class CategoryResolver {
 		return this.categoryInfoService.getInfo(id, filter);
 	}
 
-	@ResolveField(type => FilterType)
+	@ResolveField(type => FilterType, { nullable: true })
 	filter(@Parent() parent: CategoryEntity) {
 		return this.categoryService.getFilter(parent.id);
 	}

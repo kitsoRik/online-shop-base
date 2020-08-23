@@ -1,4 +1,7 @@
-import { ObjectType, Field } from "@nestjs/graphql";
+import { ObjectType, Field, Int } from "@nestjs/graphql";
 
 @ObjectType("Filter")
-export class FilterType {}
+export class FilterType {
+	@Field(type => Int)
+	id: number;
+}

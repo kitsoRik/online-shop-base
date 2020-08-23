@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity()
+@Entity("filters")
 export class FilterEntity {
 	@PrimaryGeneratedColumn({ type: "int" })
 	id: number;

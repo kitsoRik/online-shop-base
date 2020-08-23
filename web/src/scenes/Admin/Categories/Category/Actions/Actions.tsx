@@ -7,6 +7,7 @@ import ChildrenContent from "./ChildrenContent";
 import ParentContent from "./ParentContent";
 import FieldsContent from "./FieldsContent";
 import InfoContent from "./InfoContent/InfoContent";
+import FilterContent from "./FilterContent";
 
 interface Props {
 	category: {
@@ -21,7 +22,7 @@ const Actions = ({ category }: Props) => {
 	const [tab, setTab] = useLocationField("tab", {
 		type: "string",
 		initial: "editing",
-		enum: ["editing", "info", "subcategories", "parent", "fields"]
+		enum: ["editing", "info", "subcategories", "parent", "fields", "filter"]
 	});
 
 	return (
@@ -63,6 +64,13 @@ const Actions = ({ category }: Props) => {
 				disabled={category?.level !== 2}
 			>
 				<FieldsContent load={tab === "fields"} />
+			</Tabs.TabPane>
+			<Tabs.TabPane
+				key="filter"
+				tab="Filter"
+				disabled={category?.level !== 2}
+			>
+				<FilterContent />
 			</Tabs.TabPane>
 		</Tabs>
 	);

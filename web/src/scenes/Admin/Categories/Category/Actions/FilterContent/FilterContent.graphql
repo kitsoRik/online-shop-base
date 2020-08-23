@@ -1,0 +1,8 @@
+query GetCategoryFilter($categoryId: Int!) {
+	categories(filter: { id: $categoryId }) {
+		id
+		filter {
+			id
+		}
+	}
+}

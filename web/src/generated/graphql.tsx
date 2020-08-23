@@ -70,6 +70,7 @@ export type Category = {
   children?: Maybe<Array<Category>>;
   fields?: Maybe<Array<CategoryField>>;
   info: Array<CategoryInfo>;
+  filter?: Maybe<Filter>;
 };
 
 
@@ -85,6 +86,18 @@ export type CategoryInfoArgs = {
 export type CategoryInfoInput = {
   id?: Maybe<Scalars['Int']>;
   languageCode?: Maybe<Scalars['String']>;
+};
+
+export type Filter = {
+  __typename?: 'Filter';
+  id: Scalars['Int'];
+  category: Category;
+  fields: Array<FilterField>;
+};
+
+export type FilterField = {
+  __typename?: 'FilterField';
+  id: Scalars['Int'];
 };
 
 export type ProductInfoField = {
@@ -227,6 +240,8 @@ export type Mutation = {
   addFieldToCategory: Category;
   changeFieldInCategory: CategoryField;
   removeFieldFromCategory: Category;
+  initializeCategoryFilter: Category;
+  addFilterGroup: Filter;
   createProduct: Product;
   changeProduct: Product;
   changeCategoryInProduct: Product;
@@ -315,6 +330,17 @@ export type MutationChangeFieldInCategoryArgs = {
 
 export type MutationRemoveFieldFromCategoryArgs = {
   fieldId: Scalars['Int'];
+};
+
+
+export type MutationInitializeCategoryFilterArgs = {
+  categoryId: Scalars['Int'];
+};
+
+
+export type MutationAddFilterGroupArgs = {
+  name: Scalars['String'];
+  filterId: Scalars['Int'];
 };
 
 
@@ -617,6 +643,46 @@ export type ChangeFieldInCategoryMutation = (
   & { changeFieldInCategory: (
     { __typename?: 'CategoryField' }
     & Pick<CategoryField, 'id' | 'name'>
+  ) }
+);
+
+export type GetCategoryFilterQueryVariables = Exact<{
+  categoryId: Scalars['Int'];
+}>;
+
+
+export type GetCategoryFilterQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { filter?: Maybe<(
+      { __typename?: 'Filter' }
+      & Pick<Filter, 'id'>
+    )> }
+  )>> }
+);
+
+export type InitializeCategoryFilterMutationVariables = Exact<{
+  categoryId: Scalars['Int'];
+}>;
+
+
+export type InitializeCategoryFilterMutation = (
+  { __typename?: 'Mutation' }
+  & { initializeCategoryFilter: (
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { filter?: Maybe<(
+      { __typename?: 'Filter' }
+      & { category: (
+        { __typename?: 'Category' }
+        & Pick<Category, 'id'>
+      ), fields: Array<(
+        { __typename?: 'FilterField' }
+        & Pick<FilterField, 'id'>
+      )> }
+    )> }
   ) }
 );
 
@@ -1830,6 +1896,82 @@ export function useChangeFieldInCategoryMutation(baseOptions?: ApolloReactHooks.
 export type ChangeFieldInCategoryMutationHookResult = ReturnType<typeof useChangeFieldInCategoryMutation>;
 export type ChangeFieldInCategoryMutationResult = ApolloReactCommon.MutationResult<ChangeFieldInCategoryMutation>;
 export type ChangeFieldInCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFieldInCategoryMutation, ChangeFieldInCategoryMutationVariables>;
+export const GetCategoryFilterDocument = gql`
+    query GetCategoryFilter($categoryId: Int!) {
+  categories(filter: {id: $categoryId}) {
+    id
+    filter {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryFilterQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryFilterQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryFilterQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryFilterQuery({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useGetCategoryFilterQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryFilterQuery, GetCategoryFilterQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryFilterQuery, GetCategoryFilterQueryVariables>(GetCategoryFilterDocument, baseOptions);
+      }
+export function useGetCategoryFilterLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryFilterQuery, GetCategoryFilterQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryFilterQuery, GetCategoryFilterQueryVariables>(GetCategoryFilterDocument, baseOptions);
+        }
+export type GetCategoryFilterQueryHookResult = ReturnType<typeof useGetCategoryFilterQuery>;
+export type GetCategoryFilterLazyQueryHookResult = ReturnType<typeof useGetCategoryFilterLazyQuery>;
+export type GetCategoryFilterQueryResult = ApolloReactCommon.QueryResult<GetCategoryFilterQuery, GetCategoryFilterQueryVariables>;
+export const InitializeCategoryFilterDocument = gql`
+    mutation InitializeCategoryFilter($categoryId: Int!) {
+  initializeCategoryFilter(categoryId: $categoryId) {
+    id
+    filter {
+      category {
+        id
+      }
+      fields {
+        id
+      }
+    }
+  }
+}
+    `;
+export type InitializeCategoryFilterMutationFn = ApolloReactCommon.MutationFunction<InitializeCategoryFilterMutation, InitializeCategoryFilterMutationVariables>;
+
+/**
+ * __useInitializeCategoryFilterMutation__
+ *
+ * To run a mutation, you first call `useInitializeCategoryFilterMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitializeCategoryFilterMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [initializeCategoryFilterMutation, { data, loading, error }] = useInitializeCategoryFilterMutation({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useInitializeCategoryFilterMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<InitializeCategoryFilterMutation, InitializeCategoryFilterMutationVariables>) {
+        return ApolloReactHooks.useMutation<InitializeCategoryFilterMutation, InitializeCategoryFilterMutationVariables>(InitializeCategoryFilterDocument, baseOptions);
+      }
+export type InitializeCategoryFilterMutationHookResult = ReturnType<typeof useInitializeCategoryFilterMutation>;
+export type InitializeCategoryFilterMutationResult = ApolloReactCommon.MutationResult<InitializeCategoryFilterMutation>;
+export type InitializeCategoryFilterMutationOptions = ApolloReactCommon.BaseMutationOptions<InitializeCategoryFilterMutation, InitializeCategoryFilterMutationVariables>;
 export const AddCategoryInfoToCategoryDocument = gql`
     mutation AddCategoryInfoToCategory($id: Int!, $languageId: Int!) {
   addCategoryInfoToCategory(categoryId: $id, language: $languageId) {

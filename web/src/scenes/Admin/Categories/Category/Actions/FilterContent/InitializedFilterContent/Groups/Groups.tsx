@@ -14,7 +14,6 @@ import {
 } from "react-beautiful-dnd";
 import GroupItem from "./GroupItem";
 import FieldItem from "./FieldItem";
-import { getOperationName } from "@apollo/client/utilities";
 
 interface Props {
 	filterId: number;
@@ -23,6 +22,8 @@ interface Props {
 }
 
 const Groups = ({ filterId, onAddNewGroup }: Props) => {
+	const [draggable, setDraggable] = useState<"groups" | "items" | null>(null);
+
 	const client = useApolloClient();
 	const filter: FilterWithGroupsFragment = client.readFragment({
 		fragment: FilterWithGroupsFragmentDoc,
@@ -38,6 +39,8 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 	] = useChangeFilterGroupItemLocationMutation();
 
 	async function onDragEnd(result: DropResult) {
+		setDraggable(null);
+		setIsDragging(false);
 		const { source, destination } = result;
 
 		if (!destination) {
@@ -113,6 +116,185 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 		}
 	}
 
+	const ddGroupsContext = (
+		<DragDropContext
+			onDragEnd={result => {
+				console.log(result);
+			}}
+		>
+			{groups
+				.slice()
+				.sort((a, b) => a.index - b.index)
+				.map((group, ind) => (
+					<Droppable key={ind} droppableId={group.id}>
+						{(provided, snapshot) => (
+							<div
+								ref={provided.innerRef}
+								style={getListStyle(snapshot.isDraggingOver)}
+								{...provided.droppableProps}
+							>
+								{
+									<Draggable
+										key={group.id}
+										draggableId={group.id.toString()}
+										index={ind}
+									>
+										{(provided, snapshot) => (
+											<GroupItem.Draggable
+												filterGroup={group}
+												{...{
+													withDd: true,
+													provided,
+													ind,
+													snapshot,
+													getItemStyle,
+													getListStyle,
+													onEnterToDrop: () => {
+														if (!isDragging)
+															setDraggable(
+																"groups"
+															);
+													}
+												}}
+											>
+												{group.fields
+													.slice()
+													.sort(
+														(a, b) =>
+															a.index - b.index
+													)
+													.map((item, index) => (
+														<>
+															<FieldItem
+																{...{
+																	snapshot,
+																	provided,
+																	index,
+																	item,
+																	getItemStyle,
+																	ind,
+																	onEnterToDrop: () => {
+																		if (
+																			!isDragging
+																		)
+																			setDraggable(
+																				"items"
+																			);
+																	}
+																}}
+															/>
+														</>
+													))}
+											</GroupItem.Draggable>
+										)}
+									</Draggable>
+								}
+							</div>
+						)}
+					</Droppable>
+				))}
+		</DragDropContext>
+	);
+
+	const [isDragging, setIsDragging] = useState(false);
+	const ddItemsContext = (
+		<DragDropContext
+			onDragEnd={onDragEnd}
+			onDragStart={() => setIsDragging(true)}
+		>
+			{groups
+				.slice()
+				.sort((a, b) => a.index - b.index)
+				.map((group, ind) => (
+					<Droppable key={ind} droppableId={group.id}>
+						{(provided, snapshot) => (
+							<GroupItem.Droppable
+								filterGroup={group}
+								{...{
+									provided,
+									ind,
+									snapshot,
+									getItemStyle,
+									getListStyle,
+									onEnterToDrop: () => {
+										if (!isDragging) setDraggable("groups");
+									}
+								}}
+							>
+								{group.fields
+									.slice()
+									.sort((a, b) => a.index - b.index)
+									.map((item, index) => (
+										<Draggable
+											key={item.id}
+											draggableId={item.id.toString()}
+											index={index}
+										>
+											{(provided, snapshot) => (
+												<FieldItem.Draggable
+													{...{
+														snapshot,
+														provided,
+														index,
+														item,
+														getItemStyle,
+														ind
+													}}
+												/>
+											)}
+										</Draggable>
+									))}
+							</GroupItem.Droppable>
+						)}
+					</Droppable>
+				))}
+		</DragDropContext>
+	);
+
+	const context = (
+		<>
+			{groups
+				.slice()
+				.sort((a, b) => a.index - b.index)
+				.map((group, ind) => (
+					<>
+						<GroupItem
+							filterGroup={group}
+							{...{
+								withDd: false,
+								ind,
+								getItemStyle,
+								getListStyle,
+								onEnterToDrop: () => {
+									if (!isDragging) setDraggable("groups");
+								}
+							}}
+						>
+							{group.fields
+								.slice()
+								.sort((a, b) => a.index - b.index)
+								.map((item, index) => (
+									<>
+										<FieldItem
+											{...{
+												withDd: false,
+												index,
+												item,
+												getItemStyle,
+												ind,
+												onEnterToDrop: () => {
+													if (!isDragging)
+														setDraggable("items");
+												}
+											}}
+										/>
+									</>
+								))}
+						</GroupItem>
+					</>
+				))}
+		</>
+	);
 
 	return (
 		<>
@@ -121,57 +303,10 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 					Add new group
 				</button>
 
-				<div style={{ display: "flex" }}>
-					<DragDropContext onDragEnd={onDragEnd}>
-						{groups
-							.slice()
-							.sort((a, b) => a.index - b.index)
-							.map((group, ind) => (
-								<Droppable key={ind} droppableId={group.id}>
-									{(provided, snapshot) => (
-										<GroupItem
-											filterGroup={group}
-											{...{
-												provided,
-												ind,
-												snapshot,
-												getItemStyle,
-												getListStyle
-											}}
-										>
-											{group.fields
-												.slice()
-												.sort(
-													(a, b) => a.index - b.index
-												)
-												.map((item, index) => (
-													<Draggable
-														key={item.id}
-														draggableId={item.id.toString()}
-														index={index}
-													>
-														{(
-															provided,
-															snapshot
-														) => (
-															<FieldItem
-																{...{
-																	snapshot,
-																	provided,
-																	index,
-																	item,
-																	getItemStyle,
-																	ind
-																}}
-															/>
-														)}
-													</Draggable>
-												))}
-										</GroupItem>
-									)}
-								</Droppable>
-							))}
-					</DragDropContext>
+				<div style={{ display: "flex", flexDirection: "column" }}>
+					{draggable === "groups" && ddGroupsContext}
+					{draggable === "items" && ddItemsContext}
+					{draggable === null && context}
 				</div>
 			</div>
 		</>

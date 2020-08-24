@@ -1,12 +1,10 @@
 import React from "react";
+import { Button } from "antd";
 import {
 	useAddFieldToFilterGroupMutation,
 	GetCategoryFilterDocument
-} from "../../../../../../../../../generated/graphql";
-import { Button } from "antd";
+} from "../../../../../../../../../../generated/graphql";
 import { getOperationName } from "@apollo/client/utilities";
-import Droppable from "./Droppable";
-import Draggable from "./Draggable";
 
 interface Props {
 	filterGroup: { id: string };
@@ -15,13 +13,14 @@ interface Props {
 	snapshot?: any;
 
 	children: any;
-
 	onEnterToDrop: () => void;
 }
 
-const GroupItem = ({
-	filterGroup,
+const Droppable = ({
+	snapshot,
+	provided,
 	getListStyle,
+	filterGroup,
 	children,
 	onEnterToDrop
 }: Props) => {
@@ -43,7 +42,9 @@ const GroupItem = ({
 
 	return (
 		<div
-			style={getListStyle(false)}
+			ref={provided.innerRef}
+			style={getListStyle(snapshot.isDraggingOver)}
+			{...provided.droppableProps}
 			onMouseMoveCapture={e => {
 				if (e.target === e.currentTarget) {
 					onEnterToDrop();
@@ -54,11 +55,9 @@ const GroupItem = ({
 				<Button onClick={onAddField}>Add new field</Button>
 			</div>
 			{children}
+			{provided.placeholder}
 		</div>
 	);
 };
 
-GroupItem.Droppable = Droppable;
-GroupItem.Draggable = Draggable;
-
-export default GroupItem;
+export default Droppable;

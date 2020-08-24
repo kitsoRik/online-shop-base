@@ -1,32 +1,23 @@
 import React from "react";
 import { FilterField } from "../../../../../../../../../generated/graphql";
+import Draggable from "./Draggable";
 
 interface Props {
 	ind: any;
-	provided: any;
 	getItemStyle: any;
-	snapshot: any;
 	item: Exclude<{ id: string; name: string }, FilterField>;
 	index: any;
+
+	onEnterToDrop: () => void;
 }
 
-const FieldItem = ({
-	ind,
-	item,
-	getItemStyle,
-	snapshot,
-	provided,
-	index
-}: Props) => {
+const FieldItem = ({ item, getItemStyle, onEnterToDrop }: Props) => {
 	return (
 		<div
-			ref={provided.innerRef}
-			{...provided.draggableProps}
-			{...provided.dragHandleProps}
-			style={getItemStyle(
-				snapshot.isDragging,
-				provided.draggableProps.style
-			)}
+			style={getItemStyle(false, false)}
+			onMouseMoveCapture={() => {
+				onEnterToDrop();
+			}}
 		>
 			<div
 				style={{
@@ -39,5 +30,7 @@ const FieldItem = ({
 		</div>
 	);
 };
+
+FieldItem.Draggable = Draggable;
 
 export default FieldItem;

@@ -3,6 +3,16 @@ query GetCategoryFilter($categoryId: Int!) {
 		id
 		filter {
 			id
+			groups {
+				id
+				name
+				index
+				fields {
+					id
+					name
+					index
+				}
+			}
 		}
 	}
 }

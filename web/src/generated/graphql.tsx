@@ -92,12 +92,23 @@ export type Filter = {
   __typename?: 'Filter';
   id: Scalars['Int'];
   category: Category;
+  groups: Array<FilterGroup>;
+};
+
+export type FilterGroup = {
+  __typename?: 'FilterGroup';
+  id: Scalars['String'];
+  name: Scalars['String'];
+  index: Scalars['Int'];
+  filter: Filter;
   fields: Array<FilterField>;
 };
 
 export type FilterField = {
   __typename?: 'FilterField';
-  id: Scalars['Int'];
+  id: Scalars['String'];
+  name: Scalars['String'];
+  index: Scalars['Int'];
 };
 
 export type ProductInfoField = {
@@ -241,7 +252,9 @@ export type Mutation = {
   changeFieldInCategory: CategoryField;
   removeFieldFromCategory: Category;
   initializeCategoryFilter: Category;
+  addFieldToFilterGroup: FilterField;
   addFilterGroup: Filter;
+  changeFilterGroup: Filter;
   createProduct: Product;
   changeProduct: Product;
   changeCategoryInProduct: Product;
@@ -338,9 +351,21 @@ export type MutationInitializeCategoryFilterArgs = {
 };
 
 
+export type MutationAddFieldToFilterGroupArgs = {
+  name: Scalars['String'];
+  filterGroupId: Scalars['String'];
+};
+
+
 export type MutationAddFilterGroupArgs = {
   name: Scalars['String'];
   filterId: Scalars['Int'];
+};
+
+
+export type MutationChangeFilterGroupArgs = {
+  change: FilterGroupChange;
+  filterGroupId: Scalars['String'];
 };
 
 
@@ -409,6 +434,13 @@ export type ChangeCategoryInfoInput = {
 export type CategoryInfoFieldChangeInput = {
   name: Scalars['String'];
   value: Scalars['String'];
+};
+
+export type FilterGroupChange = {
+  orderedItemsIds?: Maybe<Array<Scalars['String']>>;
+  deleteIndex?: Maybe<Scalars['Int']>;
+  newGroupId?: Maybe<Scalars['String']>;
+  newGroupIndex?: Maybe<Scalars['Int']>;
 };
 
 export type ChangeProductInfoInput = {
@@ -659,8 +691,133 @@ export type GetCategoryFilterQuery = (
     & { filter?: Maybe<(
       { __typename?: 'Filter' }
       & Pick<Filter, 'id'>
+      & { groups: Array<(
+        { __typename?: 'FilterGroup' }
+        & Pick<FilterGroup, 'id' | 'name' | 'index'>
+        & { fields: Array<(
+          { __typename?: 'FilterField' }
+          & Pick<FilterField, 'id' | 'name' | 'index'>
+        )> }
+      )> }
     )> }
   )>> }
+);
+
+export type AddCategoryFilterGroupMutationVariables = Exact<{
+  filterId: Scalars['Int'];
+  name: Scalars['String'];
+}>;
+
+
+export type AddCategoryFilterGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { addFilterGroup: (
+    { __typename?: 'Filter' }
+    & Pick<Filter, 'id'>
+    & { groups: Array<(
+      { __typename?: 'FilterGroup' }
+      & Pick<FilterGroup, 'id' | 'name' | 'index'>
+      & { fields: Array<(
+        { __typename?: 'FilterField' }
+        & Pick<FilterField, 'id'>
+      )> }
+    )> }
+  ) }
+);
+
+export type AddFieldToFilterGroupMutationVariables = Exact<{
+  filterGroupId: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type AddFieldToFilterGroupMutation = (
+  { __typename?: 'Mutation' }
+  & { addFieldToFilterGroup: (
+    { __typename?: 'FilterField' }
+    & Pick<FilterField, 'id' | 'name'>
+  ) }
+);
+
+export type FilterWithGroupsFragment = (
+  { __typename?: 'Filter' }
+  & Pick<Filter, 'id'>
+  & { groups: Array<(
+    { __typename?: 'FilterGroup' }
+    & Pick<FilterGroup, 'id' | 'name' | 'index'>
+    & { fields: Array<(
+      { __typename?: 'FilterField' }
+      & Pick<FilterField, 'id' | 'name' | 'index'>
+    )> }
+  )> }
+);
+
+export type ChangeFilterGroupsOrderMutationVariables = Exact<{
+  filterGroupId: Scalars['String'];
+  orderedItemsIds: Array<Scalars['String']>;
+}>;
+
+
+export type ChangeFilterGroupsOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFilterGroup: (
+    { __typename?: 'Filter' }
+    & Pick<Filter, 'id'>
+    & { groups: Array<(
+      { __typename?: 'FilterGroup' }
+      & Pick<FilterGroup, 'id' | 'index'>
+      & { fields: Array<(
+        { __typename?: 'FilterField' }
+        & Pick<FilterField, 'id' | 'index'>
+      )> }
+    )> }
+  ) }
+);
+
+export type ChangeFilterGroupItemsOrderMutationVariables = Exact<{
+  filterGroupId: Scalars['String'];
+  orderedItemsIds: Array<Scalars['String']>;
+}>;
+
+
+export type ChangeFilterGroupItemsOrderMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFilterGroup: (
+    { __typename?: 'Filter' }
+    & Pick<Filter, 'id'>
+    & { groups: Array<(
+      { __typename?: 'FilterGroup' }
+      & Pick<FilterGroup, 'id' | 'index'>
+      & { fields: Array<(
+        { __typename?: 'FilterField' }
+        & Pick<FilterField, 'id' | 'index'>
+      )> }
+    )> }
+  ) }
+);
+
+export type ChangeFilterGroupItemLocationMutationVariables = Exact<{
+  filterGroupId: Scalars['String'];
+  deleteIndex: Scalars['Int'];
+  newGroupId: Scalars['String'];
+  newGroupIndex: Scalars['Int'];
+}>;
+
+
+export type ChangeFilterGroupItemLocationMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFilterGroup: (
+    { __typename?: 'Filter' }
+    & Pick<Filter, 'id'>
+    & { groups: Array<(
+      { __typename?: 'FilterGroup' }
+      & Pick<FilterGroup, 'id' | 'index'>
+      & { fields: Array<(
+        { __typename?: 'FilterField' }
+        & Pick<FilterField, 'id' | 'index'>
+      )> }
+    )> }
+  ) }
 );
 
 export type InitializeCategoryFilterMutationVariables = Exact<{
@@ -678,10 +835,7 @@ export type InitializeCategoryFilterMutation = (
       & { category: (
         { __typename?: 'Category' }
         & Pick<Category, 'id'>
-      ), fields: Array<(
-        { __typename?: 'FilterField' }
-        & Pick<FilterField, 'id'>
-      )> }
+      ) }
     )> }
   ) }
 );
@@ -1402,7 +1556,21 @@ export type RegisterMutation = (
   ) }
 );
 
-
+export const FilterWithGroupsFragmentDoc = gql`
+    fragment FilterWithGroups on Filter {
+  id
+  groups {
+    id
+    name
+    index
+    fields {
+      id
+      name
+      index
+    }
+  }
+}
+    `;
 export const GetApplicationLanguagesDocument = gql`
     query GetApplicationLanguages {
   languages {
@@ -1902,6 +2070,16 @@ export const GetCategoryFilterDocument = gql`
     id
     filter {
       id
+      groups {
+        id
+        name
+        index
+        fields {
+          id
+          name
+          index
+        }
+      }
     }
   }
 }
@@ -1932,15 +2110,212 @@ export function useGetCategoryFilterLazyQuery(baseOptions?: ApolloReactHooks.Laz
 export type GetCategoryFilterQueryHookResult = ReturnType<typeof useGetCategoryFilterQuery>;
 export type GetCategoryFilterLazyQueryHookResult = ReturnType<typeof useGetCategoryFilterLazyQuery>;
 export type GetCategoryFilterQueryResult = ApolloReactCommon.QueryResult<GetCategoryFilterQuery, GetCategoryFilterQueryVariables>;
+export const AddCategoryFilterGroupDocument = gql`
+    mutation AddCategoryFilterGroup($filterId: Int!, $name: String!) {
+  addFilterGroup(filterId: $filterId, name: $name) {
+    id
+    groups {
+      id
+      name
+      index
+      fields {
+        id
+      }
+    }
+  }
+}
+    `;
+export type AddCategoryFilterGroupMutationFn = ApolloReactCommon.MutationFunction<AddCategoryFilterGroupMutation, AddCategoryFilterGroupMutationVariables>;
+
+/**
+ * __useAddCategoryFilterGroupMutation__
+ *
+ * To run a mutation, you first call `useAddCategoryFilterGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCategoryFilterGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCategoryFilterGroupMutation, { data, loading, error }] = useAddCategoryFilterGroupMutation({
+ *   variables: {
+ *      filterId: // value for 'filterId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useAddCategoryFilterGroupMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddCategoryFilterGroupMutation, AddCategoryFilterGroupMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddCategoryFilterGroupMutation, AddCategoryFilterGroupMutationVariables>(AddCategoryFilterGroupDocument, baseOptions);
+      }
+export type AddCategoryFilterGroupMutationHookResult = ReturnType<typeof useAddCategoryFilterGroupMutation>;
+export type AddCategoryFilterGroupMutationResult = ApolloReactCommon.MutationResult<AddCategoryFilterGroupMutation>;
+export type AddCategoryFilterGroupMutationOptions = ApolloReactCommon.BaseMutationOptions<AddCategoryFilterGroupMutation, AddCategoryFilterGroupMutationVariables>;
+export const AddFieldToFilterGroupDocument = gql`
+    mutation AddFieldToFilterGroup($filterGroupId: String!, $name: String!) {
+  addFieldToFilterGroup(filterGroupId: $filterGroupId, name: $name) {
+    id
+    name
+  }
+}
+    `;
+export type AddFieldToFilterGroupMutationFn = ApolloReactCommon.MutationFunction<AddFieldToFilterGroupMutation, AddFieldToFilterGroupMutationVariables>;
+
+/**
+ * __useAddFieldToFilterGroupMutation__
+ *
+ * To run a mutation, you first call `useAddFieldToFilterGroupMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddFieldToFilterGroupMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addFieldToFilterGroupMutation, { data, loading, error }] = useAddFieldToFilterGroupMutation({
+ *   variables: {
+ *      filterGroupId: // value for 'filterGroupId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useAddFieldToFilterGroupMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddFieldToFilterGroupMutation, AddFieldToFilterGroupMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddFieldToFilterGroupMutation, AddFieldToFilterGroupMutationVariables>(AddFieldToFilterGroupDocument, baseOptions);
+      }
+export type AddFieldToFilterGroupMutationHookResult = ReturnType<typeof useAddFieldToFilterGroupMutation>;
+export type AddFieldToFilterGroupMutationResult = ApolloReactCommon.MutationResult<AddFieldToFilterGroupMutation>;
+export type AddFieldToFilterGroupMutationOptions = ApolloReactCommon.BaseMutationOptions<AddFieldToFilterGroupMutation, AddFieldToFilterGroupMutationVariables>;
+export const ChangeFilterGroupsOrderDocument = gql`
+    mutation ChangeFilterGroupsOrder($filterGroupId: String!, $orderedItemsIds: [String!]!) {
+  changeFilterGroup(filterGroupId: $filterGroupId, change: {orderedItemsIds: $orderedItemsIds}) {
+    id
+    groups {
+      id
+      index
+      fields {
+        id
+        index
+      }
+    }
+  }
+}
+    `;
+export type ChangeFilterGroupsOrderMutationFn = ApolloReactCommon.MutationFunction<ChangeFilterGroupsOrderMutation, ChangeFilterGroupsOrderMutationVariables>;
+
+/**
+ * __useChangeFilterGroupsOrderMutation__
+ *
+ * To run a mutation, you first call `useChangeFilterGroupsOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFilterGroupsOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFilterGroupsOrderMutation, { data, loading, error }] = useChangeFilterGroupsOrderMutation({
+ *   variables: {
+ *      filterGroupId: // value for 'filterGroupId'
+ *      orderedItemsIds: // value for 'orderedItemsIds'
+ *   },
+ * });
+ */
+export function useChangeFilterGroupsOrderMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFilterGroupsOrderMutation, ChangeFilterGroupsOrderMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFilterGroupsOrderMutation, ChangeFilterGroupsOrderMutationVariables>(ChangeFilterGroupsOrderDocument, baseOptions);
+      }
+export type ChangeFilterGroupsOrderMutationHookResult = ReturnType<typeof useChangeFilterGroupsOrderMutation>;
+export type ChangeFilterGroupsOrderMutationResult = ApolloReactCommon.MutationResult<ChangeFilterGroupsOrderMutation>;
+export type ChangeFilterGroupsOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFilterGroupsOrderMutation, ChangeFilterGroupsOrderMutationVariables>;
+export const ChangeFilterGroupItemsOrderDocument = gql`
+    mutation ChangeFilterGroupItemsOrder($filterGroupId: String!, $orderedItemsIds: [String!]!) {
+  changeFilterGroup(filterGroupId: $filterGroupId, change: {orderedItemsIds: $orderedItemsIds}) {
+    id
+    groups {
+      id
+      index
+      fields {
+        id
+        index
+      }
+    }
+  }
+}
+    `;
+export type ChangeFilterGroupItemsOrderMutationFn = ApolloReactCommon.MutationFunction<ChangeFilterGroupItemsOrderMutation, ChangeFilterGroupItemsOrderMutationVariables>;
+
+/**
+ * __useChangeFilterGroupItemsOrderMutation__
+ *
+ * To run a mutation, you first call `useChangeFilterGroupItemsOrderMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFilterGroupItemsOrderMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFilterGroupItemsOrderMutation, { data, loading, error }] = useChangeFilterGroupItemsOrderMutation({
+ *   variables: {
+ *      filterGroupId: // value for 'filterGroupId'
+ *      orderedItemsIds: // value for 'orderedItemsIds'
+ *   },
+ * });
+ */
+export function useChangeFilterGroupItemsOrderMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFilterGroupItemsOrderMutation, ChangeFilterGroupItemsOrderMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFilterGroupItemsOrderMutation, ChangeFilterGroupItemsOrderMutationVariables>(ChangeFilterGroupItemsOrderDocument, baseOptions);
+      }
+export type ChangeFilterGroupItemsOrderMutationHookResult = ReturnType<typeof useChangeFilterGroupItemsOrderMutation>;
+export type ChangeFilterGroupItemsOrderMutationResult = ApolloReactCommon.MutationResult<ChangeFilterGroupItemsOrderMutation>;
+export type ChangeFilterGroupItemsOrderMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFilterGroupItemsOrderMutation, ChangeFilterGroupItemsOrderMutationVariables>;
+export const ChangeFilterGroupItemLocationDocument = gql`
+    mutation ChangeFilterGroupItemLocation($filterGroupId: String!, $deleteIndex: Int!, $newGroupId: String!, $newGroupIndex: Int!) {
+  changeFilterGroup(filterGroupId: $filterGroupId, change: {deleteIndex: $deleteIndex, newGroupId: $newGroupId, newGroupIndex: $newGroupIndex}) {
+    id
+    groups {
+      id
+      index
+      fields {
+        id
+        index
+      }
+    }
+  }
+}
+    `;
+export type ChangeFilterGroupItemLocationMutationFn = ApolloReactCommon.MutationFunction<ChangeFilterGroupItemLocationMutation, ChangeFilterGroupItemLocationMutationVariables>;
+
+/**
+ * __useChangeFilterGroupItemLocationMutation__
+ *
+ * To run a mutation, you first call `useChangeFilterGroupItemLocationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFilterGroupItemLocationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFilterGroupItemLocationMutation, { data, loading, error }] = useChangeFilterGroupItemLocationMutation({
+ *   variables: {
+ *      filterGroupId: // value for 'filterGroupId'
+ *      deleteIndex: // value for 'deleteIndex'
+ *      newGroupId: // value for 'newGroupId'
+ *      newGroupIndex: // value for 'newGroupIndex'
+ *   },
+ * });
+ */
+export function useChangeFilterGroupItemLocationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFilterGroupItemLocationMutation, ChangeFilterGroupItemLocationMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFilterGroupItemLocationMutation, ChangeFilterGroupItemLocationMutationVariables>(ChangeFilterGroupItemLocationDocument, baseOptions);
+      }
+export type ChangeFilterGroupItemLocationMutationHookResult = ReturnType<typeof useChangeFilterGroupItemLocationMutation>;
+export type ChangeFilterGroupItemLocationMutationResult = ApolloReactCommon.MutationResult<ChangeFilterGroupItemLocationMutation>;
+export type ChangeFilterGroupItemLocationMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFilterGroupItemLocationMutation, ChangeFilterGroupItemLocationMutationVariables>;
 export const InitializeCategoryFilterDocument = gql`
     mutation InitializeCategoryFilter($categoryId: Int!) {
   initializeCategoryFilter(categoryId: $categoryId) {
     id
     filter {
       category {
-        id
-      }
-      fields {
         id
       }
     }

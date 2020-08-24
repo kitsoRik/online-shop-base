@@ -1,0 +1,6 @@
+mutation AddFieldToFilterGroup($filterGroupId: String!, $name: String!) {
+	addFieldToFilterGroup(filterGroupId: $filterGroupId, name: $name) {
+		id
+		name
+	}
+}

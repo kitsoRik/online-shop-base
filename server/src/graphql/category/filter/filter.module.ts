@@ -7,10 +7,15 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { FilterEntity } from "./filter.entity";
 import { CategoryEntity } from "../category.entity";
 import { FilterGroupModule } from "./filter-group/filter-group.module";
+import { FilterGroupEntity } from "./filter-group/filter-group.entity";
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([FilterEntity, CategoryEntity]),
+		TypeOrmModule.forFeature([
+			FilterEntity,
+			CategoryEntity,
+			FilterGroupEntity
+		]),
 		FilterFieldModule,
 		FilterGroupModule
 	],

@@ -2,6 +2,12 @@ import { ObjectType, Field, Int } from "@nestjs/graphql";
 
 @ObjectType("FilterField")
 export class FilterFieldType {
-    @Field(type => Int)
-    id: number;
+	@Field()
+	id: string;
+
+	@Field()
+	name: string;
+
+	@Field(type => Int)
+	index: number;
 }

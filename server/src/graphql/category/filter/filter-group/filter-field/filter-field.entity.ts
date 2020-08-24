@@ -1,10 +1,16 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
-@Entity({ name: "filter_field_entity" })
+@Entity({ name: "filter_fields" })
 export class FilterFieldEntity {
 	@Column({ type: "text", generated: "uuid", primary: true })
-	id: number;
+	id: string;
 
-	@Column({ type: "int", name: "filter_group_id" })
-	filterGroupId: number;
+	@Column({ type: "text", name: "filter_group_id" })
+	filterGroupId: string;
+
+	@Column()
+	name: string;
+
+	@Column({ type: "int", default: -1 })
+	index: number;
 }

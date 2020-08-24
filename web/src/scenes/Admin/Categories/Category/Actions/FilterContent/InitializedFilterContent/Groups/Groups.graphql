@@ -12,23 +12,13 @@ fragment FilterWithGroups on Filter {
 	}
 }
 
-mutation ChangeFilterGroupsOrder(
-	$filterGroupId: String!
-	$orderedItemsIds: [String!]!
-) {
-	changeFilterGroup(
-		filterGroupId: $filterGroupId
-		change: { orderedItemsIds: $orderedItemsIds }
-	) {
+mutation ChangeFilterGroupsOrder($orderedGroupsIds: [String!]!) {
+	changeFilterGroupsOrder(orderedGroupsIds: $orderedGroupsIds) {
 		id
-
-		groups {
+		index
+		fields {
 			id
 			index
-			fields {
-				id
-				index
-			}
 		}
 	}
 }

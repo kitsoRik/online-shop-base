@@ -4,7 +4,8 @@ import {
 	FilterWithGroupsFragmentDoc,
 	FilterWithGroupsFragment,
 	useChangeFilterGroupItemsOrderMutation,
-	useChangeFilterGroupItemLocationMutation
+	useChangeFilterGroupItemLocationMutation,
+	useChangeFilterGroupsOrderMutation
 } from "../../../../../../../../generated/graphql";
 import {
 	DragDropContext,
@@ -38,7 +39,9 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 		changeFilterGroupItemLocation
 	] = useChangeFilterGroupItemLocationMutation();
 
-	async function onDragEnd(result: DropResult) {
+	const [changeFilterGroupsOrder] = useChangeFilterGroupsOrderMutation();
+
+	const onDragItemEnd = async (result: DropResult) => {
 		setDraggable(null);
 		setIsDragging(false);
 		const { source, destination } = result;
@@ -114,74 +117,108 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 				}
 			});
 		}
-	}
+	};
+
+	const onDragGroupEnd = async (result: DropResult) => {
+		setDraggable(null);
+		setIsDragging(false);
+		const { source, destination } = result;
+		console.log(source, destination);
+		if (!destination) {
+			return;
+		}
+
+		if (source.index === destination.index) return;
+
+		const groupsIds = groups.map(g => g.id);
+		let orderedGroupsIds = [...groupsIds];
+		orderedGroupsIds = [
+			...orderedGroupsIds.slice(0, source.index),
+			...orderedGroupsIds.slice(source.index + 1)
+		];
+		orderedGroupsIds = [
+			...orderedGroupsIds.slice(0, destination.index),
+			groupsIds[source.index],
+			...orderedGroupsIds.slice(destination.index)
+		];
+		client.writeFragment({
+			fragment: FilterWithGroupsFragmentDoc,
+			id: `Filter:${filterId}`,
+			data: {
+				...filter,
+				groups: groups.map(group => ({
+					...group,
+					index: orderedGroupsIds.findIndex(id => id === group.id)
+				}))
+			}
+		});
+		const {} = await changeFilterGroupsOrder({
+			variables: {
+				orderedGroupsIds
+			}
+		});
+	};
 
 	const ddGroupsContext = (
-		<DragDropContext
-			onDragEnd={result => {
-				console.log(result);
-			}}
-		>
-			{groups
-				.slice()
-				.sort((a, b) => a.index - b.index)
-				.map((group, ind) => (
-					<Droppable key={ind} droppableId={group.id}>
-						{(provided, snapshot) => (
-							<div
-								ref={provided.innerRef}
-								style={getListStyle(snapshot.isDraggingOver)}
-								{...provided.droppableProps}
-							>
-								{
-									<GroupItem.Draggable
-										filterGroup={group}
-										{...{
-											index: ind,
-											getItemStyle,
-											getListStyle,
-											onEnterToDrop: () => {
-												if (!isDragging)
-													setDraggable("groups");
-											}
-										}}
-									>
-										{group.fields
-											.slice()
-											.sort((a, b) => a.index - b.index)
-											.map((item, index) => (
-												<>
-													<FieldItem
-														{...{
-															snapshot,
-															provided,
-															index,
-															item,
-															getItemStyle,
-															ind,
-															onEnterToDrop: () => {
-																if (!isDragging)
-																	setDraggable(
-																		"items"
-																	);
-															}
-														}}
-													/>
-												</>
-											))}
-									</GroupItem.Draggable>
-								}
-							</div>
-						)}
-					</Droppable>
-				))}
+		<DragDropContext onDragEnd={onDragGroupEnd}>
+			<Droppable droppableId={"d"}>
+				{(provided, snapshot) => (
+					<div
+						ref={provided.innerRef}
+						style={getListStyle(snapshot.isDraggingOver)}
+						{...provided.droppableProps}
+					>
+						{groups
+							.slice()
+							.sort((a, b) => a.index - b.index)
+							.map((group, ind) => (
+								<GroupItem.Draggable
+									filterGroup={group}
+									{...{
+										index: ind,
+										getItemStyle,
+										getListStyle,
+										onEnterToDrop: () => {
+											if (!isDragging)
+												setDraggable("groups");
+										}
+									}}
+								>
+									{group.fields
+										.slice()
+										.sort((a, b) => a.index - b.index)
+										.map((item, index) => (
+											<>
+												<FieldItem
+													{...{
+														snapshot,
+														provided,
+														index,
+														item,
+														getItemStyle,
+														ind,
+														onEnterToDrop: () => {
+															if (!isDragging)
+																setDraggable(
+																	"items"
+																);
+														}
+													}}
+												/>
+											</>
+										))}
+								</GroupItem.Draggable>
+							))}
+					</div>
+				)}
+			</Droppable>
 		</DragDropContext>
 	);
 
 	const [isDragging, setIsDragging] = useState(false);
 	const ddItemsContext = (
 		<DragDropContext
-			onDragEnd={onDragEnd}
+			onDragEnd={onDragItemEnd}
 			onDragStart={() => setIsDragging(true)}
 		>
 			{groups
@@ -280,7 +317,6 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 		</>
 	);
 };
-
 
 const grid = 8;
 

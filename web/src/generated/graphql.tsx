@@ -255,6 +255,7 @@ export type Mutation = {
   addFieldToFilterGroup: FilterField;
   addFilterGroup: Filter;
   changeFilterGroup: Filter;
+  changeFilterGroupsOrder: Array<FilterGroup>;
   createProduct: Product;
   changeProduct: Product;
   changeCategoryInProduct: Product;
@@ -366,6 +367,11 @@ export type MutationAddFilterGroupArgs = {
 export type MutationChangeFilterGroupArgs = {
   change: FilterGroupChange;
   filterGroupId: Scalars['String'];
+};
+
+
+export type MutationChangeFilterGroupsOrderArgs = {
+  orderedGroupsIds: Array<Scalars['String']>;
 };
 
 
@@ -753,25 +759,20 @@ export type FilterWithGroupsFragment = (
 );
 
 export type ChangeFilterGroupsOrderMutationVariables = Exact<{
-  filterGroupId: Scalars['String'];
-  orderedItemsIds: Array<Scalars['String']>;
+  orderedGroupsIds: Array<Scalars['String']>;
 }>;
 
 
 export type ChangeFilterGroupsOrderMutation = (
   { __typename?: 'Mutation' }
-  & { changeFilterGroup: (
-    { __typename?: 'Filter' }
-    & Pick<Filter, 'id'>
-    & { groups: Array<(
-      { __typename?: 'FilterGroup' }
-      & Pick<FilterGroup, 'id' | 'index'>
-      & { fields: Array<(
-        { __typename?: 'FilterField' }
-        & Pick<FilterField, 'id' | 'index'>
-      )> }
+  & { changeFilterGroupsOrder: Array<(
+    { __typename?: 'FilterGroup' }
+    & Pick<FilterGroup, 'id' | 'index'>
+    & { fields: Array<(
+      { __typename?: 'FilterField' }
+      & Pick<FilterField, 'id' | 'index'>
     )> }
-  ) }
+  )> }
 );
 
 export type ChangeFilterGroupItemsOrderMutationVariables = Exact<{
@@ -2186,16 +2187,13 @@ export type AddFieldToFilterGroupMutationHookResult = ReturnType<typeof useAddFi
 export type AddFieldToFilterGroupMutationResult = ApolloReactCommon.MutationResult<AddFieldToFilterGroupMutation>;
 export type AddFieldToFilterGroupMutationOptions = ApolloReactCommon.BaseMutationOptions<AddFieldToFilterGroupMutation, AddFieldToFilterGroupMutationVariables>;
 export const ChangeFilterGroupsOrderDocument = gql`
-    mutation ChangeFilterGroupsOrder($filterGroupId: String!, $orderedItemsIds: [String!]!) {
-  changeFilterGroup(filterGroupId: $filterGroupId, change: {orderedItemsIds: $orderedItemsIds}) {
+    mutation ChangeFilterGroupsOrder($orderedGroupsIds: [String!]!) {
+  changeFilterGroupsOrder(orderedGroupsIds: $orderedGroupsIds) {
     id
-    groups {
+    index
+    fields {
       id
       index
-      fields {
-        id
-        index
-      }
     }
   }
 }
@@ -2215,8 +2213,7 @@ export type ChangeFilterGroupsOrderMutationFn = ApolloReactCommon.MutationFuncti
  * @example
  * const [changeFilterGroupsOrderMutation, { data, loading, error }] = useChangeFilterGroupsOrderMutation({
  *   variables: {
- *      filterGroupId: // value for 'filterGroupId'
- *      orderedItemsIds: // value for 'orderedItemsIds'
+ *      orderedGroupsIds: // value for 'orderedGroupsIds'
  *   },
  * });
  */

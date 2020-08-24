@@ -10,11 +10,11 @@ import Draggable from "./Draggable";
 
 interface Props {
 	filterGroup: { id: string };
-	provided?: any;
 	getListStyle: any;
-	snapshot?: any;
 
-	children: any;
+	children?: any;
+
+	props?: any;
 
 	onEnterToDrop: () => void;
 }
@@ -22,8 +22,9 @@ interface Props {
 const GroupItem = ({
 	filterGroup,
 	getListStyle,
-	children,
-	onEnterToDrop
+	children = null,
+	onEnterToDrop,
+	props = {}
 }: Props) => {
 	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
 
@@ -49,6 +50,7 @@ const GroupItem = ({
 					onEnterToDrop();
 				}
 			}}
+			{...props}
 		>
 			<div>
 				<Button onClick={onAddField}>Add new field</Button>

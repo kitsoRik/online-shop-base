@@ -134,60 +134,42 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 								{...provided.droppableProps}
 							>
 								{
-									<Draggable
-										key={group.id}
-										draggableId={group.id.toString()}
-										index={ind}
+									<GroupItem.Draggable
+										filterGroup={group}
+										{...{
+											index: ind,
+											getItemStyle,
+											getListStyle,
+											onEnterToDrop: () => {
+												if (!isDragging)
+													setDraggable("groups");
+											}
+										}}
 									>
-										{(provided, snapshot) => (
-											<GroupItem.Draggable
-												filterGroup={group}
-												{...{
-													withDd: true,
-													provided,
-													ind,
-													snapshot,
-													getItemStyle,
-													getListStyle,
-													onEnterToDrop: () => {
-														if (!isDragging)
-															setDraggable(
-																"groups"
-															);
-													}
-												}}
-											>
-												{group.fields
-													.slice()
-													.sort(
-														(a, b) =>
-															a.index - b.index
-													)
-													.map((item, index) => (
-														<>
-															<FieldItem
-																{...{
-																	snapshot,
-																	provided,
-																	index,
-																	item,
-																	getItemStyle,
-																	ind,
-																	onEnterToDrop: () => {
-																		if (
-																			!isDragging
-																		)
-																			setDraggable(
-																				"items"
-																			);
-																	}
-																}}
-															/>
-														</>
-													))}
-											</GroupItem.Draggable>
-										)}
-									</Draggable>
+										{group.fields
+											.slice()
+											.sort((a, b) => a.index - b.index)
+											.map((item, index) => (
+												<>
+													<FieldItem
+														{...{
+															snapshot,
+															provided,
+															index,
+															item,
+															getItemStyle,
+															ind,
+															onEnterToDrop: () => {
+																if (!isDragging)
+																	setDraggable(
+																		"items"
+																	);
+															}
+														}}
+													/>
+												</>
+											))}
+									</GroupItem.Draggable>
 								}
 							</div>
 						)}
@@ -206,47 +188,33 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 				.slice()
 				.sort((a, b) => a.index - b.index)
 				.map((group, ind) => (
-					<Droppable key={ind} droppableId={group.id}>
-						{(provided, snapshot) => (
-							<GroupItem.Droppable
-								filterGroup={group}
-								{...{
-									provided,
-									ind,
-									snapshot,
-									getItemStyle,
-									getListStyle,
-									onEnterToDrop: () => {
-										if (!isDragging) setDraggable("groups");
-									}
-								}}
-							>
-								{group.fields
-									.slice()
-									.sort((a, b) => a.index - b.index)
-									.map((item, index) => (
-										<Draggable
-											key={item.id}
-											draggableId={item.id.toString()}
-											index={index}
-										>
-											{(provided, snapshot) => (
-												<FieldItem.Draggable
-													{...{
-														snapshot,
-														provided,
-														index,
-														item,
-														getItemStyle,
-														ind
-													}}
-												/>
-											)}
-										</Draggable>
-									))}
-							</GroupItem.Droppable>
-						)}
-					</Droppable>
+					<GroupItem.Droppable
+						filterGroup={group}
+						index={ind}
+						{...{
+							ind,
+
+							getItemStyle,
+							getListStyle,
+							onEnterToDrop: () => {
+								if (!isDragging) setDraggable("groups");
+							}
+						}}
+					>
+						{group.fields
+							.slice()
+							.sort((a, b) => a.index - b.index)
+							.map((item, index) => (
+								<FieldItem.Draggable
+									{...{
+										index,
+										item,
+										getItemStyle,
+										ind
+									}}
+								/>
+							))}
+					</GroupItem.Droppable>
 				))}
 		</DragDropContext>
 	);
@@ -313,41 +281,7 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 	);
 };
 
-const getItems = (count: any, offset: any = 0) =>
-	Array.from({ length: count }, (v, k) => k).map(k => ({
-		id: `item-${k + offset}-${new Date().getTime()}`,
-		content: `item ${k + offset}`
-	}));
 
-const reorder = (list: any, startIndex: any, endIndex: any) => {
-	const result = Array.from(list);
-	const [removed] = result.splice(startIndex, 1);
-	result.splice(endIndex, 0, removed);
-
-	return result;
-};
-
-/**
- * Moves an item from one list to another list.
- */
-const move = (
-	source: any,
-	destination: any,
-	droppableSource: any,
-	droppableDestination: any
-) => {
-	const sourceClone = Array.from(source);
-	const destClone = Array.from(destination);
-	const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-	destClone.splice(droppableDestination.index, 0, removed);
-
-	const result: any = {};
-	result[droppableSource.droppableId] = sourceClone;
-	result[droppableDestination.droppableId] = destClone;
-
-	return result;
-};
 const grid = 8;
 
 const getItemStyle = (isDragging: any, draggableStyle: any) => ({

@@ -5,23 +5,18 @@ import {
 	GetCategoryFilterDocument
 } from "../../../../../../../../../../generated/graphql";
 import { getOperationName } from "@apollo/client/utilities";
+import { Draggable as DNDDraggable } from "react-beautiful-dnd";
+import GroupItem from "../GroupItem";
 
 interface Props {
 	filterGroup: { id: string };
-	provided?: any;
+	index: number;
 	getListStyle: any;
-	snapshot?: any;
 
 	children: any;
 }
 
-const Draggable = ({
-	snapshot,
-	provided,
-	getListStyle,
-	filterGroup,
-	children
-}: Props) => {
+const Draggable = ({ getListStyle, index, filterGroup, children }: Props) => {
 	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
 
 	const onAddField = async () => {
@@ -39,17 +34,27 @@ const Draggable = ({
 	};
 
 	return (
-		<div
-			ref={provided.innerRef}
-			{...provided.draggableProps}
-			{...provided.dragHandleProps}
+		<DNDDraggable
+			key={filterGroup.id}
+			draggableId={filterGroup.id.toString()}
+			index={index}
 		>
-			<div>
-				<Button onClick={onAddField}>Add new field</Button>
-			</div>
-			{children}
-			{provided.placeholder}
-		</div>
+			{(provided, snapshot) => (
+				<GroupItem
+					filterGroup={filterGroup}
+					onEnterToDrop={() => {}}
+					getListStyle={getListStyle}
+					props={{
+						ref: provided.innerRef,
+						...provided.draggableProps,
+						...provided.dragHandleProps
+					}}
+				>
+					{children}
+					{(provided as any).placeholder}
+				</GroupItem>
+			)}
+		</DNDDraggable>
 	);
 };
 

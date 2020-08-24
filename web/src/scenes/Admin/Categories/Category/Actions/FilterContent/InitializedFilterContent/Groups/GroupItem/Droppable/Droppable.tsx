@@ -5,22 +5,22 @@ import {
 	GetCategoryFilterDocument
 } from "../../../../../../../../../../generated/graphql";
 import { getOperationName } from "@apollo/client/utilities";
+import { Droppable as DNDDropable } from "react-beautiful-dnd";
+import GroupItem from "../GroupItem";
 
 interface Props {
 	filterGroup: { id: string };
-	provided?: any;
+	index: number;
 	getListStyle: any;
-	snapshot?: any;
 
 	children: any;
 	onEnterToDrop: () => void;
 }
 
 const Droppable = ({
-	snapshot,
-	provided,
 	getListStyle,
 	filterGroup,
+	index,
 	children,
 	onEnterToDrop
 }: Props) => {
@@ -41,22 +41,23 @@ const Droppable = ({
 	};
 
 	return (
-		<div
-			ref={provided.innerRef}
-			style={getListStyle(snapshot.isDraggingOver)}
-			{...provided.droppableProps}
-			onMouseMoveCapture={e => {
-				if (e.target === e.currentTarget) {
-					onEnterToDrop();
-				}
-			}}
-		>
-			<div>
-				<Button onClick={onAddField}>Add new field</Button>
-			</div>
-			{children}
-			{provided.placeholder}
-		</div>
+		<DNDDropable key={index} droppableId={filterGroup.id}>
+			{(provided, snapshot) => (
+				<GroupItem
+					filterGroup={filterGroup}
+					getListStyle={getListStyle}
+					onEnterToDrop={onEnterToDrop}
+					props={{
+						ref: provided.innerRef,
+						style: getListStyle(snapshot.isDraggingOver),
+						...provided.droppableProps
+					}}
+				>
+					{children}
+					{provided.placeholder}
+				</GroupItem>
+			)}
+		</DNDDropable>
 	);
 };
 

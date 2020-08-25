@@ -123,7 +123,6 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 		setDraggable(null);
 		setIsDragging(false);
 		const { source, destination } = result;
-		console.log(source, destination);
 		if (!destination) {
 			return;
 		}
@@ -160,50 +159,28 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 	};
 
 	const ddGroupsContext = (
-		<DragDropContext onDragEnd={onDragGroupEnd}>
+		<DragDropContext
+			onDragEnd={onDragGroupEnd}
+			onDragStart={() => setIsDragging(true)}
+		>
 			<Droppable droppableId={"d"}>
 				{(provided, snapshot) => (
-					<div
-						ref={provided.innerRef}
-						style={getListStyle(snapshot.isDraggingOver)}
-						{...provided.droppableProps}
-					>
+					<div ref={provided.innerRef} {...provided.droppableProps}>
 						{groups
 							.slice()
 							.sort((a, b) => a.index - b.index)
 							.map((group, ind) => (
-								<GroupItem.Draggable
-									filterGroup={group}
-									{...{
-										index: ind,
-										getItemStyle,
-										getListStyle,
-										onEnterToDrop: () => {
-											if (!isDragging)
-												setDraggable("groups");
-										}
-									}}
-								>
+								<GroupItem.Draggable filterGroup={group}>
 									{group.fields
 										.slice()
 										.sort((a, b) => a.index - b.index)
 										.map((item, index) => (
 											<>
 												<FieldItem
-													{...{
-														snapshot,
-														provided,
-														index,
-														item,
-														getItemStyle,
-														ind,
-														onEnterToDrop: () => {
-															if (!isDragging)
-																setDraggable(
-																	"items"
-																);
-														}
-													}}
+													item={item}
+													onEnterToDrop={changeDraggable(
+														"items"
+													)}
 												/>
 											</>
 										))}
@@ -214,8 +191,15 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 			</Droppable>
 		</DragDropContext>
 	);
-
 	const [isDragging, setIsDragging] = useState(false);
+
+	const changeDraggable = (newDraggable: "items" | "groups" | null) => () => {
+		if (isDragging) return;
+		if (draggable === newDraggable) return;
+		console.log("C", newDraggable);
+		setDraggable(newDraggable);
+	};
+
 	const ddItemsContext = (
 		<DragDropContext
 			onDragEnd={onDragItemEnd}
@@ -227,29 +211,13 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 				.map((group, ind) => (
 					<GroupItem.Droppable
 						filterGroup={group}
-						index={ind}
-						{...{
-							ind,
-
-							getItemStyle,
-							getListStyle,
-							onEnterToDrop: () => {
-								if (!isDragging) setDraggable("groups");
-							}
-						}}
+						onEnterToDrop={changeDraggable("groups")}
 					>
 						{group.fields
 							.slice()
 							.sort((a, b) => a.index - b.index)
-							.map((item, index) => (
-								<FieldItem.Draggable
-									{...{
-										index,
-										item,
-										getItemStyle,
-										ind
-									}}
-								/>
+							.map(item => (
+								<FieldItem.Draggable item={item} />
 							))}
 					</GroupItem.Droppable>
 				))}
@@ -265,15 +233,7 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 					<>
 						<GroupItem
 							filterGroup={group}
-							{...{
-								withDd: false,
-								ind,
-								getItemStyle,
-								getListStyle,
-								onEnterToDrop: () => {
-									if (!isDragging) setDraggable("groups");
-								}
-							}}
+							onEnterToDrop={changeDraggable("groups")}
 						>
 							{group.fields
 								.slice()
@@ -281,17 +241,10 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 								.map((item, index) => (
 									<>
 										<FieldItem
-											{...{
-												withDd: false,
-												index,
-												item,
-												getItemStyle,
-												ind,
-												onEnterToDrop: () => {
-													if (!isDragging)
-														setDraggable("items");
-												}
-											}}
+											item={item}
+											onEnterToDrop={changeDraggable(
+												"items"
+											)}
 										/>
 									</>
 								))}
@@ -317,25 +270,5 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 		</>
 	);
 };
-
-const grid = 8;
-
-const getItemStyle = (isDragging: any, draggableStyle: any) => ({
-	// some basic styles to make the items look a bit nicer
-	userSelect: "none",
-	padding: grid * 2,
-	margin: `0 0 ${grid}px 0`,
-
-	// change background colour if dragging
-	background: isDragging ? "lightgreen" : "grey",
-
-	// styles we need to apply on draggables
-	...draggableStyle
-});
-const getListStyle = (isDraggingOver: any) => ({
-	background: isDraggingOver ? "lightblue" : "lightgrey",
-	padding: grid,
-	width: 250
-});
 
 export default Groups;

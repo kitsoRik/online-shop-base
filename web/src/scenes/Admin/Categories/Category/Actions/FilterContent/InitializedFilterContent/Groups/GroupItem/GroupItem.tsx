@@ -10,18 +10,14 @@ import Draggable from "./Draggable";
 
 interface Props {
 	filterGroup: { id: string };
-	getListStyle: any;
+	props?: any;
+	onEnterToDrop: () => void;
 
 	children?: any;
-
-	props?: any;
-
-	onEnterToDrop: () => void;
 }
 
 const GroupItem = ({
 	filterGroup,
-	getListStyle,
 	children = null,
 	onEnterToDrop,
 	props = {}
@@ -44,17 +40,14 @@ const GroupItem = ({
 
 	return (
 		<div
-			style={getListStyle(false)}
-			onMouseMoveCapture={e => {
+			onMouseEnter={e => {
 				if (e.target === e.currentTarget) {
 					onEnterToDrop();
 				}
 			}}
 			{...props}
 		>
-			<div>
-				<Button onClick={onAddField}>Add new field</Button>
-			</div>
+			<Button onClick={onAddField}>Add new field</Button>
 			{children}
 		</div>
 	);

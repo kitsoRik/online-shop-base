@@ -9,21 +9,13 @@ import { Droppable as DNDDropable } from "react-beautiful-dnd";
 import GroupItem from "../GroupItem";
 
 interface Props {
-	filterGroup: { id: string };
-	index: number;
-	getListStyle: any;
+	filterGroup: { id: string; index: number };
 
 	children: any;
 	onEnterToDrop: () => void;
 }
 
-const Droppable = ({
-	getListStyle,
-	filterGroup,
-	index,
-	children,
-	onEnterToDrop
-}: Props) => {
+const Droppable = ({ filterGroup, children, onEnterToDrop }: Props) => {
 	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
 
 	const onAddField = async () => {
@@ -41,15 +33,13 @@ const Droppable = ({
 	};
 
 	return (
-		<DNDDropable key={index} droppableId={filterGroup.id}>
+		<DNDDropable key={filterGroup.index} droppableId={filterGroup.id}>
 			{(provided, snapshot) => (
 				<GroupItem
 					filterGroup={filterGroup}
-					getListStyle={getListStyle}
 					onEnterToDrop={onEnterToDrop}
 					props={{
 						ref: provided.innerRef,
-						style: getListStyle(snapshot.isDraggingOver),
 						...provided.droppableProps
 					}}
 				>

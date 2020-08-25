@@ -3,10 +3,7 @@ import { FilterField } from "../../../../../../../../../generated/graphql";
 import Draggable from "./Draggable";
 
 interface Props {
-	ind: any;
-	getItemStyle: any;
 	item: Exclude<{ id: string; name: string }, FilterField>;
-	index: any;
 
 	props?: any;
 	children?: any;
@@ -16,15 +13,13 @@ interface Props {
 
 const FieldItem = ({
 	item,
-	getItemStyle,
 	onEnterToDrop,
 	children = null,
 	props = {}
 }: Props) => {
 	return (
 		<div
-			style={getItemStyle(false, false)}
-			onMouseMoveCapture={() => {
+			onMouseEnter={e => {
 				onEnterToDrop();
 			}}
 			{...props}

@@ -9,14 +9,12 @@ import { Draggable as DNDDraggable } from "react-beautiful-dnd";
 import GroupItem from "../GroupItem";
 
 interface Props {
-	filterGroup: { id: string };
-	index: number;
-	getListStyle: any;
+	filterGroup: { id: string; index: number };
 
 	children: any;
 }
 
-const Draggable = ({ getListStyle, index, filterGroup, children }: Props) => {
+const Draggable = ({ filterGroup, children }: Props) => {
 	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
 
 	const onAddField = async () => {
@@ -37,13 +35,12 @@ const Draggable = ({ getListStyle, index, filterGroup, children }: Props) => {
 		<DNDDraggable
 			key={filterGroup.id}
 			draggableId={filterGroup.id.toString()}
-			index={index}
+			index={filterGroup.index}
 		>
 			{(provided, snapshot) => (
 				<GroupItem
 					filterGroup={filterGroup}
 					onEnterToDrop={() => {}}
-					getListStyle={getListStyle}
 					props={{
 						ref: provided.innerRef,
 						...provided.draggableProps,

@@ -15,7 +15,6 @@ import FieldItem from "../../FieldItem";
 import { useApolloClient } from "@apollo/client";
 
 interface Props {
-	filter: Exclude<{ id: number }, Filter>;
 	groups: Exclude<
 		{
 			id: string;
@@ -32,7 +31,7 @@ interface Props {
 	changeDragging: (value: boolean) => void;
 }
 
-const Items = ({ filter, groups, changeContext, changeDragging }: Props) => {
+const Items = ({ groups, changeContext, changeDragging }: Props) => {
 	const client = useApolloClient();
 	const [
 		changeFilterGroupItemsOrder

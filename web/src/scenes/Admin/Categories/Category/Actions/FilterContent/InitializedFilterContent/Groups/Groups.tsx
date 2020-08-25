@@ -41,7 +41,6 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 				<div style={{ display: "flex", flexDirection: "column" }}>
 					{context === "groups" && (
 						<MoverContext.Groups
-							filter={filter}
 							changeContext={changeContext}
 							changeDragging={setIsDragging}
 							groups={groups}
@@ -49,7 +48,6 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 					)}
 					{context === "items" && (
 						<MoverContext.Items
-							filter={filter}
 							changeContext={changeContext}
 							changeDragging={setIsDragging}
 							groups={groups}

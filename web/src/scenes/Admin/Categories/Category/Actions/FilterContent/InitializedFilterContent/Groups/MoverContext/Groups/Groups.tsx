@@ -12,7 +12,6 @@ import FieldItem from "../../FieldItem";
 import GroupItem from "../../GroupItem";
 import { useApolloClient } from "@apollo/client";
 interface Props {
-	filter: Exclude<{ id: number }, Filter>;
 	groups: Exclude<
 		{
 			id: string;
@@ -28,7 +27,7 @@ interface Props {
 	changeContext: (value: "items" | null) => () => void;
 	changeDragging: (value: boolean) => void;
 }
-const Groups = ({ filter, groups, changeContext, changeDragging }: Props) => {
+const Groups = ({ groups, changeContext, changeDragging }: Props) => {
 	const client = useApolloClient();
 	const [changeFilterGroupsOrder] = useChangeFilterGroupsOrderMutation();
 
@@ -53,7 +52,7 @@ const Groups = ({ filter, groups, changeContext, changeDragging }: Props) => {
 			groupsIds[source.index],
 			...orderedGroupsIds.slice(destination.index)
 		];
-		
+
 		groups.forEach(group => {
 			client.writeFragment({
 				fragment: FilterGroupIndexFragmentDoc,

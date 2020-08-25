@@ -9,7 +9,7 @@ import { Draggable as DNDDraggable } from "react-beautiful-dnd";
 import GroupItem from "../GroupItem";
 
 interface Props {
-	filterGroup: { id: string; index: number };
+	filterGroup: { id: string; index: number; name: string };
 
 	children: any;
 }

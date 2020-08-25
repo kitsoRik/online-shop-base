@@ -12,6 +12,7 @@ interface Props {
 	groups: Exclude<
 		{
 			id: string;
+			name: string;
 			index: number;
 			fields: Extract<
 				{ id: string; index: number; name: string },

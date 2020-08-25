@@ -3,13 +3,14 @@ import {
 	useAddFieldToFilterGroupMutation,
 	GetCategoryFilterDocument
 } from "../../../../../../../../../generated/graphql";
-import { Button } from "antd";
+import { Button, Collapse } from "antd";
 import { getOperationName } from "@apollo/client/utilities";
 import Droppable from "./Droppable";
 import Draggable from "./Draggable";
+import Header from "./Header";
 
 interface Props {
-	filterGroup: { id: string };
+	filterGroup: { id: string; name: string };
 	props?: any;
 	onEnterToDrop: () => void;
 
@@ -41,14 +42,19 @@ const GroupItem = ({
 	return (
 		<div
 			onMouseEnter={e => {
-				if (e.target === e.currentTarget) {
-					onEnterToDrop();
-				}
+				onEnterToDrop();
 			}}
 			{...props}
 		>
-			<Button onClick={onAddField}>Add new field</Button>
-			{children}
+			<Collapse activeKey={filterGroup.id}>
+				<Collapse.Panel
+					header={<Header filterGroup={filterGroup} />}
+					key={filterGroup.id}
+				>
+					<Button onClick={onAddField}>Add new field</Button>
+					{children}
+				</Collapse.Panel>
+			</Collapse>
 		</div>
 	);
 };

@@ -19,6 +19,7 @@ interface Props {
 		{
 			id: string;
 			index: number;
+			name: string;
 			fields: Extract<
 				{ id: string; index: number; name: string },
 				FilterField

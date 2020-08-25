@@ -20,6 +20,7 @@ const FieldItem = ({
 	return (
 		<div
 			onMouseEnter={e => {
+				e.stopPropagation();
 				onEnterToDrop();
 			}}
 			{...props}

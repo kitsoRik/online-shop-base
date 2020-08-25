@@ -23,21 +23,7 @@ const GroupItem = ({
 	onEnterToDrop,
 	props = {}
 }: Props) => {
-	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
-
-	const onAddField = async () => {
-		try {
-			const {} = addFieldToFilterGroup({
-				variables: {
-					name: "GroupItem1",
-					filterGroupId: filterGroup.id
-				},
-				refetchQueries: [getOperationName(GetCategoryFilterDocument)!]
-			});
-		} catch (e) {
-			console.log(e.message);
-		}
-	};
+	
 
 	return (
 		<div
@@ -51,7 +37,6 @@ const GroupItem = ({
 					header={<Header filterGroup={filterGroup} />}
 					key={filterGroup.id}
 				>
-					<Button onClick={onAddField}>Add new field</Button>
 					{children}
 				</Collapse.Panel>
 			</Collapse>

@@ -42,6 +42,19 @@ export class FilterGroupResolver {
 		return await this.filterGroupService.getFilter(g.filterId);
 	}
 
+	@Mutation(type => [FilterGroupType])
+	@AccessAdmin()
+	async changeFilterGroupsOrder(
+		@Args("orderedGroupsIds", { type: () => [String] })
+		orderedGroupsIds: string[]
+	) {
+		const groups = await this.filterGroupService.changeFilterGroupsOrder(
+			orderedGroupsIds
+		);
+
+		return groups;
+	}
+
 	@ResolveField(type => FilterType)
 	filter(@Parent() parent: FilterGroupEntity) {
 		return this.filterGroupService.getFilter(parent.filterId);

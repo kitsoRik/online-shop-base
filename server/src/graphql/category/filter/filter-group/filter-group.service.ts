@@ -71,24 +71,27 @@ export class FilterGroupService {
 				await this.filterFieldRepository.save(deleteItem);
 			}
 		}
-		if (change.orderedGroupsIds) {
-			const orderedIds = change.orderedGroupsIds;
-
-			const groups = await this.filterGroupRepository.find({
-				where: { id: In(orderedIds) }
-			});
-
-			for (let i = 0; i < groups.length; i++) {
-				const group = groups[i];
-				group.index = orderedIds.findIndex(
-					orderedGroupId => orderedGroupId === group.id
-				);
-			}
-
-			await this.filterGroupRepository.save(groups);
-		}
 
 		return group;
+	}
+
+	async changeFilterGroupsOrder(orderedGroupsIds) {
+		const orderedIds = orderedGroupsIds;
+
+		const groups = await this.filterGroupRepository.find({
+			where: { id: In(orderedIds) }
+		});
+
+		for (let i = 0; i < groups.length; i++) {
+			const group = groups[i];
+			group.index = orderedIds.findIndex(
+				orderedGroupId => orderedGroupId === group.id
+			);
+		}
+
+		await this.filterGroupRepository.save(groups);
+
+		return groups;
 	}
 
 	async getFilter(filterId: number) {

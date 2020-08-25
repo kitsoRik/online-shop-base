@@ -108,6 +108,52 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 				// }
 			});
 		} else {
+			const sourceGroup = { ...group };
+
+			const destinationGroup = groups.find(
+				g => g.id === destination.droppableId
+			)!;
+
+			const movableItem = sourceGroup.fields.find(
+				f => f.index === source.index
+			)!;
+			const newGroups = [
+				...groups.filter(
+					g => g.id !== sourceGroup.id && g.id !== destinationGroup.id
+				),
+				{
+					...sourceGroup,
+					fields: sourceGroup.fields
+						.filter(f => f.index !== source.index)
+						.map(f => ({
+							...f,
+							index:
+								f.index >= source.index ? f.index - 1 : f.index
+						}))
+				},
+				{
+					...destinationGroup,
+					fields: [
+						...destinationGroup.fields.map(f => ({
+							...f,
+							index:
+								f.index >= destination.index
+									? f.index + 1
+									: f.index
+						})),
+						{ ...movableItem, index: destination.index }
+					]
+				}
+			];
+			console.log(newGroups);
+			client.writeFragment({
+				fragment: FilterWithGroupsFragmentDoc,
+				id: `Filter:${filterId}`,
+				data: {
+					...filter,
+					groups: newGroups
+				}
+			});
 			await changeFilterGroupItemLocation({
 				variables: {
 					filterGroupId: group.id,
@@ -196,7 +242,6 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 	const changeDraggable = (newDraggable: "items" | "groups" | null) => () => {
 		if (isDragging) return;
 		if (draggable === newDraggable) return;
-		console.log("C", newDraggable);
 		setDraggable(newDraggable);
 	};
 

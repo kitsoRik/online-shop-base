@@ -775,6 +775,11 @@ export type ChangeFilterGroupsOrderMutation = (
   )> }
 );
 
+export type FilterGroupIndexFragment = (
+  { __typename?: 'FilterGroup' }
+  & Pick<FilterGroup, 'id' | 'index'>
+);
+
 export type ChangeFilterGroupItemsOrderMutationVariables = Exact<{
   filterGroupId: Scalars['String'];
   orderedItemsIds: Array<Scalars['String']>;
@@ -819,6 +824,20 @@ export type ChangeFilterGroupItemLocationMutation = (
       )> }
     )> }
   ) }
+);
+
+export type FilterGroupFieldsIndexFragment = (
+  { __typename?: 'FilterGroup' }
+  & Pick<FilterGroup, 'id'>
+  & { fields: Array<(
+    { __typename?: 'FilterField' }
+    & Pick<FilterField, 'index'>
+  )> }
+);
+
+export type FilterFieldIndexFragment = (
+  { __typename?: 'FilterField' }
+  & Pick<FilterField, 'id' | 'index'>
 );
 
 export type InitializeCategoryFilterMutationVariables = Exact<{
@@ -1570,6 +1589,26 @@ export const FilterWithGroupsFragmentDoc = gql`
       index
     }
   }
+}
+    `;
+export const FilterGroupIndexFragmentDoc = gql`
+    fragment FilterGroupIndex on FilterGroup {
+  id
+  index
+}
+    `;
+export const FilterGroupFieldsIndexFragmentDoc = gql`
+    fragment FilterGroupFieldsIndex on FilterGroup {
+  id
+  fields {
+    index
+  }
+}
+    `;
+export const FilterFieldIndexFragmentDoc = gql`
+    fragment FilterFieldIndex on FilterField {
+  id
+  index
 }
     `;
 export const GetApplicationLanguagesDocument = gql`

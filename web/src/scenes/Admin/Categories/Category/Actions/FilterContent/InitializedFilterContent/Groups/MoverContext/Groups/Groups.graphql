@@ -1,0 +1,15 @@
+mutation ChangeFilterGroupsOrder($orderedGroupsIds: [String!]!) {
+	changeFilterGroupsOrder(orderedGroupsIds: $orderedGroupsIds) {
+		id
+		index
+		fields {
+			id
+			index
+		}
+	}
+}
+
+fragment FilterGroupIndex on FilterGroup {
+	id
+	index
+}

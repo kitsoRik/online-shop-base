@@ -1,0 +1,58 @@
+mutation ChangeFilterGroupItemsOrder(
+	$filterGroupId: String!
+	$orderedItemsIds: [String!]!
+) {
+	changeFilterGroup(
+		filterGroupId: $filterGroupId
+		change: { orderedItemsIds: $orderedItemsIds }
+	) {
+		id
+
+		groups {
+			id
+			index
+			fields {
+				id
+				index
+			}
+		}
+	}
+}
+
+mutation ChangeFilterGroupItemLocation(
+	$filterGroupId: String!
+	$deleteIndex: Int!
+	$newGroupId: String!
+	$newGroupIndex: Int!
+) {
+	changeFilterGroup(
+		filterGroupId: $filterGroupId
+		change: {
+			deleteIndex: $deleteIndex
+			newGroupId: $newGroupId
+			newGroupIndex: $newGroupIndex
+		}
+	) {
+		id
+		groups {
+			id
+			index
+			fields {
+				id
+				index
+			}
+		}
+	}
+}
+
+fragment FilterGroupFieldsIndex on FilterGroup {
+	id
+	fields {
+		index
+	}
+}
+
+fragment FilterFieldIndex on FilterField {
+	id
+	index
+}

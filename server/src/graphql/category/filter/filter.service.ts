@@ -4,6 +4,7 @@ import { CategoryEntity } from "../category.entity";
 import { Repository } from "typeorm";
 import { FilterEntity } from "./filter.entity";
 import { FilterGroupEntity } from "./filter-group/filter-group.entity";
+import { FilterGroupsInput } from "./filter-groups.input";
 
 @Injectable()
 export class FilterService {
@@ -30,7 +31,17 @@ export class FilterService {
 		});
 	}
 
-	async getGroups(filterId: number) {
-		return await this.filterGroupRepository.find({ where: { filterId } });
+	async getGroups(filterId: number, filter?: FilterGroupsInput) {
+		const query = this.filterGroupRepository.createQueryBuilder("groups");
+
+		query.where("filter_id = :filterId", { filterId });
+
+		if (filter) {
+			if (filter.id !== undefined || filter.id !== null) {
+				query.where("id = :id", { id: filter.id });
+			}
+		}
+
+		return await query.getMany();
 	}
 }

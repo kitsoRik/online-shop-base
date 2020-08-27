@@ -28,18 +28,16 @@ export class FilterGroupResolver {
 		return this.filterGroupService.getFilter(filterId);
 	}
 
-	@Mutation(type => FilterType)
+	@Mutation(type => FilterGroupType)
 	@AccessAdmin()
 	async changeFilterGroup(
 		@Args("filterGroupId") filterGroupId: string,
 		@Args("change") change: FilterGroupChangeInput
 	) {
-		const g = await this.filterGroupService.changeFilterGroup(
+		return await this.filterGroupService.changeFilterGroup(
 			filterGroupId,
 			change
 		);
-
-		return await this.filterGroupService.getFilter(g.filterId);
 	}
 
 	@Mutation(type => [FilterGroupType])

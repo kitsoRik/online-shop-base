@@ -14,6 +14,7 @@ import { FilterService } from "./filter.service";
 import { AccessAdmin } from "src/graphql/user/decorators/access-admin.decorator";
 import { FilterGroupType } from "./filter-group/filter-group.type";
 import { Query } from "@nestjs/common";
+import { FilterGroupsInput } from "./filter-groups.input";
 
 @Resolver(() => FilterType)
 export class FilterResolver {
@@ -35,7 +36,10 @@ export class FilterResolver {
 	}
 
 	@ResolveField(type => [FilterGroupType])
-	groups(@Parent() parent: FilterEntity) {
-		return this.filterService.getGroups(parent.id);
+	groups(
+		@Parent() parent: FilterEntity,
+		@Args("filter", { nullable: true }) filter: FilterGroupsInput
+	) {
+		return this.filterService.getGroups(parent.id, filter);
 	}
 }

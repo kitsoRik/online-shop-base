@@ -72,6 +72,12 @@ export class FilterGroupService {
 			}
 		}
 
+		if (change.name !== undefined || change.name !== null) {
+			group.name = change.name;
+		}
+
+		await this.filterGroupRepository.save(group);
+
 		return group;
 	}
 

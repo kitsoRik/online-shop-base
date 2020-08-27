@@ -3,6 +3,7 @@ import { useGetCategoryFilterQuery } from "../../../../../../../generated/graphq
 import { useParams } from "react-router";
 import Groups from "./Groups";
 import AddNewGroupDialog from "./AddNewGroupDialog";
+import EditGroupDialog from "./EditGroupDialog";
 
 const InitializedFilterContent = () => {
 	const { data, loading } = useGetCategoryFilterQuery({
@@ -14,17 +15,24 @@ const InitializedFilterContent = () => {
 	const filter = data!.categories![0].filter!;
 
 	const [addVisible, setAddVisible] = useState(false);
+	const [editVisibleGroup, setEditVisibleGroup] = useState("");
 
 	return (
 		<>
 			<Groups
 				filterId={filter.id}
 				onAddNewGroup={() => setAddVisible(true)}
+				onEditGroup={groupId => setEditVisibleGroup(groupId)}
 			/>
 			<AddNewGroupDialog
 				visible={addVisible}
 				onClose={() => setAddVisible(false)}
 				filterId={filter.id}
+			/>
+			<EditGroupDialog
+				groupId={editVisibleGroup}
+				visible={editVisibleGroup !== ""}
+				onClose={() => setEditVisibleGroup("")}
 			/>
 		</>
 	);

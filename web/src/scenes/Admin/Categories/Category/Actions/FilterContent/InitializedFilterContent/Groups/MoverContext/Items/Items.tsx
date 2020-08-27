@@ -30,9 +30,11 @@ interface Props {
 
 	changeContext: (value: "groups" | null) => () => void;
 	changeDragging: (value: boolean) => void;
+
+	onEditGroup: (groupId: string) => void;
 }
 
-const Items = ({ groups, changeContext, changeDragging }: Props) => {
+const Items = ({ groups, changeContext, changeDragging, onEditGroup }: Props) => {
 	const client = useApolloClient();
 	const [
 		changeFilterGroupItemsOrder
@@ -160,6 +162,7 @@ const Items = ({ groups, changeContext, changeDragging }: Props) => {
 					<GroupItem.Droppable
 						filterGroup={group}
 						onEnterToDrop={changeContext("groups")}
+						onEdit={() => onEditGroup(group.id)}
 					>
 						{group.fields
 							.slice()

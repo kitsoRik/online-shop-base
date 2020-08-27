@@ -13,9 +13,11 @@ interface Props {
 
 	children: any;
 	onEnterToDrop: () => void;
+
+	onEdit: () => void;
 }
 
-const Droppable = ({ filterGroup, children, onEnterToDrop }: Props) => {
+const Droppable = ({ filterGroup, children, onEnterToDrop, onEdit }: Props) => {
 	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
 
 	const onAddField = async () => {
@@ -38,6 +40,7 @@ const Droppable = ({ filterGroup, children, onEnterToDrop }: Props) => {
 				<GroupItem
 					filterGroup={filterGroup}
 					onEnterToDrop={onEnterToDrop}
+					onEdit={onEdit}
 					props={{
 						ref: provided.innerRef,
 						...provided.droppableProps

@@ -11,9 +11,10 @@ interface Props {
 	filterId: number;
 
 	onAddNewGroup: () => void;
+	onEditGroup: (groupId: string) => void;
 }
 
-const Groups = ({ filterId, onAddNewGroup }: Props) => {
+const Groups = ({ filterId, onAddNewGroup, onEditGroup }: Props) => {
 	const [context, setContent] = useState<"groups" | "items" | null>(null);
 
 	const client = useApolloClient();
@@ -41,6 +42,7 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 				<div style={{ display: "flex", flexDirection: "column" }}>
 					{context === "groups" && (
 						<MoverContext.Groups
+						onEditGroup={onEditGroup}
 							changeContext={changeContext}
 							changeDragging={setIsDragging}
 							groups={groups}
@@ -48,6 +50,7 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 					)}
 					{context === "items" && (
 						<MoverContext.Items
+						onEditGroup={onEditGroup}
 							changeContext={changeContext}
 							changeDragging={setIsDragging}
 							groups={groups}
@@ -55,6 +58,7 @@ const Groups = ({ filterId, onAddNewGroup }: Props) => {
 					)}
 					{context === null && (
 						<MoverContext
+						onEditGroup={onEditGroup}
 							groups={groups}
 							changeContext={changeContext}
 						/>

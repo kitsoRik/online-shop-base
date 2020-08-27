@@ -10,9 +10,10 @@ import { getOperationName } from "@apollo/client/utilities";
 
 interface Props {
 	filterGroup: Exclude<{ id: string; name: string }, FilterGroup>;
+	onEdit: () => void;
 }
 
-const Header = ({ filterGroup }: Props) => {
+const Header = ({ filterGroup, onEdit }: Props) => {
 	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
 
 	const onAddField = async () => {
@@ -31,6 +32,7 @@ const Header = ({ filterGroup }: Props) => {
 	return (
 		<div className={classes.header}>
 			<Typography.Text>{filterGroup.name}</Typography.Text>
+			<Button onClick={onEdit}>Edit</Button>
 			<Button onClick={onAddField}>Add new field</Button>
 		</div>
 	);

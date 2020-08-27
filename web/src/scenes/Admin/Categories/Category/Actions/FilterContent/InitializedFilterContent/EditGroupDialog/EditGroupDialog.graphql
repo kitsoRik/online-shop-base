@@ -1,0 +1,25 @@
+query GetCategoryFilterGroup($categoryId: Int!, $groupId: String!) {
+	categories(filter: { id: $categoryId }) {
+		id
+		filter {
+			id
+			groups(filter: { id: $groupId }) {
+				id
+				name
+				index
+				fields {
+					id
+					name
+					index
+				}
+			}
+		}
+	}
+}
+
+mutation ChangeFilterGroup($groupId: String!, $name: String!) {
+	changeFilterGroup(filterGroupId: $groupId, change: { name: $name }) {
+		id
+		name
+	}
+}

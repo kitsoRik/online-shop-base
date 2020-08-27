@@ -27,8 +27,10 @@ interface Props {
 
 	changeContext: (value: "items" | null) => () => void;
 	changeDragging: (value: boolean) => void;
+
+	onEditGroup: (groupId: string) => void;
 }
-const Groups = ({ groups, changeContext, changeDragging }: Props) => {
+const Groups = ({ groups, changeContext, changeDragging, onEditGroup }: Props) => {
 	const client = useApolloClient();
 	const [changeFilterGroupsOrder] = useChangeFilterGroupsOrderMutation();
 
@@ -84,7 +86,10 @@ const Groups = ({ groups, changeContext, changeDragging }: Props) => {
 							.slice()
 							.sort((a, b) => a.index - b.index)
 							.map((group, ind) => (
-								<GroupItem.Draggable filterGroup={group}>
+								<GroupItem.Draggable
+									filterGroup={group}
+									onEdit={() => onEditGroup(group.id)}
+								>
 									{group.fields
 										.slice()
 										.sort((a, b) => a.index - b.index)

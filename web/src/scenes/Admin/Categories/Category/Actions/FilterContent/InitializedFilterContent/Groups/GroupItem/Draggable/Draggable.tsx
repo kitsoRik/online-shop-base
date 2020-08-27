@@ -12,9 +12,11 @@ interface Props {
 	filterGroup: { id: string; index: number; name: string };
 
 	children: any;
+
+	onEdit: () => void;
 }
 
-const Draggable = ({ filterGroup, children }: Props) => {
+const Draggable = ({ filterGroup, children, onEdit }: Props) => {
 	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
 
 	const onAddField = async () => {
@@ -41,6 +43,7 @@ const Draggable = ({ filterGroup, children }: Props) => {
 				<GroupItem
 					filterGroup={filterGroup}
 					onEnterToDrop={() => {}}
+					onEdit={onEdit}
 					props={{
 						ref: provided.innerRef,
 						...provided.draggableProps,

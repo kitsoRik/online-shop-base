@@ -15,16 +15,17 @@ interface Props {
 	onEnterToDrop: () => void;
 
 	children?: any;
+
+	onEdit: () => void;
 }
 
 const GroupItem = ({
 	filterGroup,
 	children = null,
 	onEnterToDrop,
+	onEdit,
 	props = {}
 }: Props) => {
-	
-
 	return (
 		<div
 			onMouseEnter={e => {
@@ -34,7 +35,9 @@ const GroupItem = ({
 		>
 			<Collapse activeKey={filterGroup.id}>
 				<Collapse.Panel
-					header={<Header filterGroup={filterGroup} />}
+					header={
+						<Header filterGroup={filterGroup} onEdit={onEdit} />
+					}
 					key={filterGroup.id}
 				>
 					{children}

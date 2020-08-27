@@ -13,6 +13,7 @@ import { FilterGroupEntity } from "./filter-group.entity";
 import { FilterFieldType } from "./filter-field/filter-field.type";
 import { FilterGroupType } from "./filter-group.type";
 import { FilterGroupChangeInput } from "./filter-group-change.input";
+import { FilterGroupFieldsInput } from "./filter-group-fields.input";
 
 @Resolver(() => FilterGroupType)
 export class FilterGroupResolver {
@@ -59,7 +60,10 @@ export class FilterGroupResolver {
 	}
 
 	@ResolveField(type => [FilterFieldType])
-	fields(@Parent() parent: FilterGroupEntity) {
-		return this.filterGroupService.getFields(parent.id);
+	fields(
+		@Parent() parent: FilterGroupEntity,
+		@Args("filter", { nullable: true }) filter: FilterGroupFieldsInput
+	) {
+		return this.filterGroupService.getFields(parent.id, filter);
 	}
 }

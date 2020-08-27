@@ -5,6 +5,7 @@ import { Repository, In } from "typeorm";
 import { FilterEntity } from "../filter.entity";
 import { FilterFieldEntity } from "./filter-field/filter-field.entity";
 import { FilterGroupChangeInput } from "./filter-group-change.input";
+import { FilterGroupFieldsInput } from "./filter-group-fields.input";
 
 @Injectable()
 export class FilterGroupService {
@@ -104,7 +105,16 @@ export class FilterGroupService {
 		return this.filterRepository.findOne({ id: filterId });
 	}
 
-	async getFields(filterGroupId: string) {
-		return this.filterFieldRepository.find({ where: { filterGroupId } });
+	async getFields(filterGroupId: string, filter?: FilterGroupFieldsInput) {
+		const query = this.filterFieldRepository.createQueryBuilder();
+		query.where("filter_group_id = :filterGroupId", { filterGroupId });
+
+		if (filter) {
+			if (filter.id !== undefined && filter.id !== null) {
+				query.where("id = :id", { id: filter.id });
+			}
+		}
+
+		return await query.getMany();
 	}
 }

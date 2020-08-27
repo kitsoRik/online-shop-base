@@ -1,10 +1,29 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { Module } from "@nestjs/common";
+import { AppController } from "./app.controller";
+import { AppService } from "./app.service";
+import { GraphqlModule } from "./graphql/graphql.module";
+import { UploadModule } from "./upload/upload.module";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule } from './config/config.module';
+import { StaticModule } from './static/static.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+	imports: [
+		TypeOrmModule.forRoot({
+			type: "postgres",
+			host: "localhost",
+			username: "postgres",
+			password: "postgres",
+			database: "online-shop-base",
+			synchronize: true,
+			entities: [__dirname + "/**/*.entity.{js,ts}"]
+		}),
+		GraphqlModule,
+		UploadModule,
+		ConfigModule,
+		StaticModule
+	],
+	controllers: [AppController],
+	providers: [AppService]
 })
 export class AppModule {}

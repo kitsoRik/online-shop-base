@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs } from "antd";
 import EditAction from "./EditAction";
 import FieldsAction from "./FieldsAction";

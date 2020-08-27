@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Tabs } from "antd";
 import EditAction from "./EditAction";
 import FieldsAction from "./FieldsAction";
@@ -44,6 +44,11 @@ const InfoContent = () => {
 	const category = (data?.categories ?? [null])[0];
 
 	const info = category?.info ?? [];
+
+	useEffect(() => {
+		if (info.length === 0 || infoId !== -1) return;
+		setInfoId(info[0].id);
+	}, [info]);
 
 	return (
 		<>

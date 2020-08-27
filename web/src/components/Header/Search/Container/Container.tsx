@@ -32,7 +32,10 @@ const Container = ({ user }: Props) => {
 	return (
 		<div className={classes.container}>
 			<Spin spinning={loading}>
-				<Categories categories={categories} content={<Content categories={categories}/>} />
+				<Categories
+					categories={categories}
+					content={<Content categories={categories} />}
+				/>
 			</Spin>
 		</div>
 	);

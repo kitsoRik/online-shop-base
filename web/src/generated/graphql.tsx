@@ -113,6 +113,15 @@ export type FilterGroup = {
   fields: Array<FilterField>;
 };
 
+
+export type FilterGroupFieldsArgs = {
+  filter?: Maybe<FilterGroupFieldsInput>;
+};
+
+export type FilterGroupFieldsInput = {
+  id?: Maybe<Scalars['String']>;
+};
+
 export type FilterField = {
   __typename?: 'FilterField';
   id: Scalars['String'];
@@ -262,6 +271,7 @@ export type Mutation = {
   removeFieldFromCategory: Category;
   initializeCategoryFilter: Category;
   addFieldToFilterGroup: FilterField;
+  changeFilterGroupField: FilterField;
   addFilterGroup: Filter;
   changeFilterGroup: FilterGroup;
   changeFilterGroupsOrder: Array<FilterGroup>;
@@ -364,6 +374,12 @@ export type MutationInitializeCategoryFilterArgs = {
 export type MutationAddFieldToFilterGroupArgs = {
   name: Scalars['String'];
   filterGroupId: Scalars['String'];
+};
+
+
+export type MutationChangeFilterGroupFieldArgs = {
+  name: Scalars['String'];
+  fieldId: Scalars['String'];
 };
 
 
@@ -778,6 +794,47 @@ export type ChangeFilterGroupMutation = (
   & { changeFilterGroup: (
     { __typename?: 'FilterGroup' }
     & Pick<FilterGroup, 'id' | 'name'>
+  ) }
+);
+
+export type GetCategoryFilterGroupFieldQueryVariables = Exact<{
+  categoryId: Scalars['Int'];
+  groupId: Scalars['String'];
+  fieldId: Scalars['String'];
+}>;
+
+
+export type GetCategoryFilterGroupFieldQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { filter?: Maybe<(
+      { __typename?: 'Filter' }
+      & Pick<Filter, 'id'>
+      & { groups: Array<(
+        { __typename?: 'FilterGroup' }
+        & Pick<FilterGroup, 'id' | 'name' | 'index'>
+        & { fields: Array<(
+          { __typename?: 'FilterField' }
+          & Pick<FilterField, 'id' | 'name' | 'index'>
+        )> }
+      )> }
+    )> }
+  )>> }
+);
+
+export type ChangeFilterGroupFieldMutationVariables = Exact<{
+  fieldId: Scalars['String'];
+  name: Scalars['String'];
+}>;
+
+
+export type ChangeFilterGroupFieldMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFilterGroupField: (
+    { __typename?: 'FilterField' }
+    & Pick<FilterField, 'id' | 'name'>
   ) }
 );
 
@@ -2314,6 +2371,88 @@ export function useChangeFilterGroupMutation(baseOptions?: ApolloReactHooks.Muta
 export type ChangeFilterGroupMutationHookResult = ReturnType<typeof useChangeFilterGroupMutation>;
 export type ChangeFilterGroupMutationResult = ApolloReactCommon.MutationResult<ChangeFilterGroupMutation>;
 export type ChangeFilterGroupMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFilterGroupMutation, ChangeFilterGroupMutationVariables>;
+export const GetCategoryFilterGroupFieldDocument = gql`
+    query GetCategoryFilterGroupField($categoryId: Int!, $groupId: String!, $fieldId: String!) {
+  categories(filter: {id: $categoryId}) {
+    id
+    filter {
+      id
+      groups(filter: {id: $groupId}) {
+        id
+        name
+        index
+        fields(filter: {id: $fieldId}) {
+          id
+          name
+          index
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryFilterGroupFieldQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryFilterGroupFieldQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryFilterGroupFieldQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryFilterGroupFieldQuery({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *      groupId: // value for 'groupId'
+ *      fieldId: // value for 'fieldId'
+ *   },
+ * });
+ */
+export function useGetCategoryFilterGroupFieldQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryFilterGroupFieldQuery, GetCategoryFilterGroupFieldQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryFilterGroupFieldQuery, GetCategoryFilterGroupFieldQueryVariables>(GetCategoryFilterGroupFieldDocument, baseOptions);
+      }
+export function useGetCategoryFilterGroupFieldLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryFilterGroupFieldQuery, GetCategoryFilterGroupFieldQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryFilterGroupFieldQuery, GetCategoryFilterGroupFieldQueryVariables>(GetCategoryFilterGroupFieldDocument, baseOptions);
+        }
+export type GetCategoryFilterGroupFieldQueryHookResult = ReturnType<typeof useGetCategoryFilterGroupFieldQuery>;
+export type GetCategoryFilterGroupFieldLazyQueryHookResult = ReturnType<typeof useGetCategoryFilterGroupFieldLazyQuery>;
+export type GetCategoryFilterGroupFieldQueryResult = ApolloReactCommon.QueryResult<GetCategoryFilterGroupFieldQuery, GetCategoryFilterGroupFieldQueryVariables>;
+export const ChangeFilterGroupFieldDocument = gql`
+    mutation ChangeFilterGroupField($fieldId: String!, $name: String!) {
+  changeFilterGroupField(fieldId: $fieldId, name: $name) {
+    id
+    name
+  }
+}
+    `;
+export type ChangeFilterGroupFieldMutationFn = ApolloReactCommon.MutationFunction<ChangeFilterGroupFieldMutation, ChangeFilterGroupFieldMutationVariables>;
+
+/**
+ * __useChangeFilterGroupFieldMutation__
+ *
+ * To run a mutation, you first call `useChangeFilterGroupFieldMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFilterGroupFieldMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFilterGroupFieldMutation, { data, loading, error }] = useChangeFilterGroupFieldMutation({
+ *   variables: {
+ *      fieldId: // value for 'fieldId'
+ *      name: // value for 'name'
+ *   },
+ * });
+ */
+export function useChangeFilterGroupFieldMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFilterGroupFieldMutation, ChangeFilterGroupFieldMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFilterGroupFieldMutation, ChangeFilterGroupFieldMutationVariables>(ChangeFilterGroupFieldDocument, baseOptions);
+      }
+export type ChangeFilterGroupFieldMutationHookResult = ReturnType<typeof useChangeFilterGroupFieldMutation>;
+export type ChangeFilterGroupFieldMutationResult = ApolloReactCommon.MutationResult<ChangeFilterGroupFieldMutation>;
+export type ChangeFilterGroupFieldMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFilterGroupFieldMutation, ChangeFilterGroupFieldMutationVariables>;
 export const AddFieldToFilterGroupDocument = gql`
     mutation AddFieldToFilterGroup($filterGroupId: String!, $name: String!) {
   addFieldToFilterGroup(filterGroupId: $filterGroupId, name: $name) {

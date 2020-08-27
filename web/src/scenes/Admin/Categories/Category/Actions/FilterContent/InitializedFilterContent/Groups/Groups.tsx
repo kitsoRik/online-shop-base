@@ -12,9 +12,15 @@ interface Props {
 
 	onAddNewGroup: () => void;
 	onEditGroup: (groupId: string) => void;
+	onEditItem: (groupId: string, itemId: string) => void;
 }
 
-const Groups = ({ filterId, onAddNewGroup, onEditGroup }: Props) => {
+const Groups = ({
+	filterId,
+	onAddNewGroup,
+	onEditGroup,
+	onEditItem
+}: Props) => {
 	const [context, setContent] = useState<"groups" | "items" | null>(null);
 
 	const client = useApolloClient();
@@ -42,7 +48,8 @@ const Groups = ({ filterId, onAddNewGroup, onEditGroup }: Props) => {
 				<div style={{ display: "flex", flexDirection: "column" }}>
 					{context === "groups" && (
 						<MoverContext.Groups
-						onEditGroup={onEditGroup}
+							onEditGroup={onEditGroup}
+							onEditItem={onEditItem}
 							changeContext={changeContext}
 							changeDragging={setIsDragging}
 							groups={groups}
@@ -50,7 +57,8 @@ const Groups = ({ filterId, onAddNewGroup, onEditGroup }: Props) => {
 					)}
 					{context === "items" && (
 						<MoverContext.Items
-						onEditGroup={onEditGroup}
+							onEditGroup={onEditGroup}
+							onEditItem={onEditItem}
 							changeContext={changeContext}
 							changeDragging={setIsDragging}
 							groups={groups}
@@ -58,7 +66,8 @@ const Groups = ({ filterId, onAddNewGroup, onEditGroup }: Props) => {
 					)}
 					{context === null && (
 						<MoverContext
-						onEditGroup={onEditGroup}
+							onEditGroup={onEditGroup}
+							onEditItem={onEditItem}
 							groups={groups}
 							changeContext={changeContext}
 						/>

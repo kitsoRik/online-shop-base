@@ -29,8 +29,15 @@ interface Props {
 	changeDragging: (value: boolean) => void;
 
 	onEditGroup: (groupId: string) => void;
+	onEditItem: (groupId: string, itemId: string) => void;
 }
-const Groups = ({ groups, changeContext, changeDragging, onEditGroup }: Props) => {
+const Groups = ({
+	groups,
+	changeContext,
+	changeDragging,
+	onEditGroup,
+	onEditItem
+}: Props) => {
 	const client = useApolloClient();
 	const [changeFilterGroupsOrder] = useChangeFilterGroupsOrderMutation();
 
@@ -97,6 +104,9 @@ const Groups = ({ groups, changeContext, changeDragging, onEditGroup }: Props) =
 											<>
 												<FieldItem
 													item={item}
+													onEdit={() =>
+														onEditItem(group.id, item.id)
+													}
 													onEnterToDrop={changeContext(
 														"items"
 													)}

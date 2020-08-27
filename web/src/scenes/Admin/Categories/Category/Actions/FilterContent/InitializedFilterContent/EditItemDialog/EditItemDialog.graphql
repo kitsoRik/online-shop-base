@@ -1,0 +1,29 @@
+query GetCategoryFilterGroupField(
+	$categoryId: Int!
+	$groupId: String!
+	$fieldId: String!
+) {
+	categories(filter: { id: $categoryId }) {
+		id
+		filter {
+			id
+			groups(filter: { id: $groupId }) {
+				id
+				name
+				index
+				fields(filter: { id: $fieldId }) {
+					id
+					name
+					index
+				}
+			}
+		}
+	}
+}
+
+mutation ChangeFilterGroupField($fieldId: String!, $name: String!) {
+	changeFilterGroupField(fieldId: $fieldId, name: $name) {
+		id
+		name
+	}
+}

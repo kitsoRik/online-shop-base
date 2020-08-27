@@ -5,9 +5,10 @@ import FieldItem from "../FieldItem";
 
 interface Props {
 	item: Extract<{ id: string; name: string; index: number }, FilterField>;
+	onEdit: () => void;
 }
 
-const Draggable = ({ item }: Props) => {
+const Draggable = ({ item, onEdit }: Props) => {
 	return (
 		<DNDDraggable
 			key={item.id}
@@ -17,6 +18,7 @@ const Draggable = ({ item }: Props) => {
 			{(provided, snapshot) => (
 				<FieldItem
 					item={item}
+					onEdit={onEdit}
 					onEnterToDrop={() => {}}
 					props={{
 						ref: provided.innerRef,

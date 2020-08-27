@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import Groups from "./Groups";
 import AddNewGroupDialog from "./AddNewGroupDialog";
 import EditGroupDialog from "./EditGroupDialog";
+import EditItemDialog from "./EditItemDialog/EditItemDialog";
 
 const InitializedFilterContent = () => {
 	const { data, loading } = useGetCategoryFilterQuery({
@@ -16,6 +17,10 @@ const InitializedFilterContent = () => {
 
 	const [addVisible, setAddVisible] = useState(false);
 	const [editVisibleGroup, setEditVisibleGroup] = useState("");
+	const [editVisibleItem, setEditVisibleItem] = useState<[string, string]>([
+		"",
+		""
+	]); // groupId, fieldId
 
 	return (
 		<>
@@ -23,6 +28,9 @@ const InitializedFilterContent = () => {
 				filterId={filter.id}
 				onAddNewGroup={() => setAddVisible(true)}
 				onEditGroup={groupId => setEditVisibleGroup(groupId)}
+				onEditItem={(groupId, fieldId) =>
+					setEditVisibleItem([groupId, fieldId])
+				}
 			/>
 			<AddNewGroupDialog
 				visible={addVisible}
@@ -33,6 +41,12 @@ const InitializedFilterContent = () => {
 				groupId={editVisibleGroup}
 				visible={editVisibleGroup !== ""}
 				onClose={() => setEditVisibleGroup("")}
+			/>
+			<EditItemDialog
+				visible={!!editVisibleItem[0]}
+				itemId={editVisibleItem[1]}
+				groupId={editVisibleItem[0]}
+				onClose={() => setEditVisibleItem(["", ""])}
 			/>
 		</>
 	);

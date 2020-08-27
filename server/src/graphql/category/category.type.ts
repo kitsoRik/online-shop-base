@@ -8,7 +8,7 @@ export class CategoryType {
 	@Field(type => Int)
 	id: number;
 
-	@Field()
+	@Field({})
 	name: string;
 
 	@Field(type => CategoryType, { nullable: true })

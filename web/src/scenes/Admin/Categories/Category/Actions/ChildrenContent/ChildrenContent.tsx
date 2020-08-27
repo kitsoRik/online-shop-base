@@ -37,7 +37,7 @@ const ChildrenContent = ({ category: categoryP, load }: Props) => {
 	}
 
 	const onChildCategoryClick = (id: number) => {
-		queryPush(`/admin/categories/${category}`, { });
+		queryPush(`/admin/categories/${category.id}`, {});
 	};
 
 	return (

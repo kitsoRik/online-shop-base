@@ -1,17 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import React, { Suspense } from "react";
+import ReactDOM from "react-dom";
+import "./index.scss";
+import "./defaults.less";
+import App from "./App";
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./apollo/apollo";
+import { BrowserRouter } from "react-router-dom";
+import { BrowserLocationQuery } from "react-location-query";
+import { Provider as MobxProvider } from "mobx-react";
+import { user } from "./mobx";
+import "./i18n/i18n";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+	<React.StrictMode>
+		<Suspense fallback={<div>Loading...</div>}>
+			<BrowserRouter>
+				<BrowserLocationQuery>
+					<ApolloProvider client={client}>
+						<MobxProvider user={user}>
+							<App />
+						</MobxProvider>
+					</ApolloProvider>
+				</BrowserLocationQuery>
+			</BrowserRouter>
+		</Suspense>
+	</React.StrictMode>,
+	document.getElementById("root")
 );
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();

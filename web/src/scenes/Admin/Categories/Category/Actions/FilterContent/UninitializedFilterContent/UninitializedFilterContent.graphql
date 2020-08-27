@@ -1,0 +1,10 @@
+mutation InitializeCategoryFilter($categoryId: Int!) {
+	initializeCategoryFilter(categoryId: $categoryId) {
+		id
+		filter {
+			category {
+				id
+			}
+		}
+	}
+}

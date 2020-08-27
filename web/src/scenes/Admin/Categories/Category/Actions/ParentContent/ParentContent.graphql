@@ -1,0 +1,9 @@
+query GetParentCategoryById($id: Int!) {
+	categories(filter: { id: $id }) {
+		id
+		parent {
+			id
+			name
+		}
+	}
+}

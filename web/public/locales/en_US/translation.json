@@ -1,0 +1,230 @@
+{
+	"admin": {
+		"menu": {
+			"general": {
+				"title": "General",
+				"information": "Information",
+				"languages": "languages"
+			},
+			"categories": {
+				"title": "Categories",
+				"create": "Create",
+				"view": "View"
+			},
+			"products": {
+				"title": "Products",
+				"create": "Create",
+				"view": "View"
+			}
+		},
+		"categories": {
+			"create": {
+				"form": {
+					"name": {
+						"label": "Category name",
+						"placeholder": "Input category name"
+					},
+					"description": {
+						"label": "Category description",
+						"placeholder": "Input category description"
+					},
+					"parent": {
+						"label": "Parent category"
+					},
+					"fields": {
+						"addField": "Add field"
+					},
+					"submit": {
+						"create": "Create"
+					}
+				}
+			},
+			"edit": {
+				"actions": {
+					"edit": {
+						"form": {
+							"name": {
+								"label": "Name",
+								"rules": {
+									"requiredMessage": "Name is required"
+								}
+							},
+							"submit": {
+								"change": "Change"
+							}
+						},
+						"success": "Category has been changed",
+						"error": {
+							"unknownCategory": "Internal server error, please reload page"
+						}
+					},
+					"parent": {
+						"empty": "Has no parent category",
+						"name": "Name: {{name}}",
+						"goto": "Go to parent"
+					},
+					"children": {
+						"empty": "Has no subcategories"
+					},
+					"fields": {
+						"add": "Add field",
+						"addDialog": {
+							"success": "Field {{name}} has been added",
+							"form": {
+								"label": "Name",
+								"rules": {
+									"required": {
+										"message": "Name is required"
+									}
+								}
+							},
+							"footer": {
+								"addField": "Add field"
+							}
+						},
+						"modifyDialog": {
+							"okText": "Modify",
+							"cancelText": "Cancel",
+							"form": {
+								"name": {
+									"label": "Name"
+								}
+							},
+							"success": "Field {{name}} has been changed"
+						},
+						"field": {
+							"remove": {
+								"success": "Field {{name}} has been removed",
+								"confirm": {
+									"content": "Are you want to delete {{name}}?",
+									"okText": "Yes, I want delete it",
+									"cancelText": "No, juse close dialog"
+								},
+								"actions": {
+									"modify": "Modify",
+									"remove": "Remove"
+								}
+							}
+						}
+					}
+				}
+			},
+			"main": {
+				"title": "Search category to edit",
+				"link": "or click create new category"
+			}
+		}
+	},
+	"scenes": {
+		"login": {
+			"title": "Login",
+			"errors": {
+				"unknownData": "Unknown data"
+			},
+			"form": {
+				"email": {
+					"label": "Email",
+					"rules": {
+						"required": "Email is required"
+					}
+				},
+				"password": {
+					"label": "Password",
+					"rules": {
+						"required": "Password is required"
+					}
+				},
+				"remember": {
+					"label": "Remember me"
+				},
+				"submit": "Login"
+			},
+			"unlogin": {
+				"title": "Ooy, you are loggined now, do you want leave?",
+				"yes": "Yes, I want leave",
+				"no": "No, go to home pag",
+				"success": "You have left from your profile",
+				"error": "Server response error, but you've left from your profile localy"
+			}
+		},
+		"register": {
+			"title": "Register",
+			"errors": {
+				"busyEmail": "Email is busy"
+			},
+			"form": {
+				"firstName": {
+					"label": "First name",
+					"rules": {
+						"required": {
+							"message": "First name is required"
+						}
+					}
+				},
+				"lastName": {
+					"label": "Last name",
+					"rules": {
+						"required": {
+							"message": "Last name is required"
+						}
+					}
+				},
+				"middleName": {
+					"label": "Middle name"
+				},
+				"phone": {
+					"label": "Phone"
+				},
+				"email": {
+					"label": "Email",
+					"rules": {
+						"required": {
+							"message": "Email is required"
+						}
+					}
+				},
+				"password": {
+					"label": "Password",
+					"rules": {
+						"required": {
+							"message": "Password is required"
+						}
+					}
+				},
+				"confirmPassword": {
+					"label": "Confirm password",
+					"rules": {
+						"equalToPassword": {
+							"message": "Password is not equals"
+						}
+					}
+				},
+				"submit": "Register"
+			},
+			"successWindow": {
+				"title": "Thanks for register, now you can login into your account",
+				"subTitle": "But, you almost need to verify your email by proceed link from your email",
+				"loginLink": "Go to login form"
+			}
+		}
+	},
+	"shared": {
+		"inputCategory": {
+			"placeholder": "Input here"
+		}
+	},
+	"components": {
+		"drawer": {
+			"menu": {
+				"inbox": "Inbox"
+			},
+			"footer": {
+				"logout": {
+					"label": "Logout",
+					"success": "You have left from your profile",
+					"error": "Server response error, but you've left from your profile localy"
+				}
+			}
+		}
+	}
+}

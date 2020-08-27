@@ -1,0 +1,22 @@
+query FindProductInfoByNameTemplate(
+	$template: String
+	$offset: Int!
+	$limit: Int!
+) {
+	searchProducts(
+		filter: { nameTemplate: $template }
+		pagination: { offset: $offset, limit: $limit }
+	) {
+		productsInfo {
+			id
+			name
+			language {
+				id
+				code
+			}
+			product {
+				id
+			}
+		}
+	}
+}

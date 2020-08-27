@@ -1,0 +1,14 @@
+mutation AddFieldToProductInfo(
+	$productInfoId: Int!
+	$label: String!
+	$value: String!
+) {
+	addFieldToProductInfo(
+		productInfoId: $productInfoId
+		label: $label
+		value: $value
+	) {
+		id
+		value
+	}
+}

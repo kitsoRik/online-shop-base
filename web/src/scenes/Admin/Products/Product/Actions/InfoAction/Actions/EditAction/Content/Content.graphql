@@ -1,0 +1,18 @@
+query GetProductInfoByProductIdAndInfoId($id: Int!, $infoId: Int!) {
+	products(filter: { id: $id }) {
+		id
+		info(filter: { id: $infoId }) {
+			id
+			name
+			language {
+				id
+			}
+		}
+	}
+}
+
+mutation ChangeProductInfo($id: Int!, $name: String!) {
+	changeProductInfo(id: $id, change: { name: $name }) {
+		id
+	}
+}

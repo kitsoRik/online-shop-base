@@ -1,0 +1,9 @@
+mutation AddFieldToCategory($categoryId: Int!, $name: String!) {
+	addFieldToCategory(categoryId: $categoryId, name: $name) {
+		id
+		fields {
+			id
+			name
+		}
+	}
+}

@@ -1,0 +1,16 @@
+mutation InitializeCategoryInfoField(
+	$categoryInfoId: Int!
+	$categoryFieldId: Int!
+) {
+	initializeCategoryInfoField(
+		categoryInfoId: $categoryInfoId
+		categoryFieldId: $categoryFieldId
+	) {
+		id
+		name
+		value
+		categoryField {
+			id
+		}
+	}
+}

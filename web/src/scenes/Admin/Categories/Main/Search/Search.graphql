@@ -1,0 +1,7 @@
+query FindCategoryByNameTemplate($template: String) {
+	findCategoryByNameTemplate(template: $template) {
+		id
+		name
+		level
+	}
+}

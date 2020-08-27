@@ -1,0 +1,9 @@
+query GetFieldsCategoryById($id: Int!) {
+	categories(filter: { id: $id }) {
+		id
+		fields {
+			id
+			name
+		}
+	}
+}

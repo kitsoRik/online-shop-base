@@ -1,0 +1,8 @@
+mutation RemoveProductInfoFromProduct($productId: Int!, $infoId: Int!) {
+	removeInfoFromProduct(productId: $productId, infoId: $infoId) {
+		id
+		info {
+			id
+		}
+	}
+}

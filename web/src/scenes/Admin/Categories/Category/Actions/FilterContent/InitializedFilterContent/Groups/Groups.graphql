@@ -1,0 +1,13 @@
+fragment FilterWithGroups on Filter {
+	id
+	groups {
+		id
+		name
+		index
+		fields {
+			id
+			name
+			index
+		}
+	}
+}

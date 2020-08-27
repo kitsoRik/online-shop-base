@@ -1,0 +1,13 @@
+mutation AddCategoryFilterGroup($filterId: Int!, $name: String!) {
+	addFilterGroup(filterId: $filterId, name: $name) {
+		id
+		groups {
+			id
+			name
+			index
+			fields {
+				id
+			}
+		}
+	}
+}

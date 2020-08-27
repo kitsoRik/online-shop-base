@@ -1,0 +1,14 @@
+query GetCategoryById($id: Int!) {
+	categories(filter: { id: $id }) {
+		id
+		name
+		level
+		info {
+			id
+		}
+		parent {
+			id
+			name
+		}
+	}
+}

@@ -1,0 +1,23 @@
+query SearchProductsCategory($nameTemplate: String!, $languageCode: String!) {
+	searchProductsCategory(
+		filter: { nameTemplate: $nameTemplate, languageCode: $languageCode }
+	) {
+		id
+		name
+		parent {
+			id
+			name
+			parent {
+				id
+				name
+			}
+		}
+		info(filter: { languageCode: $languageCode }) {
+			id
+			name
+			language {
+				code
+			}
+		}
+	}
+}

@@ -26,4 +26,13 @@ export class FilterFieldResolver {
 			name
 		);
 	}
+
+	@Mutation(type => FilterFieldType)
+	@AccessAdmin()
+	changeFilterGroupField(
+		@Args("fieldId") fieldId: string,
+		@Args("name") name: string
+	) {
+		return this.filterFieldService.changeField(fieldId, name);
+	}
 }

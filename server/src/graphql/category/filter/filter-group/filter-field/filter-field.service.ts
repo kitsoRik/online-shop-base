@@ -3,6 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { CategoryEntity } from "../../../category.entity";
 import { Repository } from "typeorm";
 import { FilterFieldEntity } from "./filter-field.entity";
+import { GraphQLError } from "graphql";
 
 @Injectable()
 export class FilterFieldService {
@@ -16,6 +17,20 @@ export class FilterFieldService {
 			filterGroupId,
 			name
 		});
+
+		await this.filterFieldRepository.save(field);
+
+		return field;
+	}
+
+	async changeField(id: string, name: string) {
+		const field = await this.filterFieldRepository.findOne({
+			where: { id }
+		});
+
+		if (!field) throw new GraphQLError("UNKNOWN_FIELD");
+
+		field.name = name;
 
 		await this.filterFieldRepository.save(field);
 

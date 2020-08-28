@@ -10,4 +10,7 @@ export class FilterFieldType {
 
 	@Field(type => Int)
 	index: number;
+
+	@Field()
+	type: string;
 }

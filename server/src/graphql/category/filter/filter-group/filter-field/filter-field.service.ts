@@ -23,7 +23,7 @@ export class FilterFieldService {
 		return field;
 	}
 
-	async changeField(id: string, name: string) {
+	async changeField(id: string, name: string, type: string) {
 		const field = await this.filterFieldRepository.findOne({
 			where: { id }
 		});
@@ -31,6 +31,7 @@ export class FilterFieldService {
 		if (!field) throw new GraphQLError("UNKNOWN_FIELD");
 
 		field.name = name;
+		field.type = type;
 
 		await this.filterFieldRepository.save(field);
 

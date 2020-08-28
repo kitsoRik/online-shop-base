@@ -31,8 +31,9 @@ export class FilterFieldResolver {
 	@AccessAdmin()
 	changeFilterGroupField(
 		@Args("fieldId") fieldId: string,
-		@Args("name") name: string
+		@Args("name") name: string,
+		@Args("type") type: string
 	) {
-		return this.filterFieldService.changeField(fieldId, name);
+		return this.filterFieldService.changeField(fieldId, name, type);
 	}
 }

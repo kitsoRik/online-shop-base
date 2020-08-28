@@ -25,7 +25,7 @@ const ItemForm = ({ form, onFinish, categoryId, initialValues }: Props) => {
 		id: number;
 		type: string;
 	} | null>(null);
-	console.log(initialValues?.categoryField?.type);
+
 	return (
 		<Form
 			form={form}
@@ -52,6 +52,7 @@ const ItemForm = ({ form, onFinish, categoryId, initialValues }: Props) => {
 					/>
 				</Form.Item>
 			)}
+
 			<Form.Item
 				label="Type"
 				name="type"
@@ -59,8 +60,8 @@ const ItemForm = ({ form, onFinish, categoryId, initialValues }: Props) => {
 			>
 				<TypeSelect
 					fieldType={
-						initialValues?.categoryField?.type ||
-						categoryField?.type
+						categoryField?.type ||
+						initialValues?.categoryField?.type
 					}
 				/>
 			</Form.Item>

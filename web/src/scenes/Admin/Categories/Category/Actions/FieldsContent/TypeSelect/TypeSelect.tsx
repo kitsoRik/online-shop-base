@@ -9,7 +9,7 @@ interface Props {
 const TypeSelect = ({ value, onChange }: Props) => {
 	return (
 		<Select value={value} onChange={onChange}>
-			{["text", "integer", "float"].map(type => (
+			{["text", "integer", "float", "boolean"].map(type => (
 				<Select.Option value={type}>{type}</Select.Option>
 			))}
 		</Select>

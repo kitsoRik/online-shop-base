@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 
 interface Props {
 	categoryId: number;
-	field: CategoryField;
+	field: Exclude<{ id: number; name: string }, CategoryField>;
 }
 
 const FieldItem = ({ categoryId, field }: Props) => {

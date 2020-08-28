@@ -9,7 +9,7 @@ import classes from "./UninitializedItem.module.scss";
 import { useLocationFieldT } from "react-location-query";
 
 interface Props {
-	categoryField?: CategoryField;
+	categoryField?: Exclude<{ id: number; name: string }, CategoryField> | null;
 	categoryInfoField: Exclude<
 		{ id: number; name?: string | null },
 		CategoryInfoField

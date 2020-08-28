@@ -7,8 +7,11 @@ import { List, Button, Typography } from "antd";
 import { useLocationFieldT } from "react-location-query";
 
 interface Props {
-	categoryField: CategoryField;
-	categoryInfoField: CategoryInfoField;
+	categoryField: Exclude<{ id: number; name: string }, CategoryField>;
+	categoryInfoField: Exclude<
+		{ id: number; name: string },
+		CategoryInfoField
+	>;
 }
 
 const InitializedItem = ({ categoryField, categoryInfoField }: Props) => {
@@ -19,7 +22,11 @@ const InitializedItem = ({ categoryField, categoryInfoField }: Props) => {
 			<List.Item
 				actions={[
 					[
-						<Button onClick={() => setModify(categoryInfoField.id)}>
+						<Button
+							onClick={() =>
+								setModify(categoryInfoField.id ?? -1)
+							}
+						>
 							Edit
 						</Button>
 					]

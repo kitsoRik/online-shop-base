@@ -44,7 +44,6 @@ const Content = ({ load }: Props) => {
 		<>
 			<CategoryFields
 				categoryFields={categoryFields}
-				// @ts-ignore
 				categoryInfoFields={categoryInfoFields}
 			/>
 		</>

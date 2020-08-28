@@ -9,6 +9,7 @@ import {
 import { useForm } from "antd/lib/form/Form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
+import TypeSelect from "../TypeSelect";
 
 const AddFieldDialog = () => {
 	const { t } = useTranslation();
@@ -22,10 +23,14 @@ const AddFieldDialog = () => {
 		setAdd(false);
 	};
 
-	const onAddField = async (name: string) => {
+	const onAddField = async (
+		name: string,
+		type: string,
+		defaultValue: string
+	) => {
 		try {
 			const {} = await addFieldToCategory({
-				variables: { categoryId, name }
+				variables: { categoryId, name, type, defaultValue }
 			});
 			notification.success({
 				message: t(
@@ -56,7 +61,12 @@ const AddFieldDialog = () => {
 				</Form.Item>
 			}
 		>
-			<Form form={form} onFinish={({ name }) => onAddField(name)}>
+			<Form
+				form={form}
+				onFinish={({ name, type, defaultValue }) =>
+					onAddField(name, type, defaultValue)
+				}
+			>
 				<Form.Item
 					name="name"
 					label={t(
@@ -68,6 +78,40 @@ const AddFieldDialog = () => {
 							required: true,
 							message: t(
 								"admin.categories.edit.actions.fields.addDialog.form.name.rules.required.message"
+							)
+						}
+					]}
+				>
+					<Input />
+				</Form.Item>
+				<Form.Item
+					name="type"
+					label={t(
+						"admin.categories.edit.actions.fields.addDialog.form.type.label"
+					)}
+					required
+					rules={[
+						{
+							required: true,
+							message: t(
+								"admin.categories.edit.actions.fields.addDialog.form.type.rules.required.message"
+							)
+						}
+					]}
+				>
+					<TypeSelect />
+				</Form.Item>
+				<Form.Item
+					name="defaultValue"
+					label={t(
+						"admin.categories.edit.actions.fields.addDialog.form.defaultValue.label"
+					)}
+					required
+					rules={[
+						{
+							required: true,
+							message: t(
+								"admin.categories.edit.actions.fields.addDialog.form.defaultValue.rules.required.message"
 							)
 						}
 					]}

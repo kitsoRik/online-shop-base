@@ -9,7 +9,7 @@ import { useLocationFieldT } from "react-location-query";
 import { getOperationName } from "@apollo/client/utilities";
 
 interface Props {
-	categoryField: CategoryField;
+	categoryField: Exclude<{ id: number; name: string }, CategoryField>;
 }
 
 const UnInitializedItem = ({ categoryField }: Props) => {

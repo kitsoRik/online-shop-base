@@ -10,8 +10,17 @@ import { useLocationField } from "react-location-query";
 import ModifyDialog from "./ModifyDialog";
 
 interface Props {
-	categoryFields: CategoryField[];
-	categoryInfoFields: CategoryInfoField[];
+	categoryFields: Exclude<{ id: number; name: string }, CategoryField>[];
+	categoryInfoFields: Exclude<
+		{
+			id: number;
+			name: string;
+			categoryField?: {
+				id: number;
+			} | null;
+		},
+		CategoryInfoField
+	>[];
 }
 
 const CategoryFields = ({ categoryFields, categoryInfoFields }: Props) => {
@@ -20,7 +29,7 @@ const CategoryFields = ({ categoryFields, categoryInfoFields }: Props) => {
 		initial: -1,
 		hideIfInitial: true
 	});
-	console.log(categoryFields, categoryInfoFields);
+
 	return (
 		<>
 			<Typography.Title level={3}>From category</Typography.Title>

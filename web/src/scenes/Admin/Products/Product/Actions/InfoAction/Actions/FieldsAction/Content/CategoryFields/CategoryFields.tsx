@@ -8,12 +8,12 @@ import {
 import FieldItem from "./FieldItem/FieldItem";
 
 interface Props {
-	categoryFields: CategoryField[];
+	categoryFields: Exclude<{ id: number; name: string }, CategoryField>[];
 	categoryInfoFields: Exclude<
 		{
 			id: number;
 			name?: string | null;
-			categoryField?: CategoryField | null;
+			categoryField?: Exclude<{ id: number }, CategoryField> | null;
 		},
 		CategoryInfoField
 	>[];

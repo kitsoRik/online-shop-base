@@ -1,9 +1,19 @@
-mutation AddFieldToCategory($categoryId: Int!, $name: String!) {
-	addFieldToCategory(categoryId: $categoryId, name: $name) {
+mutation AddFieldToCategory(
+	$categoryId: Int!
+	$name: String!
+	$type: String!
+	$defaultValue: String!
+) {
+	addFieldToCategory(
+		categoryId: $categoryId
+		field: { name: $name, type: $type, defaultValue: $defaultValue }
+	) {
 		id
 		fields {
 			id
 			name
+			type
+			defaultValue
 		}
 	}
 }

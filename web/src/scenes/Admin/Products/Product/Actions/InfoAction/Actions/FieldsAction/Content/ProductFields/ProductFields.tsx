@@ -16,7 +16,7 @@ interface Props {
 		{ id: number; categoryInfoField?: { id: number } | null },
 		ProductInfoField
 	>[];
-	categoryInfoFields: CategoryInfoField[];
+	categoryInfoFields: Exclude<{ id: number }, CategoryInfoField>[];
 }
 
 const ProductFields = ({ productInfoFields, categoryInfoFields }: Props) => {

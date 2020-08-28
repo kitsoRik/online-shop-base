@@ -6,8 +6,11 @@ import InitializedItem from "./InitializedItem";
 import UnInitializedItem from "./UnInitializedItem/UnInitializedItem";
 
 interface Props {
-	categoryField: CategoryField;
-	categoryInfoField?: CategoryInfoField | null;
+	categoryField: Exclude<{ id: number; name: string }, CategoryField>;
+	categoryInfoField?: Exclude<
+		{ id: number; name: string },
+		CategoryInfoField
+	> | null;
 }
 
 const FieldItem = ({ categoryField, categoryInfoField }: Props) => {

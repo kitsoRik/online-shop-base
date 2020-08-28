@@ -4,13 +4,25 @@ query GetFieldByIdFromCategoryById($id: Int!, $fieldId: Int!) {
 		fields(filter: { id: $fieldId }) {
 			id
 			name
+			type
+			defaultValue
 		}
 	}
 }
 
-mutation ChangeFieldInCategory($fieldId: Int!, $name: String!) {
-	changeFieldInCategory(fieldId: $fieldId, name: $name) {
+mutation ChangeFieldInCategory(
+	$fieldId: Int!
+	$name: String!
+	$type: String!
+	$defaultValue: String!
+) {
+	changeFieldInCategory(
+		fieldId: $fieldId
+		change: { name: $name, type: $type, defaultValue: $defaultValue }
+	) {
 		id
 		name
+		type
+		defaultValue
 	}
 }

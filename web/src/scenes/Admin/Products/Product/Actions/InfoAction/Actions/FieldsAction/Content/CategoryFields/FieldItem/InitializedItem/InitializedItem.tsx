@@ -15,7 +15,7 @@ interface Props {
 		{ id: number; name?: string | null; value?: string | null },
 		ProductInfoField
 	>;
-	categoryField?: CategoryField;
+	categoryField?: Exclude<{ id: number; name: string }, CategoryField> | null;
 	categoryInfoField: Exclude<
 		{ id: number; name?: string | null },
 		CategoryInfoField

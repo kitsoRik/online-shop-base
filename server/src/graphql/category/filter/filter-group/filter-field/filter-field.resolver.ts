@@ -3,7 +3,8 @@ import {
 	ResolveField,
 	Parent,
 	Mutation,
-	Args
+	Args,
+	Int
 } from "@nestjs/graphql";
 import { CategoryType } from "../../../category.type";
 import { FilterFieldEntity } from "./filter-field.entity";
@@ -22,11 +23,15 @@ export class FilterFieldResolver {
 	@AccessAdmin()
 	addFieldToFilterGroup(
 		@Args("filterGroupId") filterGroupId: string,
-		@Args("name") name: string
+		@Args("name") name: string,
+		@Args("type") type: string,
+		@Args("categoryFieldId", { type: () => Int }) categoryFieldId: number
 	) {
 		return this.filterFieldService.addFieldToFilterGroup(
 			filterGroupId,
-			name
+			name,
+			type,
+			categoryFieldId
 		);
 	}
 

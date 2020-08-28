@@ -16,10 +16,17 @@ export class FilterFieldService {
 		private categoryFieldRepository: Repository<CategoryFieldEntity>
 	) {}
 
-	async addFieldToFilterGroup(filterGroupId: string, name: string) {
+	async addFieldToFilterGroup(
+		filterGroupId: string,
+		name: string,
+		type: string,
+		categoryFieldId: number
+	) {
 		const field = this.filterFieldRepository.create({
 			filterGroupId,
-			name
+			name,
+			type,
+			categoryFieldId
 		});
 
 		await this.filterFieldRepository.save(field);

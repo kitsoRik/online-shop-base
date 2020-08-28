@@ -5,9 +5,6 @@ export class FilterFieldEntity {
 	@Column({ type: "text", generated: "uuid", primary: true })
 	id: string;
 
-	@Column({ type: "text", name: "filter_group_id" })
-	filterGroupId: string;
-
 	@Column({ type: "text" })
 	name: string;
 
@@ -16,4 +13,10 @@ export class FilterFieldEntity {
 
 	@Column({ type: "int", default: -1 })
 	index: number;
+
+	@Column({ type: "text", name: "filter_group_id" })
+	filterGroupId: string;
+
+	@Column({ type: "int", name: "category_field_id", nullable: true })
+	categoryFieldId: number | null;
 }

@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from "@nestjs/graphql";
+import { CategoryFieldType } from "src/graphql/category/category-field/category-field.type";
 
 @ObjectType("FilterField")
 export class FilterFieldType {

@@ -8,6 +8,12 @@ export class CategoryFieldEntity {
 	@Column()
 	name: string;
 
+	@Column()
+	type: string;
+
+	@Column()
+	defaultValue: string;
+
 	@Column({ name: "category_id", type: "int" })
 	categoryId: number;
 

@@ -1,7 +1,7 @@
 import { Field, InputType } from "@nestjs/graphql";
 
-@InputType("CategoryFieldInput")
-export class CategoryFieldInput {
+@InputType()
+export class CategoryFieldChangeInput {
 	@Field()
 	name: string;
 

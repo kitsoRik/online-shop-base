@@ -7,10 +7,10 @@ export class CategoryInfoType {
 	@Field(type => Int)
 	id: number;
 
-	@Field()
+	@Field(type => String)
 	name: string;
 
-	@Field()
+	@Field({ nullable: false })
 	language: LanguageType;
 
 	@Field(type => [CategoryInfoFieldType], { nullable: true })

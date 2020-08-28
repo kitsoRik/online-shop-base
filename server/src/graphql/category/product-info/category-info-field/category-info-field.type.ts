@@ -5,7 +5,7 @@ import { CategoryFieldType } from "../../category-field/category-field.type";
 export class CategoryInfoFieldType {
 	@Field(type => Int)
 	id: number;
-	@Field({ nullable: true })
+	@Field()
 	name: string;
 	@Field({ nullable: true })
 	value: string;

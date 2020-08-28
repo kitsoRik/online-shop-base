@@ -8,6 +8,7 @@ import { useParams } from "react-router";
 import { Form, Input, Spin, notification } from "antd";
 import { useForm } from "antd/lib/form/Form";
 import TypeSelect from "./TypeSelect";
+import CategoryFieldSelect from "../CategoryFieldSelect";
 
 interface Props {
 	itemId: string;
@@ -18,10 +19,12 @@ interface Props {
 }
 
 const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
+	const categoryId = +(useParams() as any).id;
+
 	const { data, loading } = useGetCategoryFilterGroupFieldQuery({
 		skip: itemId === "",
 		variables: {
-			categoryId: +(useParams() as any).id,
+			categoryId,
 			groupId,
 			fieldId: itemId
 		}
@@ -29,13 +32,18 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 
 	const [changeGroup] = useChangeFilterGroupFieldMutation();
 
-	const onEdit = async (name: string, type: string) => {
+	const onEdit = async (
+		name: string,
+		type: string,
+		categoryFieldId: number
+	) => {
 		try {
 			const {} = await changeGroup({
 				variables: {
 					fieldId: itemId,
 					name,
-					type
+					type,
+					categoryFieldId
 				}
 			});
 			notification.success({ message: "Group has been changed" });
@@ -69,7 +77,9 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 			<Spin spinning={loading}>
 				<Form
 					form={form}
-					onFinish={({ name, type }) => onEdit(name, type)}
+					onFinish={({ name, type, categoryField }) =>
+						onEdit(name, type, categoryField)
+					}
 				>
 					<Form.Item
 						label="Name"
@@ -79,11 +89,18 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 						<Input />
 					</Form.Item>
 					<Form.Item
+						label="Category field"
+						name="categoryField"
+						initialValue={item?.categoryField?.id}
+					>
+						<CategoryFieldSelect categoryId={categoryId} />
+					</Form.Item>
+					<Form.Item
 						label="Type"
 						name="type"
 						initialValue={item?.type}
 					>
-						<TypeSelect />
+						<TypeSelect fieldType={item?.categoryField?.type} />
 					</Form.Item>
 				</Form>
 			</Spin>

@@ -1,0 +1,11 @@
+query CategoryFields($categoryId: Int!) {
+	categories(filter: { id: $categoryId }) {
+		id
+		fields {
+			id
+			name
+			type
+			defaultValue
+		}
+	}
+}

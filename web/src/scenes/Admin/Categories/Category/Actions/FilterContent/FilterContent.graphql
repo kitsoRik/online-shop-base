@@ -10,6 +10,7 @@ query GetCategoryFilter($categoryId: Int!) {
 				fields {
 					id
 					name
+					type
 					index
 				}
 			}

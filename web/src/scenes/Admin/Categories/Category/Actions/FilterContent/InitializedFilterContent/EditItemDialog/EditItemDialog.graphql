@@ -9,11 +9,10 @@ query GetCategoryFilterGroupField(
 			id
 			groups(filter: { id: $groupId }) {
 				id
-				name
-				index
 				fields(filter: { id: $fieldId }) {
 					id
 					name
+					type
 					index
 				}
 			}
@@ -21,9 +20,14 @@ query GetCategoryFilterGroupField(
 	}
 }
 
-mutation ChangeFilterGroupField($fieldId: String!, $name: String!) {
-	changeFilterGroupField(fieldId: $fieldId, name: $name) {
+mutation ChangeFilterGroupField(
+	$fieldId: String!
+	$name: String!
+	$type: String!
+) {
+	changeFilterGroupField(fieldId: $fieldId, name: $name, type: $type) {
 		id
 		name
+		type
 	}
 }

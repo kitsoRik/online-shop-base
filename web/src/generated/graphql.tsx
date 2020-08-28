@@ -127,6 +127,7 @@ export type FilterField = {
   id: Scalars['String'];
   name: Scalars['String'];
   index: Scalars['Int'];
+  type: Scalars['String'];
 };
 
 export type ProductInfoField = {
@@ -378,6 +379,7 @@ export type MutationAddFieldToFilterGroupArgs = {
 
 
 export type MutationChangeFilterGroupFieldArgs = {
+  type: Scalars['String'];
   name: Scalars['String'];
   fieldId: Scalars['String'];
 };
@@ -728,7 +730,7 @@ export type GetCategoryFilterQuery = (
         & Pick<FilterGroup, 'id' | 'name' | 'index'>
         & { fields: Array<(
           { __typename?: 'FilterField' }
-          & Pick<FilterField, 'id' | 'name' | 'index'>
+          & Pick<FilterField, 'id' | 'name' | 'type' | 'index'>
         )> }
       )> }
     )> }
@@ -814,10 +816,10 @@ export type GetCategoryFilterGroupFieldQuery = (
       & Pick<Filter, 'id'>
       & { groups: Array<(
         { __typename?: 'FilterGroup' }
-        & Pick<FilterGroup, 'id' | 'name' | 'index'>
+        & Pick<FilterGroup, 'id'>
         & { fields: Array<(
           { __typename?: 'FilterField' }
-          & Pick<FilterField, 'id' | 'name' | 'index'>
+          & Pick<FilterField, 'id' | 'name' | 'type' | 'index'>
         )> }
       )> }
     )> }
@@ -827,6 +829,7 @@ export type GetCategoryFilterGroupFieldQuery = (
 export type ChangeFilterGroupFieldMutationVariables = Exact<{
   fieldId: Scalars['String'];
   name: Scalars['String'];
+  type: Scalars['String'];
 }>;
 
 
@@ -834,7 +837,7 @@ export type ChangeFilterGroupFieldMutation = (
   { __typename?: 'Mutation' }
   & { changeFilterGroupField: (
     { __typename?: 'FilterField' }
-    & Pick<FilterField, 'id' | 'name'>
+    & Pick<FilterField, 'id' | 'name' | 'type'>
   ) }
 );
 
@@ -860,7 +863,7 @@ export type FilterWithGroupsFragment = (
     & Pick<FilterGroup, 'id' | 'name' | 'index'>
     & { fields: Array<(
       { __typename?: 'FilterField' }
-      & Pick<FilterField, 'id' | 'name' | 'index'>
+      & Pick<FilterField, 'id' | 'name' | 'type' | 'index'>
     )> }
   )> }
 );
@@ -1685,6 +1688,7 @@ export const FilterWithGroupsFragmentDoc = gql`
     fields {
       id
       name
+      type
       index
     }
   }
@@ -2216,6 +2220,7 @@ export const GetCategoryFilterDocument = gql`
         fields {
           id
           name
+          type
           index
         }
       }
@@ -2379,11 +2384,10 @@ export const GetCategoryFilterGroupFieldDocument = gql`
       id
       groups(filter: {id: $groupId}) {
         id
-        name
-        index
         fields(filter: {id: $fieldId}) {
           id
           name
+          type
           index
         }
       }
@@ -2420,10 +2424,11 @@ export type GetCategoryFilterGroupFieldQueryHookResult = ReturnType<typeof useGe
 export type GetCategoryFilterGroupFieldLazyQueryHookResult = ReturnType<typeof useGetCategoryFilterGroupFieldLazyQuery>;
 export type GetCategoryFilterGroupFieldQueryResult = ApolloReactCommon.QueryResult<GetCategoryFilterGroupFieldQuery, GetCategoryFilterGroupFieldQueryVariables>;
 export const ChangeFilterGroupFieldDocument = gql`
-    mutation ChangeFilterGroupField($fieldId: String!, $name: String!) {
-  changeFilterGroupField(fieldId: $fieldId, name: $name) {
+    mutation ChangeFilterGroupField($fieldId: String!, $name: String!, $type: String!) {
+  changeFilterGroupField(fieldId: $fieldId, name: $name, type: $type) {
     id
     name
+    type
   }
 }
     `;
@@ -2444,6 +2449,7 @@ export type ChangeFilterGroupFieldMutationFn = ApolloReactCommon.MutationFunctio
  *   variables: {
  *      fieldId: // value for 'fieldId'
  *      name: // value for 'name'
+ *      type: // value for 'type'
  *   },
  * });
  */

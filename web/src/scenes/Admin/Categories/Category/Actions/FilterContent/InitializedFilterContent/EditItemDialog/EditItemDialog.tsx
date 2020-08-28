@@ -7,6 +7,7 @@ import {
 import { useParams } from "react-router";
 import { Form, Input, Spin, notification } from "antd";
 import { useForm } from "antd/lib/form/Form";
+import TypeSelect from "./TypeSelect";
 
 interface Props {
 	itemId: string;
@@ -28,12 +29,13 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 
 	const [changeGroup] = useChangeFilterGroupFieldMutation();
 
-	const onEdit = async (name: string) => {
+	const onEdit = async (name: string, type: string) => {
 		try {
 			const {} = await changeGroup({
 				variables: {
 					fieldId: itemId,
-					name
+					name,
+					type
 				}
 			});
 			notification.success({ message: "Group has been changed" });
@@ -65,13 +67,23 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 			closable={false}
 		>
 			<Spin spinning={loading}>
-				<Form form={form} onFinish={({ name }) => onEdit(name)}>
+				<Form
+					form={form}
+					onFinish={({ name, type }) => onEdit(name, type)}
+				>
 					<Form.Item
 						label="Name"
 						name="name"
 						initialValue={item?.name}
 					>
 						<Input />
+					</Form.Item>
+					<Form.Item
+						label="Type"
+						name="type"
+						initialValue={item?.type}
+					>
+						<TypeSelect />
 					</Form.Item>
 				</Form>
 			</Spin>

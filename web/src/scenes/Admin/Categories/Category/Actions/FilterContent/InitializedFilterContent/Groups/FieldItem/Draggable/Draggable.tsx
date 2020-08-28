@@ -4,7 +4,10 @@ import { Draggable as DNDDraggable } from "react-beautiful-dnd";
 import FieldItem from "../FieldItem";
 
 interface Props {
-	item: Extract<{ id: string; name: string; index: number }, FilterField>;
+	item: Extract<
+		{ id: string; name: string; index: number; type: string },
+		FilterField
+	>;
 	onEdit: () => void;
 }
 

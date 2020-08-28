@@ -7,6 +7,7 @@ fragment FilterWithGroups on Filter {
 		fields {
 			id
 			name
+			type
 			index
 		}
 	}

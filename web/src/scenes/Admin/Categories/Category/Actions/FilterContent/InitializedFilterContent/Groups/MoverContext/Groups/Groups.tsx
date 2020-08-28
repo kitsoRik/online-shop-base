@@ -18,7 +18,7 @@ interface Props {
 			index: number;
 			name: string;
 			fields: Extract<
-				{ id: string; index: number; name: string },
+				{ id: string; index: number; name: string; type: string },
 				FilterField
 			>[];
 		},
@@ -105,7 +105,10 @@ const Groups = ({
 												<FieldItem
 													item={item}
 													onEdit={() =>
-														onEditItem(group.id, item.id)
+														onEditItem(
+															group.id,
+															item.id
+														)
 													}
 													onEnterToDrop={changeContext(
 														"items"

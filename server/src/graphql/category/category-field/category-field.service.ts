@@ -5,6 +5,7 @@ import { CategoryFieldEntity } from "./category-field.entity";
 import { CategoryFieldInput } from "./category-field.input";
 import { CategoryFieldChangeInput } from "./category-field-change.input";
 import { GraphQLError } from "graphql";
+import { CategoryInfoFielddInput } from "../product-info/category-info-field/category-info-field.input";
 
 @Injectable()
 export class CategoryFieldService {
@@ -17,7 +18,9 @@ export class CategoryFieldService {
 		const field = await this.categoryFieldRepository.create({
 			categoryId,
 			name: fieldInput.name,
-			type: fieldInput.type
+			type: fieldInput.type,
+			defaultValue: fieldInput.defaultValue,
+			options: fieldInput.options
 		});
 
 		await this.categoryFieldRepository.save(field);
@@ -35,6 +38,7 @@ export class CategoryFieldService {
 		field.name = change.name;
 		field.type = change.type;
 		field.defaultValue = change.defaultValue;
+		field.options = change.options;
 
 		await this.categoryFieldRepository.save(field);
 
@@ -61,11 +65,19 @@ export class CategoryFieldService {
 		return field;
 	}
 
-	async getFields(categoryId: number) {
-		const fields = await this.categoryFieldRepository.find({
-			where: { categoryId }
-		});
+	async getFields(categoryId: number, filter: CategoryInfoFielddInput) {
+		const query = this.categoryFieldRepository.createQueryBuilder("field");
 
-		return fields;
+		query.where("category_id = :categoryId", { categoryId });
+
+		if (filter) {
+			if (filter.id !== undefined && filter.id !== null) {
+				query.where("id = :id", { id: filter.id });
+			}
+		}
+
+		console.log(query.getSql());
+
+		return query.getMany();
 	}
 }

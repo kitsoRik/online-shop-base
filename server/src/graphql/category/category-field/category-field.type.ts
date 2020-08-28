@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from "@nestjs/graphql";
+import JSON from "graphql-type-json";
 
 @ObjectType("CategoryField")
 export class CategoryFieldType {
@@ -13,4 +14,7 @@ export class CategoryFieldType {
 
 	@Field()
 	defaultValue: string;
+
+	@Field(type => JSON, { nullable: true })
+	options: object;
 }

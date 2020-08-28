@@ -1,4 +1,5 @@
 import { Field, InputType, Int } from "@nestjs/graphql";
+import JSON from "graphql-type-json";
 
 @InputType()
 export class CategoryFieldChangeInput {
@@ -10,4 +11,7 @@ export class CategoryFieldChangeInput {
 
 	@Field()
 	defaultValue: string;
+
+	@Field(type => JSON)
+	options: object;
 }

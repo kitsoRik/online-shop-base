@@ -10,6 +10,7 @@ import { useForm } from "antd/lib/form/Form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import TypeSelect from "../TypeSelect";
+import FieldForm from "../FieldForm";
 
 const AddFieldDialog = () => {
 	const { t } = useTranslation();
@@ -26,11 +27,12 @@ const AddFieldDialog = () => {
 	const onAddField = async (
 		name: string,
 		type: string,
-		defaultValue: string
+		defaultValue: string,
+		options: object
 	) => {
 		try {
 			const {} = await addFieldToCategory({
-				variables: { categoryId, name, type, defaultValue }
+				variables: { categoryId, name, type, defaultValue, options }
 			});
 			notification.success({
 				message: t(
@@ -61,64 +63,7 @@ const AddFieldDialog = () => {
 				</Form.Item>
 			}
 		>
-			<Form
-				form={form}
-				onFinish={({ name, type, defaultValue }) =>
-					onAddField(name, type, defaultValue)
-				}
-			>
-				<Form.Item
-					name="name"
-					label={t(
-						"admin.categories.edit.actions.fields.addDialog.form.name.label"
-					)}
-					required
-					rules={[
-						{
-							required: true,
-							message: t(
-								"admin.categories.edit.actions.fields.addDialog.form.name.rules.required.message"
-							)
-						}
-					]}
-				>
-					<Input />
-				</Form.Item>
-				<Form.Item
-					name="type"
-					label={t(
-						"admin.categories.edit.actions.fields.addDialog.form.type.label"
-					)}
-					required
-					rules={[
-						{
-							required: true,
-							message: t(
-								"admin.categories.edit.actions.fields.addDialog.form.type.rules.required.message"
-							)
-						}
-					]}
-				>
-					<TypeSelect />
-				</Form.Item>
-				<Form.Item
-					name="defaultValue"
-					label={t(
-						"admin.categories.edit.actions.fields.addDialog.form.defaultValue.label"
-					)}
-					required
-					rules={[
-						{
-							required: true,
-							message: t(
-								"admin.categories.edit.actions.fields.addDialog.form.defaultValue.rules.required.message"
-							)
-						}
-					]}
-				>
-					<Input />
-				</Form.Item>
-			</Form>
+			<FieldForm form={form} onFinish={onAddField} />
 		</Modal>
 	);
 };

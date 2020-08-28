@@ -3,10 +3,16 @@ mutation AddFieldToCategory(
 	$name: String!
 	$type: String!
 	$defaultValue: String!
+	$options: JSON!
 ) {
 	addFieldToCategory(
 		categoryId: $categoryId
-		field: { name: $name, type: $type, defaultValue: $defaultValue }
+		field: {
+			name: $name
+			type: $type
+			defaultValue: $defaultValue
+			options: $options
+		}
 	) {
 		id
 		fields {
@@ -14,6 +20,7 @@ mutation AddFieldToCategory(
 			name
 			type
 			defaultValue
+			options
 		}
 	}
 }

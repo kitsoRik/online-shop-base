@@ -10,6 +10,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf). */
+  JSON: any;
 };
 
 export type User = {
@@ -29,7 +31,9 @@ export type CategoryField = {
   name: Scalars['String'];
   type: Scalars['String'];
   defaultValue: Scalars['String'];
+  options?: Maybe<Scalars['JSON']>;
 };
+
 
 export type CategoryInfoField = {
   __typename?: 'CategoryInfoField';
@@ -477,12 +481,14 @@ export type CategoryFieldInput = {
   name: Scalars['String'];
   type: Scalars['String'];
   defaultValue: Scalars['String'];
+  options: Scalars['JSON'];
 };
 
 export type CategoryFieldChangeInput = {
   name: Scalars['String'];
   type: Scalars['String'];
   defaultValue: Scalars['String'];
+  options: Scalars['JSON'];
 };
 
 export type FilterFieldChangeInput = {
@@ -655,6 +661,7 @@ export type AddFieldToCategoryMutationVariables = Exact<{
   name: Scalars['String'];
   type: Scalars['String'];
   defaultValue: Scalars['String'];
+  options: Scalars['JSON'];
 }>;
 
 
@@ -665,7 +672,7 @@ export type AddFieldToCategoryMutation = (
     & Pick<Category, 'id'>
     & { fields?: Maybe<Array<(
       { __typename?: 'CategoryField' }
-      & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue'>
+      & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue' | 'options'>
     )>> }
   ) }
 );
@@ -717,7 +724,7 @@ export type GetFieldByIdFromCategoryByIdQuery = (
     & Pick<Category, 'id'>
     & { fields?: Maybe<Array<(
       { __typename?: 'CategoryField' }
-      & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue'>
+      & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue' | 'options'>
     )>> }
   )>> }
 );
@@ -727,6 +734,7 @@ export type ChangeFieldInCategoryMutationVariables = Exact<{
   name: Scalars['String'];
   type: Scalars['String'];
   defaultValue: Scalars['String'];
+  options: Scalars['JSON'];
 }>;
 
 
@@ -734,7 +742,7 @@ export type ChangeFieldInCategoryMutation = (
   { __typename?: 'Mutation' }
   & { changeFieldInCategory: (
     { __typename?: 'CategoryField' }
-    & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue'>
+    & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue' | 'options'>
   ) }
 );
 
@@ -2084,14 +2092,15 @@ export type ChangeCategoryMutationHookResult = ReturnType<typeof useChangeCatego
 export type ChangeCategoryMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryMutation>;
 export type ChangeCategoryMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryMutation, ChangeCategoryMutationVariables>;
 export const AddFieldToCategoryDocument = gql`
-    mutation AddFieldToCategory($categoryId: Int!, $name: String!, $type: String!, $defaultValue: String!) {
-  addFieldToCategory(categoryId: $categoryId, field: {name: $name, type: $type, defaultValue: $defaultValue}) {
+    mutation AddFieldToCategory($categoryId: Int!, $name: String!, $type: String!, $defaultValue: String!, $options: JSON!) {
+  addFieldToCategory(categoryId: $categoryId, field: {name: $name, type: $type, defaultValue: $defaultValue, options: $options}) {
     id
     fields {
       id
       name
       type
       defaultValue
+      options
     }
   }
 }
@@ -2115,6 +2124,7 @@ export type AddFieldToCategoryMutationFn = ApolloReactCommon.MutationFunction<Ad
  *      name: // value for 'name'
  *      type: // value for 'type'
  *      defaultValue: // value for 'defaultValue'
+ *      options: // value for 'options'
  *   },
  * });
  */
@@ -2206,6 +2216,7 @@ export const GetFieldByIdFromCategoryByIdDocument = gql`
       name
       type
       defaultValue
+      options
     }
   }
 }
@@ -2238,12 +2249,13 @@ export type GetFieldByIdFromCategoryByIdQueryHookResult = ReturnType<typeof useG
 export type GetFieldByIdFromCategoryByIdLazyQueryHookResult = ReturnType<typeof useGetFieldByIdFromCategoryByIdLazyQuery>;
 export type GetFieldByIdFromCategoryByIdQueryResult = ApolloReactCommon.QueryResult<GetFieldByIdFromCategoryByIdQuery, GetFieldByIdFromCategoryByIdQueryVariables>;
 export const ChangeFieldInCategoryDocument = gql`
-    mutation ChangeFieldInCategory($fieldId: Int!, $name: String!, $type: String!, $defaultValue: String!) {
-  changeFieldInCategory(fieldId: $fieldId, change: {name: $name, type: $type, defaultValue: $defaultValue}) {
+    mutation ChangeFieldInCategory($fieldId: Int!, $name: String!, $type: String!, $defaultValue: String!, $options: JSON!) {
+  changeFieldInCategory(fieldId: $fieldId, change: {name: $name, type: $type, defaultValue: $defaultValue, options: $options}) {
     id
     name
     type
     defaultValue
+    options
   }
 }
     `;
@@ -2266,6 +2278,7 @@ export type ChangeFieldInCategoryMutationFn = ApolloReactCommon.MutationFunction
  *      name: // value for 'name'
  *      type: // value for 'type'
  *      defaultValue: // value for 'defaultValue'
+ *      options: // value for 'options'
  *   },
  * });
  */

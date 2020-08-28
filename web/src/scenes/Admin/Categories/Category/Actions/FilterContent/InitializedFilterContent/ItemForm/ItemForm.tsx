@@ -25,7 +25,7 @@ const ItemForm = ({ form, onFinish, categoryId, initialValues }: Props) => {
 		id: number;
 		type: string;
 	} | null>(null);
-
+	console.log(initialValues?.categoryField?.type);
 	return (
 		<Form
 			form={form}

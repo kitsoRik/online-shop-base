@@ -11,6 +11,7 @@ import { useForm } from "antd/lib/form/Form";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import TypeSelect from "../TypeSelect";
+import FieldForm from "../FieldForm";
 
 const ModifyDialog = () => {
 	const { t } = useTranslation();
@@ -46,7 +47,8 @@ const ModifyDialog = () => {
 	const handleModify = async (
 		name: string,
 		type: string,
-		defaultValue: string
+		defaultValue: string,
+		options: object
 	) => {
 		if (!field) throw new Error("Here field must be not null");
 		try {
@@ -55,7 +57,8 @@ const ModifyDialog = () => {
 					fieldId: field?.id,
 					name,
 					type,
-					defaultValue
+					defaultValue,
+					options
 				}
 			});
 
@@ -90,67 +93,11 @@ const ModifyDialog = () => {
 				"admin.categories.edit.actions.fields.modifyDialog.cancelText"
 			)}
 		>
-			<Form
+			<FieldForm
 				form={form}
-				onFinish={({ name, type, defaultValue }) =>
-					handleModify(name, type, defaultValue)
-				}
-			>
-				<Form.Item
-					name="name"
-					label={t(
-						"admin.categories.edit.actions.fields.modifyDialog.form.name.label"
-					)}
-					required
-					rules={[
-						{
-							required: true,
-							message: t(
-								"admin.categories.edit.actions.fields.modifyDialog.form.name.rules.required.message"
-							)
-						}
-					]}
-					initialValue={field?.name}
-				>
-					<Input />
-				</Form.Item>
-				<Form.Item
-					name="type"
-					label={t(
-						"admin.categories.edit.actions.fields.modifyDialog.form.type.label"
-					)}
-					required
-					rules={[
-						{
-							required: true,
-							message: t(
-								"admin.categories.edit.actions.fields.modifyDialog.form.type.rules.required.message"
-							)
-						}
-					]}
-					initialValue={field?.type}
-				>
-					<TypeSelect />
-				</Form.Item>
-				<Form.Item
-					name="defaultValue"
-					label={t(
-						"admin.categories.edit.actions.fields.modifyDialog.form.defaultValue.label"
-					)}
-					required
-					rules={[
-						{
-							required: true,
-							message: t(
-								"admin.categories.edit.actions.fields.modifyDialog.form.defaultValue.rules.required.message"
-							)
-						}
-					]}
-					initialValue={field?.defaultValue}
-				>
-					<Input />
-				</Form.Item>
-			</Form>
+				onFinish={handleModify}
+				initialValues={field ?? undefined}
+			/>
 		</Modal>
 	);
 };

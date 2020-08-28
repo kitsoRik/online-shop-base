@@ -6,6 +6,7 @@ query GetFieldByIdFromCategoryById($id: Int!, $fieldId: Int!) {
 			name
 			type
 			defaultValue
+			options
 		}
 	}
 }
@@ -15,14 +16,21 @@ mutation ChangeFieldInCategory(
 	$name: String!
 	$type: String!
 	$defaultValue: String!
+	$options: JSON!
 ) {
 	changeFieldInCategory(
 		fieldId: $fieldId
-		change: { name: $name, type: $type, defaultValue: $defaultValue }
+		change: {
+			name: $name
+			type: $type
+			defaultValue: $defaultValue
+			options: $options
+		}
 	) {
 		id
 		name
 		type
 		defaultValue
+		options
 	}
 }

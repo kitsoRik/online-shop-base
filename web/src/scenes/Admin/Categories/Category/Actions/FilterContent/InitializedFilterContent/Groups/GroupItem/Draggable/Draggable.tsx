@@ -14,25 +14,10 @@ interface Props {
 	children: any;
 
 	onEdit: () => void;
+	onAddField: (filterGroupId: string) => void;
 }
 
-const Draggable = ({ filterGroup, children, onEdit }: Props) => {
-	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
-
-	const onAddField = async () => {
-		try {
-			const {} = addFieldToFilterGroup({
-				variables: {
-					name: "GroupItem1",
-					filterGroupId: filterGroup.id
-				},
-				refetchQueries: [getOperationName(GetCategoryFilterDocument)!]
-			});
-		} catch (e) {
-			console.log(e.message);
-		}
-	};
-
+const Draggable = ({ filterGroup, children, onEdit, onAddField }: Props) => {
 	return (
 		<DNDDraggable
 			key={filterGroup.id}
@@ -44,6 +29,7 @@ const Draggable = ({ filterGroup, children, onEdit }: Props) => {
 					filterGroup={filterGroup}
 					onEnterToDrop={() => {}}
 					onEdit={onEdit}
+					onAddField={onAddField}
 					props={{
 						ref: provided.innerRef,
 						...provided.draggableProps,

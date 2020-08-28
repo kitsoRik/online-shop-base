@@ -31,6 +31,8 @@ interface Props {
 	changeContext: (value: "groups" | null) => () => void;
 	changeDragging: (value: boolean) => void;
 
+	onAddField: (filterGroupId: string) => void;
+
 	onEditGroup: (groupId: string) => void;
 	onEditItem: (groupId: string, itemId: string) => void;
 }
@@ -39,6 +41,7 @@ const Items = ({
 	groups,
 	changeContext,
 	changeDragging,
+	onAddField,
 	onEditGroup,
 	onEditItem
 }: Props) => {
@@ -170,6 +173,7 @@ const Items = ({
 						filterGroup={group}
 						onEnterToDrop={changeContext("groups")}
 						onEdit={() => onEditGroup(group.id)}
+						onAddField={onAddField}
 					>
 						{group.fields
 							.slice()

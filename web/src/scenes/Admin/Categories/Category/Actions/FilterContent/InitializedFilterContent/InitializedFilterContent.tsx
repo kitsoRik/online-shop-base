@@ -5,8 +5,10 @@ import Groups from "./Groups";
 import AddNewGroupDialog from "./AddNewGroupDialog";
 import EditGroupDialog from "./EditGroupDialog";
 import EditItemDialog from "./EditItemDialog/EditItemDialog";
+import AddNewItemDialog from "./AddNewItemDialog";
 
 const InitializedFilterContent = () => {
+	const categoryId = +(useParams() as any).id;
 	const { data, loading } = useGetCategoryFilterQuery({
 		variables: {
 			categoryId: +(useParams() as any).id
@@ -15,7 +17,8 @@ const InitializedFilterContent = () => {
 
 	const filter = data!.categories![0].filter!;
 
-	const [addVisible, setAddVisible] = useState(false);
+	const [addGroupVisible, setAddGroupVisible] = useState(false);
+	const [addItemVisible, setAddItemVisible] = useState("");
 	const [editVisibleGroup, setEditVisibleGroup] = useState("");
 	const [editVisibleItem, setEditVisibleItem] = useState<[string, string]>([
 		"",
@@ -26,16 +29,23 @@ const InitializedFilterContent = () => {
 		<>
 			<Groups
 				filterId={filter.id}
-				onAddNewGroup={() => setAddVisible(true)}
+				onAddNewGroup={() => setAddGroupVisible(true)}
+				onAddField={setAddItemVisible}
 				onEditGroup={groupId => setEditVisibleGroup(groupId)}
 				onEditItem={(groupId, fieldId) =>
 					setEditVisibleItem([groupId, fieldId])
 				}
 			/>
 			<AddNewGroupDialog
-				visible={addVisible}
-				onClose={() => setAddVisible(false)}
+				visible={addGroupVisible}
+				onClose={() => setAddGroupVisible(false)}
 				filterId={filter.id}
+			/>
+			<AddNewItemDialog
+				categoryId={categoryId}
+				visible={addItemVisible !== ""}
+				filterGroupId={addItemVisible}
+				onClose={() => setAddItemVisible("")}
 			/>
 			<EditGroupDialog
 				groupId={editVisibleGroup}

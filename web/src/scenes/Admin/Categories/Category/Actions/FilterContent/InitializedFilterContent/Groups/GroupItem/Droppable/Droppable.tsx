@@ -15,25 +15,16 @@ interface Props {
 	onEnterToDrop: () => void;
 
 	onEdit: () => void;
+	onAddField: (filterGroupId: string) => void;
 }
 
-const Droppable = ({ filterGroup, children, onEnterToDrop, onEdit }: Props) => {
-	const [addFieldToFilterGroup] = useAddFieldToFilterGroupMutation();
-
-	const onAddField = async () => {
-		try {
-			const {} = addFieldToFilterGroup({
-				variables: {
-					name: "GroupItem1",
-					filterGroupId: filterGroup.id
-				},
-				refetchQueries: [getOperationName(GetCategoryFilterDocument)!]
-			});
-		} catch (e) {
-			console.log(e.message);
-		}
-	};
-
+const Droppable = ({
+	filterGroup,
+	children,
+	onEnterToDrop,
+	onEdit,
+	onAddField
+}: Props) => {
 	return (
 		<DNDDropable key={filterGroup.index} droppableId={filterGroup.id}>
 			{(provided, snapshot) => (
@@ -41,6 +32,7 @@ const Droppable = ({ filterGroup, children, onEnterToDrop, onEdit }: Props) => {
 					filterGroup={filterGroup}
 					onEnterToDrop={onEnterToDrop}
 					onEdit={onEdit}
+					onAddField={onAddField}
 					props={{
 						ref: provided.innerRef,
 						...provided.droppableProps

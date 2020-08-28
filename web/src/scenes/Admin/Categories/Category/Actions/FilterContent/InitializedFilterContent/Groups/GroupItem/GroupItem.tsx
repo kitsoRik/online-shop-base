@@ -17,6 +17,7 @@ interface Props {
 	children?: any;
 
 	onEdit: () => void;
+	onAddField: (filterGroupId: string) => void;
 }
 
 const GroupItem = ({
@@ -24,6 +25,7 @@ const GroupItem = ({
 	children = null,
 	onEnterToDrop,
 	onEdit,
+	onAddField,
 	props = {}
 }: Props) => {
 	return (
@@ -36,7 +38,11 @@ const GroupItem = ({
 			<Collapse activeKey={filterGroup.id}>
 				<Collapse.Panel
 					header={
-						<Header filterGroup={filterGroup} onEdit={onEdit} />
+						<Header
+							filterGroup={filterGroup}
+							onEdit={onEdit}
+							onAddField={onAddField}
+						/>
 					}
 					key={filterGroup.id}
 				>

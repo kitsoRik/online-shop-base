@@ -7,8 +7,9 @@ import {
 import { useParams } from "react-router";
 import { Form, Input, Spin, notification } from "antd";
 import { useForm } from "antd/lib/form/Form";
-import TypeSelect from "./TypeSelect";
-import CategoryFieldSelect from "../CategoryFieldSelect";
+import TypeSelect from "../ItemForm/TypeSelect";
+import CategoryFieldSelect from "../ItemForm/CategoryFieldSelect";
+import ItemForm from "../ItemForm";
 
 interface Props {
 	itemId: string;
@@ -43,7 +44,10 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 					fieldId: itemId,
 					name,
 					type,
-					categoryFieldId
+					categoryFieldId:
+						categoryFieldId !== undefined
+							? categoryFieldId
+							: item!.categoryField!.id
 				}
 			});
 			notification.success({ message: "Group has been changed" });
@@ -75,34 +79,16 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 			closable={false}
 		>
 			<Spin spinning={loading}>
-				<Form
+				<ItemForm
 					form={form}
-					onFinish={({ name, type, categoryField }) =>
-						onEdit(name, type, categoryField)
-					}
-				>
-					<Form.Item
-						label="Name"
-						name="name"
-						initialValue={item?.name}
-					>
-						<Input />
-					</Form.Item>
-					<Form.Item
-						label="Category field"
-						name="categoryField"
-						initialValue={item?.categoryField?.id}
-					>
-						<CategoryFieldSelect categoryId={categoryId} />
-					</Form.Item>
-					<Form.Item
-						label="Type"
-						name="type"
-						initialValue={item?.type}
-					>
-						<TypeSelect fieldType={item?.categoryField?.type} />
-					</Form.Item>
-				</Form>
+					onFinish={onEdit}
+					categoryId={categoryId}
+					initialValues={{
+						name: item?.name ?? "",
+						categoryField: item?.categoryField,
+						type: item?.type ?? ""
+					}}
+				/>
 			</Spin>
 		</Modal>
 	);

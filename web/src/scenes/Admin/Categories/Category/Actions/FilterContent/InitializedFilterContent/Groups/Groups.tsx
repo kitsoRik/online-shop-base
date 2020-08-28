@@ -11,6 +11,7 @@ interface Props {
 	filterId: number;
 
 	onAddNewGroup: () => void;
+	onAddField: (filterGroupId: string) => void;
 	onEditGroup: (groupId: string) => void;
 	onEditItem: (groupId: string, itemId: string) => void;
 }
@@ -18,6 +19,7 @@ interface Props {
 const Groups = ({
 	filterId,
 	onAddNewGroup,
+	onAddField,
 	onEditGroup,
 	onEditItem
 }: Props) => {
@@ -48,6 +50,7 @@ const Groups = ({
 				<div style={{ display: "flex", flexDirection: "column" }}>
 					{context === "groups" && (
 						<MoverContext.Groups
+							onAddField={onAddField}
 							onEditGroup={onEditGroup}
 							onEditItem={onEditItem}
 							changeContext={changeContext}
@@ -57,6 +60,7 @@ const Groups = ({
 					)}
 					{context === "items" && (
 						<MoverContext.Items
+							onAddField={onAddField}
 							onEditGroup={onEditGroup}
 							onEditItem={onEditItem}
 							changeContext={changeContext}
@@ -66,6 +70,7 @@ const Groups = ({
 					)}
 					{context === null && (
 						<MoverContext
+							onAddField={onAddField}
 							onEditGroup={onEditGroup}
 							onEditItem={onEditItem}
 							groups={groups}

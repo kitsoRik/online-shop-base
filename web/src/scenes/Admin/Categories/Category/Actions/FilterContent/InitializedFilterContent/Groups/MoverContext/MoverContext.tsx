@@ -23,6 +23,9 @@ interface Props {
 	>[];
 
 	changeContext: (value: "groups" | "items") => () => void;
+
+	onAddField: (filterGroupId: string) => void;
+
 	onEditGroup: (groupId: string) => void;
 	onEditItem: (groupId: string, itemId: string) => void;
 }
@@ -30,6 +33,7 @@ interface Props {
 const MoverContext = ({
 	groups,
 	changeContext,
+	onAddField,
 	onEditGroup,
 	onEditItem
 }: Props) => {
@@ -41,6 +45,7 @@ const MoverContext = ({
 				.map((group, ind) => (
 					<>
 						<GroupItem
+							onAddField={onAddField}
 							onEdit={() => onEditGroup(group.id)}
 							filterGroup={group}
 							onEnterToDrop={changeContext("groups")}

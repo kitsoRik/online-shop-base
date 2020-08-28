@@ -3,6 +3,8 @@ import { SearchSubsubCategoryProductsQuery } from "../../../../../../generated/g
 import ProductsContainer from "../../../../../../shared/ProductsContainer";
 import ProductCard from "../../../../../../shared/ProductCard";
 import ProductCardWrapper from "../../../../../../wrappers/ProductCardWrapper";
+import { Link } from "react-router-dom";
+import FilterPanel from "../../../../../../shared/FilterPanel";
 
 interface Props {
 	data?: SearchSubsubCategoryProductsQuery;
@@ -13,6 +15,7 @@ const AnyCategoryContent = ({ data, loading }: Props) => {
 	const productsInfo = data?.searchProducts.productsInfo;
 	return (
 		<>
+			<FilterPanel categoryId={3} />
 			<ProductsContainer
 				cards={
 					productsInfo?.map(p => (
@@ -22,6 +25,7 @@ const AnyCategoryContent = ({ data, loading }: Props) => {
 					)) ?? []
 				}
 			/>
+			<Link to="/">12</Link>
 		</>
 	);
 };

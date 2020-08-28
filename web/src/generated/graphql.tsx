@@ -1744,6 +1744,35 @@ export type RegisterMutation = (
   ) }
 );
 
+export type GetCategoryFilterFieldsQueryVariables = Exact<{
+  categoryId: Scalars['Int'];
+}>;
+
+
+export type GetCategoryFilterFieldsQuery = (
+  { __typename?: 'Query' }
+  & { categories?: Maybe<Array<(
+    { __typename?: 'Category' }
+    & Pick<Category, 'id'>
+    & { filter?: Maybe<(
+      { __typename?: 'Filter' }
+      & Pick<Filter, 'id'>
+      & { groups: Array<(
+        { __typename?: 'FilterGroup' }
+        & Pick<FilterGroup, 'id' | 'name'>
+        & { fields: Array<(
+          { __typename?: 'FilterField' }
+          & Pick<FilterField, 'id' | 'type'>
+          & { categoryField?: Maybe<(
+            { __typename?: 'CategoryField' }
+            & Pick<CategoryField, 'id' | 'type' | 'options'>
+          )> }
+        )> }
+      )> }
+    )> }
+  )>> }
+);
+
 export const FilterWithGroupsFragmentDoc = gql`
     fragment FilterWithGroups on Filter {
   id
@@ -4257,3 +4286,52 @@ export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookO
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
+export const GetCategoryFilterFieldsDocument = gql`
+    query GetCategoryFilterFields($categoryId: Int!) {
+  categories(filter: {id: $categoryId}) {
+    id
+    filter {
+      id
+      groups {
+        id
+        name
+        fields {
+          id
+          type
+          categoryField {
+            id
+            type
+            options
+          }
+        }
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetCategoryFilterFieldsQuery__
+ *
+ * To run a query within a React component, call `useGetCategoryFilterFieldsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetCategoryFilterFieldsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetCategoryFilterFieldsQuery({
+ *   variables: {
+ *      categoryId: // value for 'categoryId'
+ *   },
+ * });
+ */
+export function useGetCategoryFilterFieldsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetCategoryFilterFieldsQuery, GetCategoryFilterFieldsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetCategoryFilterFieldsQuery, GetCategoryFilterFieldsQueryVariables>(GetCategoryFilterFieldsDocument, baseOptions);
+      }
+export function useGetCategoryFilterFieldsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetCategoryFilterFieldsQuery, GetCategoryFilterFieldsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetCategoryFilterFieldsQuery, GetCategoryFilterFieldsQueryVariables>(GetCategoryFilterFieldsDocument, baseOptions);
+        }
+export type GetCategoryFilterFieldsQueryHookResult = ReturnType<typeof useGetCategoryFilterFieldsQuery>;
+export type GetCategoryFilterFieldsLazyQueryHookResult = ReturnType<typeof useGetCategoryFilterFieldsLazyQuery>;
+export type GetCategoryFilterFieldsQueryResult = ApolloReactCommon.QueryResult<GetCategoryFilterFieldsQuery, GetCategoryFilterFieldsQueryVariables>;

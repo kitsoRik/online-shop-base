@@ -8,9 +8,18 @@ export class CategoryFieldEntity {
 	@Column()
 	name: string;
 
+	@Column()
+	type: string;
+
+	@Column()
+	defaultValue: string;
+
 	@Column({ name: "category_id", type: "int" })
 	categoryId: number;
 
 	@Column({ type: "boolean", default: false })
 	removed: boolean;
+
+	@Column({ type: "json", nullable: true })
+	options: object;
 }

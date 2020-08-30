@@ -68,10 +68,14 @@ export class CategoryService {
 
 	async getCategories(filter?: CategoryFilter) {
 		const query = this.categoryRepository.createQueryBuilder("categories");
-		if (filter.level !== undefined) {
-			query.andWhere("level = :level", { level: filter.level });
+		if (filter) {
+			if (filter.id !== undefined) {
+				query.andWhere("id = :id", { id: filter.id });
+			}
+			if (filter.level !== undefined) {
+				query.andWhere("level = :level", { level: filter.level });
+			}
 		}
-
 		const categories = await query.getMany();
 		return categories;
 	}
@@ -90,6 +94,9 @@ export class CategoryService {
 
 	async findById(id: number) {
 		const category = await this.categoryRepository.findOne({ id });
+
+		if (!category) throw new GraphQLError("NOT_FOUND");
+
 		return category;
 	}
 }

@@ -59,13 +59,6 @@ export class CategoryResolver {
 		@Args("filter", { type: () => CategoryFilter, nullable: true })
 		filter: CategoryFilter
 	) {
-		if (filter) {
-			if (filter.id) {
-				const category = await this.categoryService.findById(filter.id);
-				if (!category) return [];
-				return [category];
-			}
-		}
 		return this.categoryService.getCategories(filter);
 	}
 
@@ -85,7 +78,7 @@ export class CategoryResolver {
 		@Parent() { id }: { id: number },
 		@Args("filter", { nullable: true }) filter: CategoryInfoFielddInput
 	) {
-		return this.categoryFieldService.getFields(id);
+		return this.categoryFieldService.getFields(id, filter);
 	}
 
 	@ResolveField(type => [CategoryInfoType])

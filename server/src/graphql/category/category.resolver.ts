@@ -59,13 +59,6 @@ export class CategoryResolver {
 		@Args("filter", { type: () => CategoryFilter, nullable: true })
 		filter: CategoryFilter
 	) {
-		if (filter) {
-			if (filter.id) {
-				const category = await this.categoryService.findById(filter.id);
-				if (!category) return [];
-				return [category];
-			}
-		}
 		return this.categoryService.getCategories(filter);
 	}
 

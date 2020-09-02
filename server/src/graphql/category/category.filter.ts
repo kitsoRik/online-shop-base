@@ -5,6 +5,6 @@ export class CategoryFilter {
 	@Field(type => Int, { nullable: true })
 	id: number;
 
-	@Field(type => Int, { nullable: true, defaultValue: -1 })
+	@Field(type => Int, { nullable: true })
 	level: number;
 }

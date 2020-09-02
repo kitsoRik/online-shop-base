@@ -69,13 +69,15 @@ export class CategoryService {
 	async getCategories(filter?: CategoryFilter) {
 		const query = this.categoryRepository.createQueryBuilder("categories");
 		if (filter) {
-			if (filter.id !== undefined) {
+			if (filter.id !== undefined && filter.id !== null) {
 				query.andWhere("id = :id", { id: filter.id });
 			}
-			if (filter.level !== undefined) {
+			if (filter.level !== undefined && filter.level !== null) {
 				query.andWhere("level = :level", { level: filter.level });
+				console.log(filter.level);
 			}
 		}
+
 		const categories = await query.getMany();
 		return categories;
 	}

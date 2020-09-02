@@ -6,6 +6,7 @@ import { GraphQLError } from "graphql";
 import { ProductInfoService } from "./product-info/product-info.service";
 import { ProductInfoInput } from "./product-info/product-info.input";
 import { ProductInfoEntity } from "./product-info/product-info.entity";
+import { FilterValueEntity } from "./filter-value/filter-value.entity";
 
 @Injectable()
 export class ProductService {
@@ -13,7 +14,9 @@ export class ProductService {
 		@InjectRepository(ProductEntity)
 		private productRepository: Repository<ProductEntity>,
 		@InjectRepository(ProductInfoEntity)
-		private productInfoRepository: Repository<ProductInfoEntity>
+		private productInfoRepository: Repository<ProductInfoEntity>,
+		@InjectRepository(FilterValueEntity)
+		private filterValueRepository: Repository<FilterValueEntity>
 	) {}
 
 	async createProduct(categoryId: number) {
@@ -77,5 +80,9 @@ export class ProductService {
 		}
 
 		return query.getMany();
+	}
+
+	async getFilterValues(productId: number) {
+		return await this.filterValueRepository.find({ where: { productId } });
 	}
 }

@@ -16,6 +16,8 @@ import { ProductInput } from "./product.input";
 import { ProductInfoType } from "./product-info/product-info.type";
 import { ProductInfoService } from "./product-info/product-info.service";
 import { ProductInfoInput } from "./product-info/product-info.input";
+import { FilterValueType } from "./filter-value/filter-value.type";
+import { ProductEntity } from "./product.entity";
 
 @Resolver(of => ProductType)
 export class ProductResolver {
@@ -70,5 +72,12 @@ export class ProductResolver {
 		@Args("filter", { nullable: true }) filter: ProductInfoInput
 	) {
 		return this.productService.getInfo(parent.id, filter);
+	}
+
+	@ResolveField(type => [FilterValueType])
+	filterValues(
+		@Parent() parent: ProductEntity,
+	) {
+		return this.productService.getFilterValues(parent.id);
 	}
 }

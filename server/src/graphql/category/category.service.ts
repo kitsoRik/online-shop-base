@@ -74,7 +74,6 @@ export class CategoryService {
 			}
 			if (filter.level !== undefined && filter.level !== null) {
 				query.andWhere("level = :level", { level: filter.level });
-				console.log(filter.level);
 			}
 		}
 

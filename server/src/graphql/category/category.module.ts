@@ -17,7 +17,7 @@ import { FilterEntity } from "./filter/filter.entity";
 		CategoryInfoModule,
 		FilterModule
 	],
-	exports: [CategoryService, CategoryType],
-	providers: [CategoryResolver, CategoryService, CategoryType]
+	exports: [CategoryService],
+	providers: [CategoryResolver, CategoryService]
 })
 export class CategoryModule {}

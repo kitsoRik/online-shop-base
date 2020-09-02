@@ -6,15 +6,34 @@ interface Props {
 
 	hAlign?: "left" | "center" | "right" | "stretch";
 	vAlign?: "top" | "center" | "bottom" | "stretch";
+
+	alignment?: "vertical" | "horizontal";
 }
 
-const Page = ({ children, hAlign = "center", vAlign = "center" }: Props) => {
+const Page = ({
+	children,
+	hAlign = "center",
+	vAlign = "center",
+	alignment = "vertical"
+}: Props) => {
+	const alignItems =
+		alignment === "vertical"
+			? alignItemsFromHAlign(hAlign)
+			: justifyContentFromVAlign(vAlign);
+	const justifyContent =
+		alignment === "horizontal"
+			? alignItemsFromHAlign(hAlign)
+			: justifyContentFromVAlign(vAlign);
+
+	const flexDirection = flexDirectionFromAlignment(alignment);
+
 	return (
 		<div
 			className={classes.page}
 			style={{
-				alignItems: alignItemsFromHAlign(hAlign),
-				justifyContent: justifyContentFromVAlign(vAlign)
+				alignItems,
+				justifyContent,
+				flexDirection
 			}}
 		>
 			{children}
@@ -54,6 +73,10 @@ const justifyContentFromVAlign = (
 		default:
 			throw new Error(`Unknown vAlign, passed ${hAlign}`);
 	}
+};
+
+const flexDirectionFromAlignment = (alignment: "vertical" | "horizontal") => {
+	return alignment === "vertical" ? "column" : "row";
 };
 
 export default Page;

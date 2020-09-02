@@ -8,6 +8,7 @@ import AddInfoDialog from "./AddInfoDialog";
 import RemoveInfoDialog from "./RemoveInfoDialog";
 import LanguageActions from "../../../../../../shared/LanguageActions";
 import { useParams } from "react-router";
+import FilterActions from "./FilterActions";
 
 const InfoContent = () => {
 	const { id } = useParams();
@@ -15,7 +16,7 @@ const InfoContent = () => {
 	const [action, setAction] = useLocationField("action", {
 		type: "string",
 		initial: "editing",
-		enum: ["editing", "category", "fields"]
+		enum: ["editing", "category", "fields", "filter"]
 	});
 	const [infoId, setInfoId] = useLocationField("info", {
 		type: "number",
@@ -73,6 +74,9 @@ const InfoContent = () => {
 					</Tabs.TabPane>,
 					<Tabs.TabPane key="fields" tab="Fields">
 						<FieldsAction />
+					</Tabs.TabPane>,
+					<Tabs.TabPane key="filter" tab="Filter">
+						<FilterActions />
 					</Tabs.TabPane>
 				]}
 			/>

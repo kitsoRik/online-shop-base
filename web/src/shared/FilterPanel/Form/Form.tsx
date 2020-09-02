@@ -26,6 +26,7 @@ interface Props {
 }
 
 const Form = ({ form, groups }: Props) => {
+	console.log(groups);
 	return (
 		<FormD form={form}>
 			{groups.map(group => (

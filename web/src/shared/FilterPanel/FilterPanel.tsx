@@ -6,6 +6,8 @@ import { Spin } from "antd";
 
 interface Props {
 	categoryId: number;
+
+	needRender: boolean;
 }
 
 const FilterPanel = ({ categoryId }: Props) => {
@@ -26,9 +28,8 @@ const FilterPanel = ({ categoryId }: Props) => {
 	const filter = category.filter;
 	if (!filter) return <h1>Error2</h1>;
 
-    const groups = filter.groups;
-    
-    
+	const groups = filter.groups;
+
 	return (
 		<>
 			<Form form={form} groups={groups} />

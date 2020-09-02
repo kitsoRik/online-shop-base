@@ -15,7 +15,7 @@ const AnyCategoryContent = ({ data, loading }: Props) => {
 	const productsInfo = data?.searchProducts.productsInfo;
 	return (
 		<>
-			<FilterPanel categoryId={3} />
+			<FilterPanel categoryId={3} needRender={false} />
 			<ProductsContainer
 				cards={
 					productsInfo?.map(p => (

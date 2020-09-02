@@ -1,0 +1,27 @@
+query GetProductFilterValues($productId: Int!) {
+	products(filter: { id: $productId }) {
+		id
+		category {
+			id
+			filter {
+				id
+				groups {
+					id
+					fields {
+						id
+						name
+						type
+						index
+					}
+				}
+			}
+		}
+		filterValues {
+			id
+			value
+			filterField {
+				id
+			}
+		}
+	}
+}

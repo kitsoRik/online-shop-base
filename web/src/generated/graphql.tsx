@@ -76,7 +76,7 @@ export type Category = {
   children?: Maybe<Array<Category>>;
   fields?: Maybe<Array<CategoryField>>;
   info: Array<CategoryInfo>;
-  filter?: Maybe<Filter>;
+  filter: Filter;
 };
 
 
@@ -168,6 +168,7 @@ export type Product = {
   id: Scalars['Int'];
   category: Category;
   info: Array<ProductInfo>;
+  filterValues: Array<FilterValue>;
 };
 
 
@@ -177,6 +178,14 @@ export type ProductInfoArgs = {
 
 export type ProductInfoInput = {
   id?: Maybe<Scalars['Int']>;
+};
+
+export type FilterValue = {
+  __typename?: 'FilterValue';
+  id: Scalars['String'];
+  value: Scalars['String'];
+  product: Product;
+  filterField: FilterField;
 };
 
 export type SearchProductsOutput = {
@@ -756,7 +765,7 @@ export type GetCategoryFilterQuery = (
   & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
-    & { filter?: Maybe<(
+    & { filter: (
       { __typename?: 'Filter' }
       & Pick<Filter, 'id'>
       & { groups: Array<(
@@ -767,7 +776,7 @@ export type GetCategoryFilterQuery = (
           & Pick<FilterField, 'id' | 'name' | 'type' | 'index'>
         )> }
       )> }
-    )> }
+    ) }
   )>> }
 );
 
@@ -824,7 +833,7 @@ export type GetCategoryFilterGroupQuery = (
   & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
-    & { filter?: Maybe<(
+    & { filter: (
       { __typename?: 'Filter' }
       & Pick<Filter, 'id'>
       & { groups: Array<(
@@ -835,7 +844,7 @@ export type GetCategoryFilterGroupQuery = (
           & Pick<FilterField, 'id' | 'name' | 'index'>
         )> }
       )> }
-    )> }
+    ) }
   )>> }
 );
 
@@ -865,7 +874,7 @@ export type GetCategoryFilterGroupFieldQuery = (
   & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
-    & { filter?: Maybe<(
+    & { filter: (
       { __typename?: 'Filter' }
       & Pick<Filter, 'id'>
       & { groups: Array<(
@@ -880,7 +889,7 @@ export type GetCategoryFilterGroupFieldQuery = (
           )> }
         )> }
       )> }
-    )> }
+    ) }
   )>> }
 );
 
@@ -1018,13 +1027,13 @@ export type InitializeCategoryFilterMutation = (
   & { initializeCategoryFilter: (
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
-    & { filter?: Maybe<(
+    & { filter: (
       { __typename?: 'Filter' }
       & { category: (
         { __typename?: 'Category' }
         & Pick<Category, 'id'>
       ) }
-    )> }
+    ) }
   ) }
 );
 
@@ -1447,6 +1456,42 @@ export type ChangeCategoryInProductMutation = (
   ) }
 );
 
+export type GetProductFilterValuesQueryVariables = Exact<{
+  productId: Scalars['Int'];
+}>;
+
+
+export type GetProductFilterValuesQuery = (
+  { __typename?: 'Query' }
+  & { products: Array<(
+    { __typename?: 'Product' }
+    & Pick<Product, 'id'>
+    & { category: (
+      { __typename?: 'Category' }
+      & Pick<Category, 'id'>
+      & { filter: (
+        { __typename?: 'Filter' }
+        & Pick<Filter, 'id'>
+        & { groups: Array<(
+          { __typename?: 'FilterGroup' }
+          & Pick<FilterGroup, 'id'>
+          & { fields: Array<(
+            { __typename?: 'FilterField' }
+            & Pick<FilterField, 'id' | 'name' | 'type' | 'index'>
+          )> }
+        )> }
+      ) }
+    ), filterValues: Array<(
+      { __typename?: 'FilterValue' }
+      & Pick<FilterValue, 'id' | 'value'>
+      & { filterField: (
+        { __typename?: 'FilterField' }
+        & Pick<FilterField, 'id'>
+      ) }
+    )> }
+  )> }
+);
+
 export type GetProductInfoByProductIdQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1754,7 +1799,7 @@ export type GetCategoryFilterFieldsQuery = (
   & { categories?: Maybe<Array<(
     { __typename?: 'Category' }
     & Pick<Category, 'id'>
-    & { filter?: Maybe<(
+    & { filter: (
       { __typename?: 'Filter' }
       & Pick<Filter, 'id'>
       & { groups: Array<(
@@ -1769,7 +1814,7 @@ export type GetCategoryFilterFieldsQuery = (
           )> }
         )> }
       )> }
-    )> }
+    ) }
   )>> }
 );
 
@@ -3690,6 +3735,61 @@ export function useChangeCategoryInProductMutation(baseOptions?: ApolloReactHook
 export type ChangeCategoryInProductMutationHookResult = ReturnType<typeof useChangeCategoryInProductMutation>;
 export type ChangeCategoryInProductMutationResult = ApolloReactCommon.MutationResult<ChangeCategoryInProductMutation>;
 export type ChangeCategoryInProductMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeCategoryInProductMutation, ChangeCategoryInProductMutationVariables>;
+export const GetProductFilterValuesDocument = gql`
+    query GetProductFilterValues($productId: Int!) {
+  products(filter: {id: $productId}) {
+    id
+    category {
+      id
+      filter {
+        id
+        groups {
+          id
+          fields {
+            id
+            name
+            type
+            index
+          }
+        }
+      }
+    }
+    filterValues {
+      id
+      value
+      filterField {
+        id
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProductFilterValuesQuery__
+ *
+ * To run a query within a React component, call `useGetProductFilterValuesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProductFilterValuesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProductFilterValuesQuery({
+ *   variables: {
+ *      productId: // value for 'productId'
+ *   },
+ * });
+ */
+export function useGetProductFilterValuesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProductFilterValuesQuery, GetProductFilterValuesQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetProductFilterValuesQuery, GetProductFilterValuesQueryVariables>(GetProductFilterValuesDocument, baseOptions);
+      }
+export function useGetProductFilterValuesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProductFilterValuesQuery, GetProductFilterValuesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetProductFilterValuesQuery, GetProductFilterValuesQueryVariables>(GetProductFilterValuesDocument, baseOptions);
+        }
+export type GetProductFilterValuesQueryHookResult = ReturnType<typeof useGetProductFilterValuesQuery>;
+export type GetProductFilterValuesLazyQueryHookResult = ReturnType<typeof useGetProductFilterValuesLazyQuery>;
+export type GetProductFilterValuesQueryResult = ApolloReactCommon.QueryResult<GetProductFilterValuesQuery, GetProductFilterValuesQueryVariables>;
 export const GetProductInfoByProductIdDocument = gql`
     query GetProductInfoByProductId($id: Int!) {
   products(filter: {id: $id}) {

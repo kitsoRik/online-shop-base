@@ -6,6 +6,7 @@ import { Link } from "react-location-query";
 import { useFindCategoryByIdQuery } from "../../../../../generated/graphql";
 import Category from "./Category";
 import { useParams } from "react-router";
+import Filter from "./Filter";
 
 const Actions = () => {
 	const { id } = useParams();
@@ -13,7 +14,7 @@ const Actions = () => {
 	const [tab, setTab] = useLocationField("tab", {
 		type: "string",
 		initial: "info",
-		enum: ["info", "category"]
+		enum: ["info", "category", "filter"]
 	});
 
 	const { data, loading } = useFindCategoryByIdQuery({
@@ -35,6 +36,9 @@ const Actions = () => {
 				<Category />
 			</Tabs.TabPane>
 			{InfoAction()}
+			<Tabs.TabPane key="filter" tab="Filter">
+				<Filter productId={productId} />
+			</Tabs.TabPane>
 		</Tabs>
 	);
 };

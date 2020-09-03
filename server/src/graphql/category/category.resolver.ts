@@ -90,7 +90,7 @@ export class CategoryResolver {
 		return this.categoryInfoService.getInfo(id, filter);
 	}
 
-	@ResolveField(type => FilterType, { nullable: true })
+	@ResolveField(type => FilterType)
 	filter(@Parent() parent: CategoryEntity) {
 		return this.categoryService.getFilter(parent.id);
 	}

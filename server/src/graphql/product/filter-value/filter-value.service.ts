@@ -16,6 +16,22 @@ export class FilterValueService {
 		private filterFieldRepository: Repository<FilterFieldEntity>
 	) {}
 
+	async initializeFilterValue(
+		value: string,
+		productId: number,
+		filterFieldId: string
+	) {
+		const filterValue = this.filterValueRepository.create({
+			value,
+			productId,
+			filterFieldId
+		});
+
+		await this.filterValueRepository.save(filterValue);
+
+		return filterValue;
+	}
+
 	async getProduct(productId: number): Promise<ProductEntity> {
 		return await this.productRepository.findOne({
 			where: { id: productId }

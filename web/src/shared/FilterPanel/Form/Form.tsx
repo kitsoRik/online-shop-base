@@ -1,5 +1,5 @@
 import React from "react";
-import { Form as FormD } from "antd";
+import { Form as FormD, Button } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { FilterGroup } from "../../../generated/graphql";
 import Group from "./Group";
@@ -19,6 +19,7 @@ interface Props {
 					type: string;
 					options?: object | null;
 				} | null;
+				options?: any | null;
 			}[];
 		},
 		FilterGroup
@@ -26,12 +27,14 @@ interface Props {
 }
 
 const Form = ({ form, groups }: Props) => {
-	console.log(groups);
 	return (
-		<FormD form={form}>
+		<FormD form={form} onFinish={console.log}>
 			{groups.map(group => (
 				<Group group={group} />
 			))}
+			<Button type="primary" onClick={form.submit}>
+				Search
+			</Button>
 		</FormD>
 	);
 };

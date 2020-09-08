@@ -16,6 +16,7 @@ interface Props {
 					type: string;
 					options?: object | null;
 				} | null;
+				options?: any | null;
 			}[];
 		},
 		FilterGroup

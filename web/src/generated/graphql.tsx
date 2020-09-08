@@ -1872,7 +1872,7 @@ export type GetCategoryFilterFieldsQuery = (
         & Pick<FilterGroup, 'id' | 'name'>
         & { fields: Array<(
           { __typename?: 'FilterField' }
-          & Pick<FilterField, 'id' | 'type'>
+          & Pick<FilterField, 'id' | 'type' | 'options'>
           & { categoryField?: Maybe<(
             { __typename?: 'CategoryField' }
             & Pick<CategoryField, 'id' | 'type' | 'options'>
@@ -4558,6 +4558,7 @@ export const GetCategoryFilterFieldsDocument = gql`
             type
             options
           }
+          options
         }
       }
     }

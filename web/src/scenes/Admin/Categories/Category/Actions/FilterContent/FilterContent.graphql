@@ -12,6 +12,7 @@ query GetCategoryFilter($categoryId: Int!) {
 					name
 					type
 					index
+					options
 				}
 			}
 		}

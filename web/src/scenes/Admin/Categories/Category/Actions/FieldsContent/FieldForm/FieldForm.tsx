@@ -3,8 +3,7 @@ import { Form, Input } from "antd";
 import { FormInstance } from "antd/lib/form";
 import TypeSelect from "../TypeSelect";
 import { useTranslation } from "react-i18next";
-import FloatOptions from "./FloatOptions";
-import IntegerOptions from "./IntegerOptions";
+import Options from "./Options";
 
 interface Props {
 	form: FormInstance;
@@ -69,26 +68,14 @@ const FieldForm = ({ form, onFinish, initialValues }: Props) => {
 				<TypeSelect />
 			</Form.Item>
 			<Form.Item label="Options" shouldUpdate>
-				{() => {
-					if (
-						initialValues?.type === "integer" ||
-						form.getFieldValue("type")
-					)
-						return (
-							<IntegerOptions
-								intitialOptions={initialValues?.options}
-							/>
-						);
-					if (
-						initialValues?.type === "float" ||
-						form.getFieldValue("type")
-					)
-						return (
-							<FloatOptions
-								intitialOptions={initialValues?.options}
-							/>
-						);
-				}}
+				{() => (
+					<Options
+						fieldType={
+							form.getFieldValue("type") || initialValues?.type
+						}
+						intitialOptions={initialValues?.options ?? {}}
+					/>
+				)}
 			</Form.Item>
 
 			<Form.Item

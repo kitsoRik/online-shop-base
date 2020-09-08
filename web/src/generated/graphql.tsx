@@ -134,6 +134,7 @@ export type FilterField = {
   name: Scalars['String'];
   index: Scalars['Int'];
   type: Scalars['String'];
+  options?: Maybe<Scalars['JSON']>;
   categoryField?: Maybe<CategoryField>;
 };
 
@@ -788,7 +789,7 @@ export type GetCategoryFilterQuery = (
         & Pick<FilterGroup, 'id' | 'name' | 'index'>
         & { fields: Array<(
           { __typename?: 'FilterField' }
-          & Pick<FilterField, 'id' | 'name' | 'type' | 'index'>
+          & Pick<FilterField, 'id' | 'name' | 'type' | 'index' | 'options'>
         )> }
       )> }
     ) }
@@ -897,10 +898,10 @@ export type GetCategoryFilterGroupFieldQuery = (
         & Pick<FilterGroup, 'id'>
         & { fields: Array<(
           { __typename?: 'FilterField' }
-          & Pick<FilterField, 'id' | 'name' | 'type' | 'index'>
+          & Pick<FilterField, 'id' | 'name' | 'type' | 'index' | 'options'>
           & { categoryField?: Maybe<(
             { __typename?: 'CategoryField' }
-            & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue'>
+            & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue' | 'options'>
           )> }
         )> }
       )> }
@@ -920,10 +921,10 @@ export type ChangeFilterGroupFieldMutation = (
   { __typename?: 'Mutation' }
   & { changeFilterGroupField: (
     { __typename?: 'FilterField' }
-    & Pick<FilterField, 'id' | 'name' | 'type'>
+    & Pick<FilterField, 'id' | 'name' | 'type' | 'options'>
     & { categoryField?: Maybe<(
       { __typename?: 'CategoryField' }
-      & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue'>
+      & Pick<CategoryField, 'id' | 'name' | 'type' | 'defaultValue' | 'options'>
     )> }
   ) }
 );
@@ -2456,6 +2457,7 @@ export const GetCategoryFilterDocument = gql`
           name
           type
           index
+          options
         }
       }
     }
@@ -2668,7 +2670,9 @@ export const GetCategoryFilterGroupFieldDocument = gql`
             name
             type
             defaultValue
+            options
           }
+          options
         }
       }
     }
@@ -2714,7 +2718,9 @@ export const ChangeFilterGroupFieldDocument = gql`
       name
       type
       defaultValue
+      options
     }
+    options
   }
 }
     `;

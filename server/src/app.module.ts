@@ -4,8 +4,8 @@ import { AppService } from "./app.service";
 import { GraphqlModule } from "./graphql/graphql.module";
 import { UploadModule } from "./upload/upload.module";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { ConfigModule } from './config/config.module';
-import { StaticModule } from './static/static.module';
+import { ConfigModule } from "./config/config.module";
+import { StaticModule } from "./static/static.module";
 
 @Module({
 	imports: [

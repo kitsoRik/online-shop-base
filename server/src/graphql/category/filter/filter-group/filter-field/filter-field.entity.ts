@@ -19,4 +19,6 @@ export class FilterFieldEntity {
 
 	@Column({ type: "int", name: "category_field_id", nullable: true })
 	categoryFieldId: number | null;
+
+
 }

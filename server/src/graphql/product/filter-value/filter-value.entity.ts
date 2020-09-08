@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from "typeorm";
 
 @Entity("filters_values")
 export class FilterValueEntity {
-	@PrimaryGeneratedColumn({ type: "uuid" })
+	@Column({ generated: "uuid", type: "text", primary: true })
 	id: string;
 
 	@Column({ type: "int", name: "product_id" })

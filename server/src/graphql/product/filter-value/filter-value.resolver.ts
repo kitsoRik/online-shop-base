@@ -31,6 +31,15 @@ export class FilterValueResolver {
 		);
 	}
 
+	@Mutation(type => FilterValueType)
+	@AccessAdmin()
+	changeFilterValue(
+		@Args("value") value: string,
+		@Args("filterValueId") filterValueId: string
+	) {
+		return this.filterValueService.changeFilterValue(value, filterValueId);
+	}
+
 	@ResolveField(type => ProductType)
 	product(@Parent() parent: FilterValueEntity) {
 		return this.filterValueService.getProduct(parent.productId);

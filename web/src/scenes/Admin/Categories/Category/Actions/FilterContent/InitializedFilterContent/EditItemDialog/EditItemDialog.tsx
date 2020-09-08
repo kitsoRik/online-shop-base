@@ -31,15 +31,16 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 		}
 	});
 
-	const [changeGroup] = useChangeFilterGroupFieldMutation();
+	const [changeGroupField] = useChangeFilterGroupFieldMutation();
 
 	const onEdit = async (
 		name: string,
 		type: string,
-		categoryFieldId: number
+		categoryFieldId: number,
+		options: object
 	) => {
 		try {
-			const {} = await changeGroup({
+			const {} = await changeGroupField({
 				variables: {
 					fieldId: itemId,
 					name,
@@ -47,10 +48,11 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 					categoryFieldId:
 						categoryFieldId !== undefined
 							? categoryFieldId
-							: item!.categoryField!.id
+							: item!.categoryField!.id,
+					options
 				}
 			});
-			notification.success({ message: "Group has been changed" });
+			notification.success({ message: "Item has been changed" });
 			onClose();
 		} catch (e) {
 			console.log(e.message);
@@ -86,7 +88,8 @@ const EditItemDialog = ({ itemId, groupId, visible, onClose }: Props) => {
 					initialValues={{
 						name: item?.name ?? "",
 						categoryField: item?.categoryField,
-						type: item?.type ?? ""
+						type: item?.type ?? "",
+						options: item?.options ?? {}
 					}}
 				/>
 			</Spin>

@@ -5,12 +5,12 @@ interface Props {
 	value?: string;
 	onChange?: (value: string) => void;
 
-	fieldType?: string;
+	categoryFieldType?: string;
 }
 
-const TypeSelect = ({ value, onChange, fieldType }: Props) => {
-	const options = getOptions(fieldType);
-	console.log(fieldType);
+const TypeSelect = ({ value, onChange, categoryFieldType }: Props) => {
+	const options = getOptions(categoryFieldType);
+
 	return (
 		<Select value={value} onChange={onChange}>
 			{options.map(value => (
@@ -20,10 +20,10 @@ const TypeSelect = ({ value, onChange, fieldType }: Props) => {
 	);
 };
 
-const getOptions = (fieldType?: string) => {
-	switch (fieldType) {
-		case "integer":
-			return ["text"];
+const getOptions = (categoryFieldType?: string) => {
+	switch (categoryFieldType) {
+		case "number":
+			return ["slider", "spin"];
 		case "boolean":
 			return ["checkbox"];
 		case "text":

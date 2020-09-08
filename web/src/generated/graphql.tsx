@@ -520,6 +520,7 @@ export type FilterFieldChangeInput = {
   name: Scalars['String'];
   type: Scalars['String'];
   categoryFieldId: Scalars['Int'];
+  options: Scalars['JSON'];
 };
 
 export type FilterGroupChange = {
@@ -914,6 +915,7 @@ export type ChangeFilterGroupFieldMutationVariables = Exact<{
   name: Scalars['String'];
   type: Scalars['String'];
   categoryFieldId: Scalars['Int'];
+  options: Scalars['JSON'];
 }>;
 
 
@@ -2708,8 +2710,8 @@ export type GetCategoryFilterGroupFieldQueryHookResult = ReturnType<typeof useGe
 export type GetCategoryFilterGroupFieldLazyQueryHookResult = ReturnType<typeof useGetCategoryFilterGroupFieldLazyQuery>;
 export type GetCategoryFilterGroupFieldQueryResult = ApolloReactCommon.QueryResult<GetCategoryFilterGroupFieldQuery, GetCategoryFilterGroupFieldQueryVariables>;
 export const ChangeFilterGroupFieldDocument = gql`
-    mutation ChangeFilterGroupField($fieldId: String!, $name: String!, $type: String!, $categoryFieldId: Int!) {
-  changeFilterGroupField(fieldId: $fieldId, change: {name: $name, type: $type, categoryFieldId: $categoryFieldId}) {
+    mutation ChangeFilterGroupField($fieldId: String!, $name: String!, $type: String!, $categoryFieldId: Int!, $options: JSON!) {
+  changeFilterGroupField(fieldId: $fieldId, change: {name: $name, type: $type, categoryFieldId: $categoryFieldId, options: $options}) {
     id
     name
     type
@@ -2743,6 +2745,7 @@ export type ChangeFilterGroupFieldMutationFn = ApolloReactCommon.MutationFunctio
  *      name: // value for 'name'
  *      type: // value for 'type'
  *      categoryFieldId: // value for 'categoryFieldId'
+ *      options: // value for 'options'
  *   },
  * });
  */

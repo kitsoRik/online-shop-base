@@ -3,10 +3,16 @@ import { Form, Input } from "antd";
 import CategoryFieldSelect from "./CategoryFieldSelect";
 import TypeSelect from "./TypeSelect";
 import { FormInstance } from "antd/lib/form";
+import Options from "./Options";
 
 interface Props {
 	form: FormInstance;
-	onFinish: (name: string, type: string, categoryField: number) => void;
+	onFinish: (
+		name: string,
+		type: string,
+		categoryField: number,
+		options: object
+	) => void;
 
 	categoryId: number;
 
@@ -17,6 +23,7 @@ interface Props {
 			id: number;
 			type: string;
 		} | null;
+		options: object;
 	};
 }
 
@@ -29,8 +36,8 @@ const ItemForm = ({ form, onFinish, categoryId, initialValues }: Props) => {
 	return (
 		<Form
 			form={form}
-			onFinish={({ name, type, categoryField }) =>
-				onFinish(name, type, categoryField.id)
+			onFinish={({ name, type, categoryField, options }) =>
+				onFinish(name, type, categoryField.id, options)
 			}
 		>
 			<Form.Item
@@ -59,11 +66,25 @@ const ItemForm = ({ form, onFinish, categoryId, initialValues }: Props) => {
 				initialValue={initialValues?.type}
 			>
 				<TypeSelect
-					fieldType={
+					categoryFieldType={
 						categoryField?.type ||
 						initialValues?.categoryField?.type
 					}
 				/>
+			</Form.Item>
+
+			<Form.Item label="Options" shouldUpdate>
+				{() => {
+					return (
+						<Options
+							fieldType={
+								form.getFieldValue("type") ||
+								initialValues?.type
+							}
+							initialOptions={initialValues?.options}
+						/>
+					);
+				}}
 			</Form.Item>
 		</Form>
 	);

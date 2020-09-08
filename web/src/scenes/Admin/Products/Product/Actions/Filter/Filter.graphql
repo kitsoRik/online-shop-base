@@ -1,3 +1,11 @@
+fragment FilterValueFields on FilterValue {
+	id
+	value
+	filterField {
+		id
+	}
+}
+
 query GetProductFilterValues($productId: Int!) {
 	products(filter: { id: $productId }) {
 		id
@@ -17,11 +25,38 @@ query GetProductFilterValues($productId: Int!) {
 			}
 		}
 		filterValues {
-			id
-			value
-			filterField {
-				id
-			}
+			...FilterValueFields
 		}
+	}
+}
+
+mutation InitializeFilterValue(
+	$value: String!
+	$productId: Int!
+	$filterFieldId: String!
+) {
+	initializeFilterValue(
+		value: $value
+		productId: $productId
+		filterFieldId: $filterFieldId
+	) {
+		...FilterValueFields
+	}
+}
+
+mutation ChangeFilterValue($value: String!, $filterValueId: String!) {
+	changeFilterValue(value: $value, filterValueId: $filterValueId) {
+		id
+		value
+		filterField {
+			id
+		}
+	}
+}
+
+fragment InitializedFilterValueProduct on Product {
+	id
+	filterValues {
+		...FilterValueFields
 	}
 }

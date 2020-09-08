@@ -300,6 +300,8 @@ export type Mutation = {
   changeProductInfo: ProductInfo;
   addFieldToProductInfo: ProductInfoField;
   changeFieldInProductInfo: ProductInfoField;
+  initializeFilterValue: FilterValue;
+  changeFilterValue: FilterValue;
   addLanguage: Language;
   setLanguageJson: Scalars['Boolean'];
 };
@@ -464,6 +466,19 @@ export type MutationAddFieldToProductInfoArgs = {
 export type MutationChangeFieldInProductInfoArgs = {
   change: ProductInfoFieldChangeInput;
   id?: Maybe<Scalars['Int']>;
+};
+
+
+export type MutationInitializeFilterValueArgs = {
+  filterFieldId: Scalars['String'];
+  productId: Scalars['Int'];
+  value: Scalars['String'];
+};
+
+
+export type MutationChangeFilterValueArgs = {
+  filterValueId: Scalars['String'];
+  value: Scalars['String'];
 };
 
 
@@ -1456,6 +1471,15 @@ export type ChangeCategoryInProductMutation = (
   ) }
 );
 
+export type FilterValueFieldsFragment = (
+  { __typename?: 'FilterValue' }
+  & Pick<FilterValue, 'id' | 'value'>
+  & { filterField: (
+    { __typename?: 'FilterField' }
+    & Pick<FilterField, 'id'>
+  ) }
+);
+
 export type GetProductFilterValuesQueryVariables = Exact<{
   productId: Scalars['Int'];
 }>;
@@ -1483,12 +1507,50 @@ export type GetProductFilterValuesQuery = (
       ) }
     ), filterValues: Array<(
       { __typename?: 'FilterValue' }
-      & Pick<FilterValue, 'id' | 'value'>
-      & { filterField: (
-        { __typename?: 'FilterField' }
-        & Pick<FilterField, 'id'>
-      ) }
+      & FilterValueFieldsFragment
     )> }
+  )> }
+);
+
+export type InitializeFilterValueMutationVariables = Exact<{
+  value: Scalars['String'];
+  productId: Scalars['Int'];
+  filterFieldId: Scalars['String'];
+}>;
+
+
+export type InitializeFilterValueMutation = (
+  { __typename?: 'Mutation' }
+  & { initializeFilterValue: (
+    { __typename?: 'FilterValue' }
+    & FilterValueFieldsFragment
+  ) }
+);
+
+export type ChangeFilterValueMutationVariables = Exact<{
+  value: Scalars['String'];
+  filterValueId: Scalars['String'];
+}>;
+
+
+export type ChangeFilterValueMutation = (
+  { __typename?: 'Mutation' }
+  & { changeFilterValue: (
+    { __typename?: 'FilterValue' }
+    & Pick<FilterValue, 'id' | 'value'>
+    & { filterField: (
+      { __typename?: 'FilterField' }
+      & Pick<FilterField, 'id'>
+    ) }
+  ) }
+);
+
+export type InitializedFilterValueProductFragment = (
+  { __typename?: 'Product' }
+  & Pick<Product, 'id'>
+  & { filterValues: Array<(
+    { __typename?: 'FilterValue' }
+    & FilterValueFieldsFragment
   )> }
 );
 
@@ -1854,6 +1916,23 @@ export const FilterFieldIndexFragmentDoc = gql`
   index
 }
     `;
+export const FilterValueFieldsFragmentDoc = gql`
+    fragment FilterValueFields on FilterValue {
+  id
+  value
+  filterField {
+    id
+  }
+}
+    `;
+export const InitializedFilterValueProductFragmentDoc = gql`
+    fragment InitializedFilterValueProduct on Product {
+  id
+  filterValues {
+    ...FilterValueFields
+  }
+}
+    ${FilterValueFieldsFragmentDoc}`;
 export const GetApplicationLanguagesDocument = gql`
     query GetApplicationLanguages {
   languages {
@@ -3755,15 +3834,11 @@ export const GetProductFilterValuesDocument = gql`
       }
     }
     filterValues {
-      id
-      value
-      filterField {
-        id
-      }
+      ...FilterValueFields
     }
   }
 }
-    `;
+    ${FilterValueFieldsFragmentDoc}`;
 
 /**
  * __useGetProductFilterValuesQuery__
@@ -3790,6 +3865,77 @@ export function useGetProductFilterValuesLazyQuery(baseOptions?: ApolloReactHook
 export type GetProductFilterValuesQueryHookResult = ReturnType<typeof useGetProductFilterValuesQuery>;
 export type GetProductFilterValuesLazyQueryHookResult = ReturnType<typeof useGetProductFilterValuesLazyQuery>;
 export type GetProductFilterValuesQueryResult = ApolloReactCommon.QueryResult<GetProductFilterValuesQuery, GetProductFilterValuesQueryVariables>;
+export const InitializeFilterValueDocument = gql`
+    mutation InitializeFilterValue($value: String!, $productId: Int!, $filterFieldId: String!) {
+  initializeFilterValue(value: $value, productId: $productId, filterFieldId: $filterFieldId) {
+    ...FilterValueFields
+  }
+}
+    ${FilterValueFieldsFragmentDoc}`;
+export type InitializeFilterValueMutationFn = ApolloReactCommon.MutationFunction<InitializeFilterValueMutation, InitializeFilterValueMutationVariables>;
+
+/**
+ * __useInitializeFilterValueMutation__
+ *
+ * To run a mutation, you first call `useInitializeFilterValueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInitializeFilterValueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [initializeFilterValueMutation, { data, loading, error }] = useInitializeFilterValueMutation({
+ *   variables: {
+ *      value: // value for 'value'
+ *      productId: // value for 'productId'
+ *      filterFieldId: // value for 'filterFieldId'
+ *   },
+ * });
+ */
+export function useInitializeFilterValueMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<InitializeFilterValueMutation, InitializeFilterValueMutationVariables>) {
+        return ApolloReactHooks.useMutation<InitializeFilterValueMutation, InitializeFilterValueMutationVariables>(InitializeFilterValueDocument, baseOptions);
+      }
+export type InitializeFilterValueMutationHookResult = ReturnType<typeof useInitializeFilterValueMutation>;
+export type InitializeFilterValueMutationResult = ApolloReactCommon.MutationResult<InitializeFilterValueMutation>;
+export type InitializeFilterValueMutationOptions = ApolloReactCommon.BaseMutationOptions<InitializeFilterValueMutation, InitializeFilterValueMutationVariables>;
+export const ChangeFilterValueDocument = gql`
+    mutation ChangeFilterValue($value: String!, $filterValueId: String!) {
+  changeFilterValue(value: $value, filterValueId: $filterValueId) {
+    id
+    value
+    filterField {
+      id
+    }
+  }
+}
+    `;
+export type ChangeFilterValueMutationFn = ApolloReactCommon.MutationFunction<ChangeFilterValueMutation, ChangeFilterValueMutationVariables>;
+
+/**
+ * __useChangeFilterValueMutation__
+ *
+ * To run a mutation, you first call `useChangeFilterValueMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeFilterValueMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeFilterValueMutation, { data, loading, error }] = useChangeFilterValueMutation({
+ *   variables: {
+ *      value: // value for 'value'
+ *      filterValueId: // value for 'filterValueId'
+ *   },
+ * });
+ */
+export function useChangeFilterValueMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<ChangeFilterValueMutation, ChangeFilterValueMutationVariables>) {
+        return ApolloReactHooks.useMutation<ChangeFilterValueMutation, ChangeFilterValueMutationVariables>(ChangeFilterValueDocument, baseOptions);
+      }
+export type ChangeFilterValueMutationHookResult = ReturnType<typeof useChangeFilterValueMutation>;
+export type ChangeFilterValueMutationResult = ApolloReactCommon.MutationResult<ChangeFilterValueMutation>;
+export type ChangeFilterValueMutationOptions = ApolloReactCommon.BaseMutationOptions<ChangeFilterValueMutation, ChangeFilterValueMutationVariables>;
 export const GetProductInfoByProductIdDocument = gql`
     query GetProductInfoByProductId($id: Int!) {
   products(filter: {id: $id}) {

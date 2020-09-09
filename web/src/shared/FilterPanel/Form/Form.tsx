@@ -14,6 +14,7 @@ interface Props {
 			fields: {
 				id: string;
 				type: string;
+				name: string;
 				categoryField?: {
 					id: number;
 					type: string;
@@ -24,13 +25,16 @@ interface Props {
 		},
 		FilterGroup
 	>[];
+
+	initialOptions: object;
+	onSearch: (values: object) => void;
 }
 
-const Form = ({ form, groups }: Props) => {
+const Form = ({ form, groups, initialOptions, onSearch }: Props) => {
 	return (
-		<FormD form={form} onFinish={console.log}>
+		<FormD form={form} onFinish={onSearch}>
 			{groups.map(group => (
-				<Group group={group} />
+				<Group group={group} initialOptions={initialOptions} />
 			))}
 			<Button type="primary" onClick={form.submit}>
 				Search

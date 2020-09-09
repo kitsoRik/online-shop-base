@@ -15,7 +15,12 @@ const Search = () => {
 
 	return (
 		<Page alignment="horizontal" vAlign="top">
-			<FilterPanel categoryId={3} needRender={false} />
+			<FilterPanel
+				categoryId={3}
+				needRender={false}
+				initialOptions={{}}
+				onFilterSearch={() => {}}
+			/>
 			<Products />
 		</Page>
 	);

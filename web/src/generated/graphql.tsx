@@ -265,6 +265,7 @@ export type SearchProductsInput = {
   categoryId?: Maybe<Scalars['Int']>;
   subCategoryId?: Maybe<Scalars['Int']>;
   rootCategoryId?: Maybe<Scalars['Int']>;
+  options?: Maybe<Scalars['JSON']>;
 };
 
 export type SearchProductsPaginationInput = {
@@ -626,6 +627,7 @@ export type SearchSubsubCategoryProductsQueryVariables = Exact<{
   categoryId: Scalars['Int'];
   offset: Scalars['Int'];
   limit: Scalars['Int'];
+  options: Scalars['JSON'];
 }>;
 
 
@@ -1872,7 +1874,7 @@ export type GetCategoryFilterFieldsQuery = (
         & Pick<FilterGroup, 'id' | 'name'>
         & { fields: Array<(
           { __typename?: 'FilterField' }
-          & Pick<FilterField, 'id' | 'type' | 'options'>
+          & Pick<FilterField, 'id' | 'type' | 'name' | 'options'>
           & { categoryField?: Maybe<(
             { __typename?: 'CategoryField' }
             & Pick<CategoryField, 'id' | 'type' | 'options'>
@@ -2100,8 +2102,8 @@ export type SearchSubCategoryProductsQueryHookResult = ReturnType<typeof useSear
 export type SearchSubCategoryProductsLazyQueryHookResult = ReturnType<typeof useSearchSubCategoryProductsLazyQuery>;
 export type SearchSubCategoryProductsQueryResult = ApolloReactCommon.QueryResult<SearchSubCategoryProductsQuery, SearchSubCategoryProductsQueryVariables>;
 export const SearchSubsubCategoryProductsDocument = gql`
-    query SearchSubsubCategoryProducts($nameTemplate: String!, $languageCode: String!, $categoryId: Int!, $offset: Int!, $limit: Int!) {
-  searchProducts(filter: {nameTemplate: $nameTemplate, languageCode: $languageCode, categoryId: $categoryId}, pagination: {offset: $offset, limit: $limit}) {
+    query SearchSubsubCategoryProducts($nameTemplate: String!, $languageCode: String!, $categoryId: Int!, $offset: Int!, $limit: Int!, $options: JSON!) {
+  searchProducts(filter: {nameTemplate: $nameTemplate, languageCode: $languageCode, categoryId: $categoryId, options: $options}, pagination: {offset: $offset, limit: $limit}) {
     productsInfo {
       id
       name
@@ -2127,6 +2129,7 @@ export const SearchSubsubCategoryProductsDocument = gql`
  *      categoryId: // value for 'categoryId'
  *      offset: // value for 'offset'
  *      limit: // value for 'limit'
+ *      options: // value for 'options'
  *   },
  * });
  */
@@ -4553,6 +4556,7 @@ export const GetCategoryFilterFieldsDocument = gql`
         fields {
           id
           type
+          name
           categoryField {
             id
             type

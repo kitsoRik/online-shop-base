@@ -9,6 +9,7 @@ query GetCategoryFilterFields($categoryId: Int!) {
 				fields {
 					id
 					type
+					name
 					categoryField {
 						id
 						type

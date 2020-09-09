@@ -33,7 +33,17 @@ const Content = ({ categories }: Props) => {
 	);
 
 	const [search_text] = useLocationFieldT<string>("search_text");
+
+	const [searchFilter, setSearchFilter] = useLocationFieldT<object>(
+		"search_filter"
+	);
+
 	const categoryType = getCategoryType(searchSelectedCategory, categories);
+
+	const onFilterSearch = (values: object) => {
+		console.log("search with", values);
+		setSearchFilter(values);
+	};
 
 	if (categoryType === "subsub")
 		return (
@@ -41,6 +51,8 @@ const Content = ({ categories }: Props) => {
 				searchText={search_text}
 				categoryId={searchSelectedCategory}
 				languageCode={i18n.language}
+				options={searchFilter}
+				onFilterSearch={onFilterSearch}
 			/>
 		);
 	if (categoryType === "sub")
@@ -49,6 +61,7 @@ const Content = ({ categories }: Props) => {
 				searchText={search_text}
 				subCategoryId={searchSelectedCategory}
 				languageCode={i18n.language}
+				onFilterSearch={onFilterSearch}
 			/>
 		);
 	if (categoryType === "root")
@@ -57,6 +70,7 @@ const Content = ({ categories }: Props) => {
 				searchText={search_text}
 				rootCategoryId={searchSelectedCategory}
 				languageCode={i18n.language}
+				onFilterSearch={onFilterSearch}
 			/>
 		);
 

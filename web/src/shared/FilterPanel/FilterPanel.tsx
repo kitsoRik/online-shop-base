@@ -8,9 +8,12 @@ interface Props {
 	categoryId: number;
 
 	needRender: boolean;
+
+	initialOptions: object;
+	onFilterSearch: (values: object) => void;
 }
 
-const FilterPanel = ({ categoryId }: Props) => {
+const FilterPanel = ({ categoryId, initialOptions, onFilterSearch }: Props) => {
 	const { data, loading } = useGetCategoryFilterFieldsQuery({
 		variables: {
 			categoryId
@@ -32,7 +35,12 @@ const FilterPanel = ({ categoryId }: Props) => {
 
 	return (
 		<>
-			<Form form={form} groups={groups} />
+			<Form
+				form={form}
+				groups={groups}
+				initialOptions={initialOptions}
+				onSearch={onFilterSearch}
+			/>
 		</>
 	);
 };

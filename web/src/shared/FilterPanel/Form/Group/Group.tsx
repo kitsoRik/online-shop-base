@@ -11,6 +11,7 @@ interface Props {
 			fields: {
 				id: string;
 				type: string;
+				name: string;
 				categoryField?: {
 					id: number;
 					type: string;
@@ -21,13 +22,18 @@ interface Props {
 		},
 		FilterGroup
 	>;
+
+	initialOptions: { [path: string]: any };
 }
 
-const Group = ({ group }: Props) => {
+const Group = ({ group, initialOptions }: Props) => {
 	return (
 		<Form.Item label={group.name}>
 			{group.fields.map(field => (
-				<Field field={field} />
+				<Field
+					field={field}
+					initialOption={initialOptions[field.name]}
+				/>
 			))}
 		</Form.Item>
 	);

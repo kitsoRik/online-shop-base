@@ -8,6 +8,7 @@ interface Props {
 	field: {
 		id: string;
 		type: string;
+		name: string;
 		categoryField?: {
 			id: number;
 			type: string;
@@ -15,12 +16,18 @@ interface Props {
 		} | null;
 		options?: any | null;
 	};
+
+	initialOption: any; // value
 }
 
-const Field = ({ field }: Props) => {
+const Field = ({ field, initialOption }: Props) => {
 	const component = getFieldOptionComponent(field);
 	return (
-		<Form.Item name={field.id} label="Val">
+		<Form.Item
+			name={field.name}
+			label={field.name}
+			initialValue={initialOption}
+		>
 			{component}
 		</Form.Item>
 	);

@@ -6,12 +6,15 @@ interface Props {
 	searchText: string;
 	rootCategoryId: number;
 	languageCode: string;
+
+	onFilterSearch: (values: object) => void;
 }
 
 const RootCategoryContent = ({
 	searchText,
 	rootCategoryId,
-	languageCode
+	languageCode,
+	...props
 }: Props) => {
 	const { data, loading } = useSearchRootCategoryProductsQuery({
 		variables: {
@@ -23,7 +26,14 @@ const RootCategoryContent = ({
 		}
 	});
 
-	return <AnyCategoryContent data={data} loading={loading} />;
+	return (
+		<AnyCategoryContent
+			data={data}
+			loading={loading}
+			options={{}}
+			{...props}
+		/>
+	);
 };
 
 export default RootCategoryContent;

@@ -9,13 +9,26 @@ import FilterPanel from "../../../../../../shared/FilterPanel";
 interface Props {
 	data?: SearchSubsubCategoryProductsQuery;
 	loading: boolean;
+
+	options: object;
+	onFilterSearch: (values: object) => void;
 }
 
-const AnyCategoryContent = ({ data, loading }: Props) => {
+const AnyCategoryContent = ({
+	data,
+	loading,
+	options,
+	onFilterSearch
+}: Props) => {
 	const productsInfo = data?.searchProducts.productsInfo;
 	return (
 		<>
-			<FilterPanel categoryId={3} needRender={false} />
+			<FilterPanel
+				categoryId={3}
+				needRender={false}
+				initialOptions={options}
+				onFilterSearch={onFilterSearch}
+			/>
 			<ProductsContainer
 				cards={
 					productsInfo?.map(p => (

@@ -4,12 +4,14 @@ query SearchSubsubCategoryProducts(
 	$categoryId: Int!
 	$offset: Int!
 	$limit: Int!
+	$options: JSON!
 ) {
 	searchProducts(
 		filter: {
 			nameTemplate: $nameTemplate
 			languageCode: $languageCode
 			categoryId: $categoryId
+			options: $options
 		}
 		pagination: { offset: $offset, limit: $limit }
 	) {

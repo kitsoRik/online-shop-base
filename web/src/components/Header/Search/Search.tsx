@@ -33,6 +33,13 @@ const Search = () => {
 		hideIfInitial: true
 	});
 
+	const [] = useLocationField("search_filter", {
+		type: "json",
+		initial: {},
+		hideIfInitial: true,
+		actionOnChange: "Push"
+	});
+
 	const queryPush = useQueryPush();
 
 	const onSearch = (value: string) => {

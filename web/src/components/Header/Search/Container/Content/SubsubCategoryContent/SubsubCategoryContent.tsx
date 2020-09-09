@@ -6,12 +6,17 @@ interface Props {
 	searchText: string;
 	categoryId: number;
 	languageCode: string;
+
+	onFilterSearch: (values: object) => void;
+	options: object;
 }
 
 const SubsubCategoryContent = ({
 	searchText,
 	categoryId,
-	languageCode
+	languageCode,
+	options,
+	...props
 }: Props) => {
 	const { data, loading } = useSearchSubsubCategoryProductsQuery({
 		variables: {
@@ -19,11 +24,19 @@ const SubsubCategoryContent = ({
 			nameTemplate: searchText,
 			languageCode,
 			limit: 10,
-			offset: 0
+			offset: 0,
+			options
 		}
 	});
 
-	return <AnyCategoryContent data={data} loading={loading} />;
+	return (
+		<AnyCategoryContent
+			data={data}
+			loading={loading}
+			options={options}
+			{...props}
+		/>
+	);
 };
 
 export default SubsubCategoryContent;

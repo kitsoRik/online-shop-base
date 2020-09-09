@@ -1,5 +1,5 @@
 import { ObjectType, Field, Int } from "@nestjs/graphql";
-import { CategoryFieldType } from "src/graphql/category/category-field/category-field.type";
+import JSON from "graphql-type-json";
 
 @ObjectType("FilterField")
 export class FilterFieldType {
@@ -14,4 +14,7 @@ export class FilterFieldType {
 
 	@Field()
 	type: string;
+
+	@Field(type => JSON, { nullable: true })
+	options: object;
 }

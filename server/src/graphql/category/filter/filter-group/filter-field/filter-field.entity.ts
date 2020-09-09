@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, Column } from "typeorm";
 
 @Entity({ name: "filter_fields" })
 export class FilterFieldEntity {
@@ -20,5 +20,6 @@ export class FilterFieldEntity {
 	@Column({ type: "int", name: "category_field_id", nullable: true })
 	categoryFieldId: number | null;
 
-
+	@Column({ type: "json", default: {}, nullable: true })
+	options: object;
 }

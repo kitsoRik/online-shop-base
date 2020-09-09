@@ -1,4 +1,5 @@
 import { InputType, Field, Int } from "@nestjs/graphql";
+import JSON from "graphql-type-json";
 
 @InputType()
 export class FilterFieldChangeInput {
@@ -10,4 +11,7 @@ export class FilterFieldChangeInput {
 
 	@Field(type => Int)
 	categoryFieldId: number;
+
+	@Field(type => JSON)
+	options: object;
 }

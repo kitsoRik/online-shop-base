@@ -44,6 +44,7 @@ export class FilterFieldService {
 		field.name = change.name;
 		field.type = change.type;
 		field.categoryFieldId = change.categoryFieldId;
+		field.options = change.options;
 
 		await this.filterFieldRepository.save(field);
 

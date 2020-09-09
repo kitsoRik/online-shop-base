@@ -133,6 +133,9 @@ export class ProductInfoService {
 					}
 				);
 			}
+			if (Object.keys(filter.options ?? {}).length > 0) {
+				console.log(filter.options);
+			}
 		}
 
 		if (pagination) {

@@ -24,7 +24,7 @@ const Field = ({ field, initialOption }: Props) => {
 	const component = getFieldOptionComponent(field);
 	return (
 		<Form.Item
-			name={field.name}
+			name={field.id}
 			label={field.name}
 			initialValue={initialOption}
 		>

@@ -11,6 +11,8 @@ import { ProductInfoFieldEntity } from "./product-info-field/product-info-field.
 import { SearchProductsPaginationInput } from "./search-products-pagination.input";
 import { ProductEntity } from "../product.entity";
 import { CategoryEntity } from "src/graphql/category/category.entity";
+import { FilterFieldEntity } from "src/graphql/category/filter/filter-group/filter-field/filter-field.entity";
+import { searchProductOptionsBuilder } from "./search-products-options-builder";
 
 @Injectable()
 export class ProductInfoService {
@@ -21,6 +23,8 @@ export class ProductInfoService {
 		private productInfoFieldRepository: Repository<ProductInfoFieldEntity>,
 		@InjectRepository(CategoryEntity)
 		private categoryRepository: Repository<CategoryEntity>,
+		@InjectRepository(FilterFieldEntity)
+		private filterFieldRepository: Repository<FilterFieldEntity>,
 		private productService: ProductService
 	) {}
 
@@ -81,6 +85,7 @@ export class ProductInfoService {
 		const query = await this.productInfoRepository.createQueryBuilder(
 			"products_info"
 		);
+
 		if (filter) {
 			if (filter.nameTemplate) {
 				query.andWhere("name LIKE :template", {
@@ -99,7 +104,7 @@ export class ProductInfoService {
 
 			if (filter.categoryId) {
 				query.andWhere(
-					"product_id IN (SELECT id FROM products WHERE category_id = :categoryId)",
+					"products_info.product_id IN (SELECT id FROM products WHERE category_id = :categoryId)",
 					{
 						categoryId: filter.categoryId
 					}
@@ -108,7 +113,7 @@ export class ProductInfoService {
 
 			if (filter.subCategoryId !== undefined) {
 				query.andWhere(
-					`product_id IN (SELECT id FROM products WHERE category_id  IN (
+					`products_info.product_id IN (SELECT id FROM products WHERE category_id  IN (
 						SELECT id from categories WHERE categories.parent_id = :subCategoryId
 					))`,
 					{
@@ -119,8 +124,8 @@ export class ProductInfoService {
 
 			if (filter.rootCategoryId !== undefined) {
 				query.andWhere(
-					`product_id IN (
-						SELECT products.id FROM products
+					`products_info.product_id IN (
+						SELECT products_info.products.id FROM products
 							WHERE category_id IN (
 								SELECT id from categories c1 WHERE c1.parent_id IN (
 									SELECT id from categories c2 WHERE c2.parent_id = :rootCategoryId
@@ -133,9 +138,12 @@ export class ProductInfoService {
 					}
 				);
 			}
-			if (Object.keys(filter.options ?? {}).length > 0) {
-				console.log(filter.options);
-			}
+
+			await searchProductOptionsBuilder(
+				filter.options,
+				query,
+				this.filterFieldRepository
+			);
 		}
 
 		if (pagination) {

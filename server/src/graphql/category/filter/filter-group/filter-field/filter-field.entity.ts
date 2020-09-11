@@ -21,5 +21,5 @@ export class FilterFieldEntity {
 	categoryFieldId: number | null;
 
 	@Column({ type: "json", default: {}, nullable: true })
-	options: object;
+	options: any;
 }

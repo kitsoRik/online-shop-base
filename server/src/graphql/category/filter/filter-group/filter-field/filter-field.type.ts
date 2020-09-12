@@ -15,6 +15,6 @@ export class FilterFieldType {
 	@Field()
 	type: string;
 
-	@Field(type => JSON, { nullable: true })
+	@Field(type => JSON)
 	options: object;
 }

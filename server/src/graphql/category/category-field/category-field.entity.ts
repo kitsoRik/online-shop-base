@@ -20,6 +20,6 @@ export class CategoryFieldEntity {
 	@Column({ type: "boolean", default: false })
 	removed: boolean;
 
-	@Column({ type: "json", nullable: true })
+	@Column({ type: "json" })
 	options: object;
 }

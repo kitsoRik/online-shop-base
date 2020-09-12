@@ -15,6 +15,6 @@ export class CategoryFieldType {
 	@Field()
 	defaultValue: string;
 
-	@Field(type => JSON, { nullable: true })
+	@Field(type => JSON)
 	options: object;
 }

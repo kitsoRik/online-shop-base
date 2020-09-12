@@ -11,6 +11,13 @@ export const searchProductOptionsBuilder = async (
 	if (Object.keys(options).length > 0) {
 		const optionsKeys = Object.keys(options);
 
+		const join = (query: SelectQueryBuilder<ProductInfoEntity>) =>
+			query.innerJoin(
+				"filters_values",
+				"filters_values",
+				"products_info.product_id = filters_values.product_id"
+			);
+
 		await Promise.all(
 			optionsKeys.map(async optionKey => {
 				const optionValue = options[optionKey];
@@ -18,13 +25,8 @@ export const searchProductOptionsBuilder = async (
 					optionKey
 				);
 
-				query.innerJoin(
-					"filters_values",
-					"filters_values",
-					"products_info.product_id = filters_values.product_id"
-				);
-
 				if (filterField.type === "slider") {
+					join(query);
 					sliderBuilder(query, optionValue);
 				}
 			})

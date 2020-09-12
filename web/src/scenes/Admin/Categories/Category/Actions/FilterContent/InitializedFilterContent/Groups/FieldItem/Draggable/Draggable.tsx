@@ -4,7 +4,7 @@ import { Draggable as DNDDraggable } from "react-beautiful-dnd";
 import FieldItem from "../FieldItem";
 
 interface Props {
-	item: Extract<
+	item: Exclude<
 		{ id: string; name: string; index: number; type: string },
 		FilterField
 	>;

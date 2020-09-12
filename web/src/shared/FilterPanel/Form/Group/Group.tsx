@@ -15,9 +15,9 @@ interface Props {
 				categoryField?: {
 					id: number;
 					type: string;
-					options?: object | null;
+					options: object;
 				} | null;
-				options?: any | null;
+				options: object;
 			}[];
 		},
 		FilterGroup

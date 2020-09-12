@@ -1,8 +1,7 @@
 import React from "react";
-import Text from "./Text";
-import Slider from "./Slider";
-import Checkbox from "./Checkbox";
 import { Form } from "antd";
+import Number from "./Number";
+import Boolean from "./Boolean";
 
 interface Props {
 	field: {
@@ -12,16 +11,19 @@ interface Props {
 		categoryField?: {
 			id: number;
 			type: string;
-			options?: object | null;
+			options: any;
 		} | null;
-		options?: any | null;
+		options: any;
 	};
 
 	initialOption: any; // value
 }
 
 const Field = ({ field, initialOption }: Props) => {
-	const component = getFieldOptionComponent(field);
+	if (!field.categoryField) return null;
+
+	const component = getFieldOptionComponent(field as any);
+	console.log(field);
 	return (
 		<Form.Item
 			name={field.id}
@@ -34,17 +36,21 @@ const Field = ({ field, initialOption }: Props) => {
 };
 
 const getFieldOptionComponent = (field: {
-	options?: any | null;
+	id: string;
 	type: string;
+	name: string;
+	categoryField: {
+		id: number;
+		type: string;
+		options: any;
+	};
+	options: object;
 }) => {
-	console.log(field.type);
-	switch (field.type) {
-		case "text":
-			return <Text />;
-		case "checkbox":
-			return <Checkbox />;
-		case "slider":
-			return <Slider options={field.options} />;
+	switch (field.categoryField?.type) {
+		case "boolean":
+			return <Boolean field={field} />;
+		case "number":
+			return <Number field={field} />;
 	}
 	return null;
 };

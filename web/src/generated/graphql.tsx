@@ -31,7 +31,7 @@ export type CategoryField = {
   name: Scalars['String'];
   type: Scalars['String'];
   defaultValue: Scalars['String'];
-  options?: Maybe<Scalars['JSON']>;
+  options: Scalars['JSON'];
 };
 
 
@@ -134,7 +134,7 @@ export type FilterField = {
   name: Scalars['String'];
   index: Scalars['Int'];
   type: Scalars['String'];
-  options?: Maybe<Scalars['JSON']>;
+  options: Scalars['JSON'];
   categoryField?: Maybe<CategoryField>;
 };
 

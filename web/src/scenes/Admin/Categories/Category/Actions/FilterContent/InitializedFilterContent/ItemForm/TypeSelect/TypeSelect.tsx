@@ -23,11 +23,9 @@ const TypeSelect = ({ value, onChange, categoryFieldType }: Props) => {
 const getOptions = (categoryFieldType?: string) => {
 	switch (categoryFieldType) {
 		case "number":
-			return ["slider", "spin"];
+			return ["slider", "spin", "enum"];
 		case "boolean":
-			return ["checkbox"];
-		case "text":
-			return ["text"];
+			return ["enum"];
 	}
 
 	return [];

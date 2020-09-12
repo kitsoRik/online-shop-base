@@ -14,7 +14,7 @@ interface Props {
 			id: string;
 			name: string;
 			index: number;
-			fields: Extract<
+			fields: Exclude<
 				{ id: string; index: number; name: string; type: string },
 				FilterField
 			>[];

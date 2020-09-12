@@ -13,6 +13,7 @@ import { ProductEntity } from "../product.entity";
 import { CategoryEntity } from "src/graphql/category/category.entity";
 import { FilterFieldEntity } from "src/graphql/category/filter/filter-group/filter-field/filter-field.entity";
 import { searchProductOptionsBuilder } from "./search-products-options-builder";
+import { CategoryFieldEntity } from "src/graphql/category/category-field/category-field.entity";
 
 @Injectable()
 export class ProductInfoService {
@@ -25,6 +26,8 @@ export class ProductInfoService {
 		private categoryRepository: Repository<CategoryEntity>,
 		@InjectRepository(FilterFieldEntity)
 		private filterFieldRepository: Repository<FilterFieldEntity>,
+		@InjectRepository(CategoryFieldEntity)
+		private categoryFieldRepository: Repository<CategoryFieldEntity>,
 		private productService: ProductService
 	) {}
 
@@ -142,7 +145,8 @@ export class ProductInfoService {
 			await searchProductOptionsBuilder(
 				filter.options,
 				query,
-				this.filterFieldRepository
+				this.filterFieldRepository,
+				this.categoryFieldRepository
 			);
 		}
 
@@ -150,7 +154,6 @@ export class ProductInfoService {
 			query.offset(pagination.offset);
 			query.limit(pagination.limit);
 		}
-
 		const result = await query.getManyAndCount();
 		return result;
 	}

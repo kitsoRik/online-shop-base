@@ -10,6 +10,7 @@ import { LanguageModule } from "src/config/language/language.module";
 import { ProductInfoFieldEntity } from "./product-info-field/product-info-field.entity";
 import { CategoryEntity } from "src/graphql/category/category.entity";
 import { FilterFieldEntity } from "src/graphql/category/filter/filter-group/filter-field/filter-field.entity";
+import { CategoryFieldEntity } from "src/graphql/category/category-field/category-field.entity";
 
 @Module({
 	imports: [
@@ -17,7 +18,8 @@ import { FilterFieldEntity } from "src/graphql/category/filter/filter-group/filt
 			ProductInfoEntity,
 			ProductInfoFieldEntity,
 			CategoryEntity,
-			FilterFieldEntity
+			FilterFieldEntity,
+			CategoryFieldEntity
 		]),
 		CategoryModule,
 		ProductInfoFieldModule,
